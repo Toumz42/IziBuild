@@ -2,7 +2,7 @@ name := """IsiLE"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 
 scalaVersion := "2.11.8"
 
@@ -14,6 +14,8 @@ libraryDependencies += "dom4j" % "dom4j" % "1.6"
 libraryDependencies += "org.mockito" % "mockito-core" % "2.1.0"
 
 libraryDependencies += javaWs % "test"
+
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.12"
 
 // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
 // must exclude dom4j in hibernate core because it causes staxeventreader exceptions

@@ -2,8 +2,47 @@
 
 @main("Welcome to Play") {
     <script type='text/javascript' src='@routes.Assets.at("javascripts/index.js")'></script>
-    <header style="position: fixed;background: blue;height: 80px;top: 0px;width: 100%;left: 0px;">
-        <span>ENT Isitech</span>
-    </header>
-    <div style="width: 66%; height:50% ">Bienvenue sur l'ENT d'Isitech</div>
+    <script type='text/javascript' src='@routes.Assets.at("javascripts/views/home.js")'></script>
+
+    <div style="width: 60%;margin-top: 10%;margin-bottom: 10%;margin-left: 18% ;background: white;padding: 3%;" class="card card-1">
+        <div class="row" style="padding: 0 1.5rem">
+            <span style="font-size: 25px;color: #00abff">Bienvenue sur l'ENT Isitech</span><br>
+        </div>
+        <div class="row" id="formParent">
+            <form id="formSign" class="col s12 blue-text">
+                <div class="row" style="color: grey; margin-left: 12px">
+                    <span>Veuillez saisir vos identifiants</span>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="email" type="email" class="validate">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="password" type="password" class="validate">
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+                <div class="row" style="">
+                    <div class="col s12">
+                        <input type="checkbox" class="filled-in" id="signInCheck" checked="" />
+                        <label for="signInCheck">Filled in</label>
+                    </div>
+                </div>
+                <div class="row" id="signInNameDiv" style="">
+                    <div class="input-field col s6">
+                        <input id="last_name" type="text" class="validate">
+                        <label for="last_name">Last Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="first_name" type="text" class="validate">
+                        <label for="first_name">First Name</label>
+                    </div>
+                </div>
+                <a id="sub" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
+            </form>
+        </div>
+    </div>
 }

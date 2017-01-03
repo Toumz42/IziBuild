@@ -1,4 +1,3 @@
-import controllers.PersonController;
 import org.junit.Test;
 import play.data.FormFactory;
 import play.db.jpa.JPAApi;
@@ -18,15 +17,6 @@ import static play.test.Helpers.*;
  */
 public class UnitTest {
 
-    @Test
-    public void checkIndex() {
-        JPAApi jpaApi = mock(JPAApi.class);
-        FormFactory formFactory = mock(FormFactory.class);
-        final PersonController controller = new PersonController(formFactory, jpaApi);
-        final Result result = controller.index();
-
-        assertEquals(OK, result.status());
-    }
 
     @Test
     public void checkTemplate() {
