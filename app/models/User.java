@@ -13,6 +13,7 @@ public class User extends Model {
     public String name;
     public String surname;
     public String email;
+    public String login = surname+"."+name;
     public String password;
 
     public User(String name, String surname, String email, String password) {
@@ -24,6 +25,7 @@ public class User extends Model {
 
     public User() {
     }
+
     public static Finder<Long, User> find = new Finder<Long,User>(User.class);
 
 }

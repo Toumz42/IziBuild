@@ -22,6 +22,7 @@ public class UserController extends Controller {
     }
 
     public Result index() {
+
         return ok(views.html.index.render());
     }
 

@@ -3,6 +3,8 @@
  */
 $(function()
 {
+    
+    
     $("#signInCheck").click(function(){
         if ( $("#signInCheck").is( ":checked" ) ){
             $("#signInNameDiv").show();
