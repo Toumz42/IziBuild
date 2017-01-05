@@ -4,17 +4,26 @@
     <script type='text/javascript' src='@routes.Assets.at("javascripts/index.js")'></script>
     <script type='text/javascript' src='@routes.Assets.at("javascripts/views/home.js")'></script>
 
-    <div style="width: 60%;margin-top: 10%;margin-bottom: 10%;margin-left: 18% ;background: white;padding: 3%;" class="card card-1">
+    <div style="width: 60% ; height: 50%; margin-top: 10%; margin-bottom: 20%; margin-left: 18% ; background: white; padding: 3%;" class="card card-1">
         <div class="row" style="padding: 0 1.5rem">
-            <span style="font-size: 25px;color: #00abff">Bienvenue sur l'ENT Isitech</span><br>
+            <span style="font-size: 25px;color: #00abff">Menu</span><br>
         </div>
-        <a href=""><img src="..\public\images\menu\projet.png"></a>
-        <a href=""><img src="..\public\images\menu\agenda.png"></a>
-        <a href="project.scala.html"><img src="..\public\images\menu\note.png"></a>
-        <a href="https://login.microsoftonline.com/"><img src="..\public\images\menu\office365.png"></a>
-        <a href=""><img src="..\public\images\menu\note.png"></a>
-        <a href=""><img src="..\public\images\menu\info.png"></a>
-
+        <a href="project.scala.html"><img src='/assets/images/menu/projet.png' title="Projet")></a>
+        <a href="project.scala.html"><img src='/assets/images/menu/agenda.png'title="Agenda")></a>
+        <a href="project.scala.html"><img src='/assets/images/menu/notes.png' title="Notes")></a>
+        <a href="https://login.microsoftonline.com/"><img src='/assets/images/menu/office365.png' title="Office 365")></a>
+        <a href="project.scala.html"><img src='/assets/images/menu/stockage.png'title="Stockage")></a>
+        <a href="project.scala.html"><img src='/assets/images/menu/info.png'title="Info Isitech")></a>
 
     </div>
 }
+
+<style>
+    img {
+        height:100px;
+    }
+    a {
+        margin-right: 20%;
+        margin-bottom: 30%;
+    }
+</style>

@@ -8,6 +8,7 @@ import models.User;
 import models.utils.ErrorUtils;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.home;
 
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class Application extends Controller {
     public Result home()
     {
 //        if(checkConnected()) {
-            return ok(views.html.home.render());
+            return ok(home.render());
 //        } else {
 //            return redirect("/login");
 //        }
