@@ -29,6 +29,16 @@ public class Application extends Controller {
         }
     }
 
+
+    public Result home()
+    {
+//        if(checkConnected()) {
+            return ok(views.html.home.render());
+//        } else {
+//            return redirect("/login");
+//        }
+    }
+
     public Result login()
     {
         return ok(views.html.login.render());

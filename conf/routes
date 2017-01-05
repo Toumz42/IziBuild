@@ -6,6 +6,7 @@
 GET     /                                           controllers.Application.index()
 GET     /login                                      controllers.Application.login()
 GET     /project                                    controllers.Application.project()
+GET     /home                                       controllers.Application.home()
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /user                                       controllers.UserController.addUser()
 
