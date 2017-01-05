@@ -36,7 +36,10 @@ public class UserController extends Controller {
         String pass = json.get("password").asText();
 
 
-        User u = User.find.where().ilike("email","%"+email+"%").findUnique();
+        User u = User.find
+                .where()
+                .ilike("email","%"+email+"%")
+                .findUnique();
 
         if (u == null) {
             if (email != null) {

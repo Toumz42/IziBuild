@@ -3,7 +3,6 @@ package controllers;
 import com.avaje.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.javafx.collections.MappingChange;
 import models.User;
 import models.utils.ErrorUtils;
 import play.mvc.Controller;
@@ -17,14 +16,10 @@ import java.util.Map;
  */
 public class Application extends Controller {
 
-
-
-
-
     public Result index()
     {
         if(checkConnected()) {
-            return redirect("/project");
+            return redirect("/home");
         } else {
             return redirect("/login");
         }
@@ -33,11 +28,11 @@ public class Application extends Controller {
 
     public Result home()
     {
-//        if(checkConnected()) {
-            return ok(home.render());
-//        } else {
-//            return redirect("/login");
-//        }
+        if(checkConnected()) {
+            return ok(views.html.home.render());
+        } else {
+            return redirect("/login");
+        }
     }
 
     public Result login()
@@ -74,7 +69,7 @@ public class Application extends Controller {
 
             if (p != null) {
                 session("userId",p.id.toString());
-                return ok("/project");
+                return ok("/home");
             } else {
                 retour = ErrorUtils.createError( true, "Pas de Compte", "erreur" );
             }
@@ -99,5 +94,10 @@ public class Application extends Controller {
         } else {
             return false;
         }
+    }
+
+    public Result logout() {
+        session().clear();
+        return ok("/login");
     }
 }

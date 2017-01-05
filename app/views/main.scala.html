@@ -9,15 +9,40 @@
             <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/materialize.min.css")"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/menu.css")"  media="screen,projection"/>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/jquery-2.2.0.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/materialize.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/views/menu.js")" type="text/javascript"></script>
+        <script src='@routes.Assets.at("javascripts/views/login.js")' type='text/javascript'></script>
+
 
     </head>
     <body style="background:#f3f3f3 ;">
-        <header >
-            <img style="height: 70px;vertical-align: middle" src="/assets/images/logo.png"/>
+        <header>
+            <img style="height: 70px;vertical-align: middle" src="/assets/images/logo.png" id="bannerLogo"/>
+            <span class="nav__button" id="button">
+                <section class="material-design-hamburger">
+                    <button class="material-design-hamburger__icon">
+                        <span class="material-design-hamburger__layer"></span>
+                    </button>
+                </section>
+            </span>
+            <a style="float: right; margin-top: 45px;color:white;cursor: pointer" id="logout">Déconnexion</a>
         </header>
+        <div id= "layout" class="conteneur">
+            <main class="main">
+                <nav class="navigation" id="menu">
+                    <div class="textMenu">
+                        <a href="#">Acceuil</a>
+                        <a href="#">Agenda</a>
+                        <a href="#">Notes</a>
+                        <a href="#">Projet</a>
+                        <a href="#">Info</a>
+                    </div>
+                </nav>
+            </main>
+        </div>
         @content
     </body>
 </html>

@@ -31,6 +31,24 @@ $(function () {
             }
         });
     });
+
+    $('#logout').bind("click", function () {
+        $.post(
+            '/logout',
+            function (retour) {
+
+            if (retour.error) {
+                alert(retour.messageRetour);
+            }
+            else {
+                window.location = retour;
+            //     var rep = "<div class='row' style='color: grey; margin-left: 20px'> "+
+            //         "<span>"+retour.messageRetour+"</span>"+
+            //         "</div>";
+            //     $("#formParent").append(rep);
+            }
+        });
+    });
     
 });
     

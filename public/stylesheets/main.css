@@ -35,10 +35,20 @@ header {
     left: 0px;
     padding: 1%;
     box-shadow: grey 0px 0px 30px 5px;
-    z-index: 2;
+    z-index: 10;
 }
 
+.imgHome {
+    height:100px;
+}
 
+.imgMenu {
+    height:10px;
+}
+.linkHome{
+    margin-right: 20%;
+    margin-bottom: 30%;
+}
 /*!* valid color *!*/
 /*.input-field input[type=text].valid {*/
     /*border-bottom: 1px solid #000;*/

@@ -5,6 +5,7 @@ import com.avaje.ebean.Model;
 import javax.persistence.*;
 
 @Entity
+//@Table(name="user")
 public class User extends Model {
 
     @Id

@@ -8,6 +8,7 @@ GET     /login                                      controllers.Application.logi
 GET     /project                                    controllers.Application.project()
 GET     /home                                       controllers.Application.home()
 POST    /identifyUser                               controllers.Application.identifyUser()
+POST    /logout                                     controllers.Application.logout()
 POST    /user                                       controllers.UserController.addUser()
 
 # Map static resources from the /public folder to the /assets URL path
