@@ -1,5 +1,6 @@
 package models;
-import com.avaje.ebean.Model;
+import io.ebean.Finder;
+import io.ebean.Model;
 import scala.reflect.internal.Trees;
 
 import javax.persistence.*;
@@ -20,5 +21,17 @@ public class SuiviProjet extends Model {
     public Integer etat;
     @ManyToOne
     public GroupeProjet groupe;
+
+    public SuiviProjet() {
+    }
+
+    public SuiviProjet(Date dateSuivi, String contenu, Integer etat, GroupeProjet groupe) {
+        this.dateSuivi = dateSuivi;
+        this.contenu = contenu;
+        this.etat = etat;
+        this.groupe = groupe;
+    }
+
+    public static Finder<Long, SuiviProjet> find = new Finder<Long,SuiviProjet>(SuiviProjet.class);
 
 }

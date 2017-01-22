@@ -1,20 +1,25 @@
 package controllers;
 
-import com.avaje.ebean.Expr;
+import io.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.User;
+import models.query.QUser;
 import models.utils.ErrorUtils;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.home;
 
+
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by ttomc on 02/01/2017.
  */
 public class Application extends Controller {
+
+    public Application() {
+    }
 
     public Result index()
     {
@@ -40,10 +45,19 @@ public class Application extends Controller {
         return ok(views.html.login.render());
     }
 
-    public Result project()
+    public Result projet()
     {
         if(checkConnected()) {
             return ok(views.html.project.render());
+        } else {
+            return redirect("/login");
+        }
+    }
+
+    public Result admin()
+    {
+        if(checkConnected()) {
+            return ok(views.html.admin.render());
         } else {
             return redirect("/login");
         }
@@ -63,7 +77,12 @@ public class Application extends Controller {
         User p = null;
         try
         {
-            p = User.find.where().eq("login", login)
+//            p = User.find.query().where().eq("login", login)
+//                    .and(Expr.eq("login", login),Expr.eq("password", pswd))
+//                    .findUnique();
+
+            List<User> list = new QUser().findList();
+            p = User.find.query().where().eq("login", login)
                     .and(Expr.eq("login", login),Expr.eq("password", pswd))
                     .findUnique();
 
@@ -93,6 +112,16 @@ public class Application extends Controller {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static String getCurrentUser()
+    {
+        String user = session("userId");
+        if(user != null) {
+            return user;
+        } else {
+            return null;
         }
     }
 

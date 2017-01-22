@@ -2,8 +2,13 @@
  * Created by ttomc on 03/01/2017.
  */
 $(function () {
+    var pathname = window.location.pathname;
+
+    if (pathname == "/login") {
+        $('.logout').hide();
+    }
     $('#login').val('');
-    var password = $('#password').val('');
+    $('#password').val('');
 
     $('#btn_connexion').bind("click", function () {
         var id = $('#email').val();
@@ -32,23 +37,15 @@ $(function () {
         });
     });
 
-    $('#logout').bind("click", function () {
-        $.post(
-            '/logout',
-            function (retour) {
-
-            if (retour.error) {
-                alert(retour.messageRetour);
-            }
-            else {
-                window.location = retour;
-            //     var rep = "<div class='row' style='color: grey; margin-left: 20px'> "+
-            //         "<span>"+retour.messageRetour+"</span>"+
-            //         "</div>";
-            //     $("#formParent").append(rep);
-            }
-        });
+    $('.input-field').keypress(function (e) {
+        if (e.which == 13) {
+            $('#btn_connexion').click();
+            return false;    //<---- Add this line
+        }
     });
-    
+
+   
+
+    Materialize.showStaggeredList($("#stage"));
 });
     

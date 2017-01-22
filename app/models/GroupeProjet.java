@@ -1,5 +1,6 @@
 package models;
-import com.avaje.ebean.Model;
+import io.ebean.Finder;
+import io.ebean.Model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,5 +17,15 @@ public class GroupeProjet extends Model {
     public String theme;
     public Date dateSoutenance;
 
+    public GroupeProjet() {
+    }
+
+    public GroupeProjet(String name, String theme, Date dateSoutenance) {
+        this.name = name;
+        this.theme = theme;
+        this.dateSoutenance = dateSoutenance;
+    }
+
+    public static Finder<Long, GroupeProjet> find = new Finder<Long,GroupeProjet>(GroupeProjet.class);
 
 }

@@ -1,6 +1,8 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Classe;
+import models.GroupeProjet;
 import models.User;
 import play.data.FormFactory;
 import play.db.jpa.JPAApi;
@@ -16,17 +18,6 @@ import static play.libs.Json.toJson;
 public class UserController extends Controller {
 
 
-
-    public UserController() {
-
-    }
-
-    public Result index() {
-
-        return ok(views.html.index.render());
-    }
-
-
     public Result addUser(/*String name, String surname, String email, String password*/) {
 //        return redirect(routes.UserController.index());
         JsonNode json = request().body().asJson();
@@ -36,7 +27,7 @@ public class UserController extends Controller {
         String pass = json.get("password").asText();
 
 
-        User u = User.find
+        User u = User.find.query()
                 .where()
                 .ilike("email","%"+email+"%")
                 .findUnique();
@@ -55,7 +46,36 @@ public class UserController extends Controller {
             }
         }
 
-        return ok("T'es déjà inscrit connard !");
+        return ok("Déjà inscrit !");
+    }
+
+    public Result addClasse() {
+        JsonNode json = request().body().asJson();
+        String name = json.get("name").asText();
+
+
+
+
+        Classe u = Classe.find.query()
+                .where()
+                .ilike("name","%"+name+"%")
+                .findUnique();
+
+        if (u == null) {
+            if (name != null) {
+                if (!name.equals("")) {
+                    Classe person = new Classe(name);
+                    person.save();
+                    return ok("La création s'est bien passée ! :)");
+                } else {
+                    return ok("Erreur dans le theme");
+                }
+            } else {
+                return ok("Erreur dans le theme");
+            }
+        }
+
+        return ok("Déjà inscrit !");
     }
 
 }

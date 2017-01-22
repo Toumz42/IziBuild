@@ -1,6 +1,7 @@
 package models;
 
-import com.avaje.ebean.Model;
+import io.ebean.Model;
+import io.ebean.Finder;
 
 import javax.persistence.*;
 
@@ -16,6 +17,10 @@ public class User extends Model {
     public String email;
     public String login = surname+"."+name;
     public String password;
+    @OneToOne
+    public Classe classe;
+    @OneToOne
+    public GroupeProjet groupe;
 
     public User(String name, String surname, String email, String password) {
         this.name = name;

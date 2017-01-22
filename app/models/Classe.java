@@ -1,6 +1,7 @@
 package models;
 
-import com.avaje.ebean.Model;
+import io.ebean.Finder;
+import io.ebean.Model;
 import javax.persistence.*;
 
 
@@ -15,5 +16,12 @@ public class Classe extends Model {
     public Long id;
     public String name;
 
+    public Classe() {
+    }
 
+    public Classe(String name) {
+        this.name = name;
+    }
+
+    public static Finder<Long, Classe> find = new Finder<Long,Classe>(Classe.class);
 }

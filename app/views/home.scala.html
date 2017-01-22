@@ -1,19 +1,36 @@
 @()
 
 @main("Welcome to ENT - ISITECH") {
-    <script type='text/javascript' src='@routes.Assets.at("javascripts/index.js")'></script>
-    <script type='text/javascript' src='@routes.Assets.at("javascripts/views/home.js")'></script>
+    <script type='text/javascript' src='/assets/javascripts/index.js'></script>
 
-    <div style="width: 60% ; height: 50%; margin-top: 10%; margin-bottom: 20%; margin-left: 18% ; background: white; padding: 3%;" class="card card-1">
-        <div class="row" style="padding: 0 1.5rem">
-            <span style="font-size: 25px;color: #00abff">Menu</span><br>
+    <ul id="stage1">
+        <div class="row">
+            <div class="col s10 m12 l12 push-s1">
+                <li>
+                    <div class="card card-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">Card Title</span>
+                            <div class="row" style="padding: 0 1.5rem">
+                                <span style="font-size: 25px;color: #00abff">Menu</span><br>
+                            </div>
+                            <div class="row">
+                                <a class="col s4" href="/projet"><img class="responsive-img" src='/assets/images/menu/projet.png' title="Projet")></a>
+                                <a class="col s4" href=""><img class="responsive-img" src='/assets/images/menu/agenda.png'title="Agenda")></a>
+                                <a class="col s4" href=""><img class="responsive-img" src='/assets/images/menu/notes.png' title="Notes")></a>
+                            </div>
+
+                            <div class="row">
+                                <a class="col s4" href="https://login.microsoftonline.com/"><img class="responsive-img" src='/assets/images/menu/office365.png' title="Office 365")></a>
+                                <a class="col s4" href=""><img class="responsive-img" src='/assets/images/menu/stockage.png'title="Stockage")></a>
+                                <a class="col s4" href=""><img class="responsive-img" src='/assets/images/menu/info.png'title="Info Isitech")></a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </div>
         </div>
-        <a class="linkHome" href="project.scala.html"><img class="imgHome" src='/assets/images/menu/projet.png' title="Projet")></a>
-        <a class="linkHome" href="project.scala.html"><img class="imgHome" src='/assets/images/menu/agenda.png'title="Agenda")></a>
-        <a class="linkHome" href="project.scala.html"><img class="imgHome" src='/assets/images/menu/notes.png' title="Notes")></a>
-        <a class="linkHome" href="https://login.microsoftonline.com/"><img class="imgHome" src='/assets/images/menu/office365.png' title="Office 365")></a>
-        <a class="linkHome" href="project.scala.html"><img class="imgHome" src='/assets/images/menu/stockage.png'title="Stockage")></a>
-        <a class="linkHome" href="project.scala.html"><img class="imgHome" src='/assets/images/menu/info.png'title="Info Isitech")></a>
-    </div>
+    </ul>
+
+
 }
 
