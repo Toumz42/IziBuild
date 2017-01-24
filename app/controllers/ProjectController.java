@@ -4,13 +4,18 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.GroupeProjet;
 import models.SuiviProjet;
 import models.User;
 
-import models.query.QSuiviProjet;
-import models.query.QUser;
+
 import models.utils.HtmlUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -18,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -29,8 +35,6 @@ public class ProjectController extends Controller {
 
     public Result getGroupeProject() {
 
-        QUser user = models.query.QUser.alias();
-        QSuiviProjet proj = QSuiviProjet.alias();
 
         String idUser = Application.getCurrentUser();
         if (idUser != null && !idUser.equals("")) {
@@ -42,10 +46,47 @@ public class ProjectController extends Controller {
                         .eq("id",u.groupe.id)
                         .findUnique();
 
-                JsonNode tableauRetour = HtmlUtils.ObjectToJsonTab(grp);
+                JsonNode retour = Json.toJson(grp);
 
-                return ok().sendJson(tableauRetour);
+                return ok().sendJson(retour);
             }
+        }
+        return notFound();
+
+    }
+
+    public Result getAllGroupeProject() {
+
+        String idUser = Application.getCurrentUser();
+        User u = null;
+        if (idUser != null && !idUser.equals("")) {
+            Integer id = Integer.parseInt(idUser);
+            u = User.find.query().where().eq("id",id).findUnique();
+
+        }
+        if (u != null) {
+            List<GroupeProjet> projetList= GroupeProjet.find.all();
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode listResult = mapper.createArrayNode();
+            Integer i = 0;
+            for (GroupeProjet g : projetList) {
+                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",g.id).findList();
+                ArrayNode array = mapper.valueToTree(userList);
+                ObjectNode userNode = mapper.valueToTree(g);
+                userNode.remove("dateSoutenance");
+                DateTime dt = new DateTime(g.dateSoutenance);
+                DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
+                DateTimeFormatter frenchFmt = fmt.withLocale(Locale.FRENCH);
+                String date = frenchFmt.print(dt) ;
+                userNode.put("date", date );
+                userNode.putArray("users").addAll(array);
+                listResult.add(userNode);
+                i++;
+            }
+
+
+//                JsonNode retour = Json.toJson(projetList);
+            return ok().sendJson(listResult);
         }
         return notFound();
 
@@ -53,8 +94,6 @@ public class ProjectController extends Controller {
 
     public Result getProjects() {
 
-        QUser user = models.query.QUser.alias();
-        QSuiviProjet proj = QSuiviProjet.alias();
 
         String idUser = Application.getCurrentUser();
         if (idUser != null && !idUser.equals("")) {
@@ -66,10 +105,11 @@ public class ProjectController extends Controller {
                         .eq("groupe.id",u.groupe.id)
                         .findList();
 
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode retourJson = mapper.convertValue(list, JsonNode.class);
+//                ObjectMapper mapper = new ObjectMapper();
+                JsonNode result = Json.toJson(list);
+                return ok(result);
+//                JsonNode retourJson = HtmlUtils.ListObjectToJsonTab(list);
 
-                return ok().sendJson(retourJson);
             }
         }
         return notFound();

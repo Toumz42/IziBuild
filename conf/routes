@@ -10,6 +10,7 @@ GET     /home                                       controllers.Application.home
 GET     /admin                                      controllers.Application.admin()
 GET     /getProjects                                controllers.ProjectController.getProjects
 GET     /getGroupeProject                           controllers.ProjectController.getGroupeProject
+GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /logout                                     controllers.Application.logout()
 POST    /addUser                                    controllers.UserController.addUser()

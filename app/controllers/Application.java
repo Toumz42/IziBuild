@@ -4,7 +4,6 @@ import io.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.User;
-import models.query.QUser;
 import models.utils.ErrorUtils;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -81,7 +80,6 @@ public class Application extends Controller {
 //                    .and(Expr.eq("login", login),Expr.eq("password", pswd))
 //                    .findUnique();
 
-            List<User> list = new QUser().findList();
             p = User.find.query().where().eq("login", login)
                     .and(Expr.eq("login", login),Expr.eq("password", pswd))
                     .findUnique();

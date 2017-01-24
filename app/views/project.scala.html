@@ -1,25 +1,52 @@
 @()
 
-    @main("Welcome to Play") {
+@main("Welcome to Play") {
 
-        <script type='text/javascript' src='/assets/javascripts/views/project.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/project.js'></script>
+    <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
 
+    <div class="row" style="padding: 0 1.5rem">
+        <span style="font-size: 25px;color: #00abff">Bienvenue sur l'ENT Isitech</span><br>
+    </div>
+    <div class="row" style="display: none" id="addCard">
+        <div class="col s12 push-s1  push-l2">
+            <div class="card card-1">
+                <div class="card-content ">
+                    <div class="row" style="padding: 0 1.5rem" id="addSuiviDiv">
 
-        <div class="row" style="padding: 0 1.5rem">
-            <span style="font-size: 25px;color: #00abff">Bienvenue sur l'ENT Isitech</span><br>
-        </div>
-        <div class="row">
-            <div class="col s12 push-s1">
-                <div class="card card-1">
-                    <div class="card-content ">
-                        <div class="row" style="padding: 0 1.5rem">
-                            <table id="tableProject" class="responsive-table highlight">
-
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
+        <div class="col s12 push-s1  push-l2">
+            <div class="card card-1">
+                <div class="card-content ">
+                    <div class="row" style="padding: 0 1.5rem">
+                        <table id="tableGrpProject" class="responsive-table highlight">
 
-    }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 push-s1  push-l2">
+            <div class="card card-1">
+                <div class="card-content ">
+                    <div class="row" style="padding: 0 1.5rem">
+                        <table id="tableProject" class="responsive-table highlight">
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}

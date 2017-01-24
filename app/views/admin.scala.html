@@ -11,139 +11,148 @@
             <li class="tab col s3"><a href="#projet">Projet</a></li>
         </ul>
     </div>
+
     <div class="container">
         <div class="row">
-            <div class="col s12">
-                <ul class="stage">
-                    <div class="row">
-                        <div class="col m12 s12 l12 push-s1">
-                            <li>
-                                <div class="card card-1">
-                                    <div class="card-content ">
-                                        <div class="row" id="formParent">
-                                            <span class="card-title blue-text">Bienvenue sur l'espace Administrateur</span><br>
-                                        </div>
+
+            <ul class="stage">
+                <div class="row">
+                    <div class="col m12 s12 l12 push-s1 push-l2">
+                        <li>
+                            <div class="card card-1">
+                                <div class="card-content">
+                                    <div class="row" id="formParent">
+                                        <span class="card-title blue-text">Bienvenue sur l'espace Administrateur</span><br>
                                     </div>
                                 </div>
-                            </li>
-                        </div>
+                            </div>
+                        </li>
                     </div>
-                </ul>
-            </div>
+                </div>
+            </ul>
+
             <div id="users">
-                <ul class="stage">
-                    <div class="row">
-                        <div class="col m12 s12 l12 push-s1">
-                            <li>
-                                <div class="card card-1">
-                                    <div class="card-content ">
-                                        <div class="row" id="formParent">
-                                            <form id="formSign" class="col s12 blue-text">
-                                                <span class="card-title blue-text">Nouvel Utilisateur</span>
-                                                <div class="row" style="color: grey; margin-left: 2px">
-                                                    <span>Veuillez saisir ses identifiants</span>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="input-field col s12">
-                                                        <input id="email" type="email" class="validate">
-                                                        <label for="email">Email</label>
+                <a id="addUser" class="btn-floating hasTab btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
+                <div id="usersAdderDiv" style="display: none">
+                    <ul class="stage">
+                        <div class="row">
+                            <div class="col m12 s12 l12 push-s1 push-l2">
+                                <li>
+                                    <div class="card card-1">
+                                        <div class="card-content ">
+                                            <div class="row" id="formParent">
+                                                <form id="formSign" class="col s12 blue-text">
+                                                    <span class="card-title blue-text">Nouvel Utilisateur</span>
+                                                    <div class="row" style="color: grey; margin-left: 2px">
+                                                        <span>Veuillez saisir ses identifiants</span>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="input-field col s12">
-                                                        <input id="password" type="password" class="validate">
-                                                        <label for="password">Password</label>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="email" type="email" class="validate">
+                                                            <label for="email">Email</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row" id="signInNameDiv">
-                                                    <div class="input-field col s6">
-                                                        <input id="last_name" type="text" class="validate">
-                                                        <label for="last_name">Last Name</label>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="password" type="password" class="validate">
+                                                            <label for="password">Password</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="input-field col s6">
-                                                        <input id="first_name" type="text" class="validate">
-                                                        <label for="first_name">First Name</label>
+                                                    <div class="row" id="signInNameDiv">
+                                                        <div class="input-field col s6">
+                                                            <input id="last_name" type="text" class="validate">
+                                                            <label for="last_name">Last Name</label>
+                                                        </div>
+                                                        <div class="input-field col s6">
+                                                            <input id="first_name" type="text" class="validate">
+                                                            <label for="first_name">First Name</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <a id="sub" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
-                                            </form>
+                                                    <a id="sub" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            </div>
                         </div>
-                    </div>
-                </ul>
+                    </ul>
+                </div>
             </div>
             <div id="classe">
-                <ul class="stage">
-                    <div class="row">
-                        <div class="col m12 s12 l12 push-s1">
-                            <li>
-                                <div class="card card-1">
-                                    <div class="card-content ">
-                                        <div class="row" id="formParent">
-                                            <form id="formClasse" class="col s12 blue-text">
-                                                <span class="card-title blue-text">Nouvelle Classe</span>
-                                                @*<div class="row" style="color: grey; margin-left: 12px">*@
-                                                @*<span>Veuillez saisir ses identifiants</span>*@
-                                                @*</div>*@
-                                                <div class="row">
-                                                    <div class="input-field col s12">
-                                                        <input id="classeName" type="text" class="">
-                                                        <label for="Nom">Nom</label>
+                <a id="addClasse" class="btn-floating hasTab btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
+                <div id="classeAdderDiv" style="display: none">
+                    <ul class="stage">
+                        <div class="row">
+                            <div class="col m12 s12 l12 push-s1  push-l2">
+                                <li>
+                                    <div class="card card-1">
+                                        <div class="card-content ">
+                                            <div class="row" id="formParent">
+                                                <form id="formClasse" class="col s12 blue-text">
+                                                    <span class="card-title blue-text">Nouvelle Classe</span>
+                                                    @*<div class="row" style="color: grey; margin-left: 12px">*@
+                                                    @*<span>Veuillez saisir ses identifiants</span>*@
+                                                    @*</div>*@
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="classeName" type="text" class="">
+                                                            <label for="Nom">Nom</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <a id="subClasse" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
-                                            </form>
+                                                    <a id="subClasse" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            </div>
                         </div>
-                    </div>
-                </ul>
+                    </ul>
+                </div>
             </div>
             <div id="projet">
-                <ul class="stage">
-                    <div class="row">
-                        <div class="col m12 s12 l12 push-s1">
-                            <li>
-                                <div class="card card-1">
-                                    <div class="card-content ">
-                                        <div class="row" id="formParent">
-                                            <form id="formGroupe" class="col s12 blue-text">
-                                                <span class="card-title blue-text">Nouveau groupe de projet</span>
-                                                @*<div class="row" style="color: grey; margin-left: 12px">*@
-                                                @*<span>Veuillez saisir ses identifiants</span>*@
-                                                @*</div>*@
-                                                <div class="row">
+                <a id="addGroupe" class="btn-floating hasTab btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
+                <div id="projetAdderDiv" style="display: none">
+                    <ul class="stage">
+                        <div class="row">
+                            <div class="col m12 s12 l12 push-s1  push-l2">
+                                <li>
+                                    <div class="card card-1">
+                                        <div class="card-content ">
+                                            <div class="row" id="formParent">
+                                                <form id="formGroupe" class="col s12 blue-text">
+                                                    <span class="card-title blue-text">Nouveau groupe de projet</span>
+                                                    @*<div class="row" style="color: grey; margin-left: 12px">*@
+                                                    @*<span>Veuillez saisir ses identifiants</span>*@
+                                                    @*</div>*@
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="groupeName" type="text" class="">
+                                                            <label for="Nom">Nom</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="theme" type="text" class="">
+                                                            <label for="Nom">Theme</label>
+                                                        </div>
+                                                    </div><div class="row">
                                                     <div class="input-field col s12">
-                                                        <input id="groupeName" type="text" class="">
-                                                        <label for="Nom">Nom</label>
+                                                        <input id="date" type="date" class="datepicker">
+                                                        <label for="Nom">Date</label>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="input-field col s12">
-                                                        <input id="theme" type="text" class="">
-                                                        <label for="Nom">Theme</label>
-                                                    </div>
-                                                </div><div class="row">
-                                                <div class="input-field col s12">
-                                                    <input id="date" type="date" class="datepicker">
-                                                    <label for="Nom">Date</label>
-                                                </div>
+                                                    <a id="subGroupe" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
+                                                </form>
                                             </div>
-
-                                                <a id="subGroupe" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
-                                            </form>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            </div>
                         </div>
-                    </div>
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
