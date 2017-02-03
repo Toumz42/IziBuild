@@ -9,13 +9,16 @@ GET     /projet                                     controllers.Application.proj
 GET     /home                                       controllers.Application.home()
 GET     /admin                                      controllers.Application.admin()
 GET     /getProjects                                controllers.ProjectController.getProjects
+GET     /addProject                                 controllers.ProjectController.addProject
 GET     /getGroupeProject                           controllers.ProjectController.getGroupeProject
 GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
+GET     /getAllUser                                 controllers.UserController.getAllUser
+GET     /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()
-POST    /logout                                     controllers.Application.logout()
 POST    /addUser                                    controllers.UserController.addUser()
 POST    /addProjectGroup                            controllers.ProjectController.addProjectGroup()
 POST    /addClasse                                  controllers.UserController.addClasse()
+POST    /logout                                     controllers.Application.logout()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                               controllers.Assets.at(path="/public", file)

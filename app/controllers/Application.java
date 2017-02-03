@@ -123,6 +123,18 @@ public class Application extends Controller {
         }
     }
 
+    public static User getCurrentUserObj()
+    {
+        String user = session("userId");
+        Long id = Long.parseLong(user);
+        User u = User.find.byId(id);
+        if(u != null) {
+            return u;
+        } else {
+            return null;
+        }
+    }
+
     public Result logout() {
         session().clear();
         return ok("/login");

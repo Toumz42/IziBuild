@@ -17,6 +17,7 @@ public class User extends Model {
     public String email;
     public String login = surname+"."+name;
     public String password;
+    public Integer droit;
     @OneToOne
     public Classe classe;
     @OneToOne
@@ -31,6 +32,7 @@ public class User extends Model {
 
     public User() {
     }
+
 
     public static Finder<Long, User> find = new Finder<Long,User>(User.class);
 

@@ -12,8 +12,23 @@
         <div class="col s12 push-s1  push-l2">
             <div class="card card-1">
                 <div class="card-content ">
-                    <div class="row" style="padding: 0 1.5rem" id="addSuiviDiv">
-
+                    <div class="row">
+                        <form id='formSign' class='col s12 blue-text'>
+                            <span class='card-title blue-text'>Nouveau Suivi Projet</span>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input id="dateSuivi" type='date' class='datepicker'>
+                                        <label for='dateSuivi'>Date</label>
+                                    </div>
+                                </div>
+                            <div class='row'>
+                                <div class='input-field col s12'>
+                                    <textarea id='textarea1' class='materialize-textarea' length='120'></textarea>
+                                    <label for='textarea1'>Commentaire suivi</label>
+                                </div>
+                            </div>
+                            <a id='sub' class='waves-effect waves-light btn' style='float: right;background: #00abff'>Valider</a>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -23,10 +38,9 @@
         <div class="col s12 push-s1  push-l2">
             <div class="card card-1">
                 <div class="card-content ">
-                    <div class="row" style="padding: 0 1.5rem">
-                        <table id="tableGrpProject" class="responsive-table highlight">
+                    <div class="row" style="padding: 0 1.5rem" id="tableGrpProjectDiv" >
 
-                        </table>
+
                     </div>
                 </div>
             </div>

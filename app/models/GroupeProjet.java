@@ -13,15 +13,13 @@ public class GroupeProjet extends Model {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     public Long id;
-    public String name;
     public String theme;
     public Date dateSoutenance;
 
     public GroupeProjet() {
     }
 
-    public GroupeProjet(String name, String theme, Date dateSoutenance) {
-        this.name = name;
+    public GroupeProjet(String theme, Date dateSoutenance) {
         this.theme = theme;
         this.dateSoutenance = dateSoutenance;
     }

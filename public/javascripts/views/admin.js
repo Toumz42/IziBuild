@@ -128,6 +128,84 @@ $(function()
         }
     });
 
+    $.ajax ({
+        url: "/getAllUser",
+        type: "GET",
+        // data: JSON.stringify(data),
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            var cardStart = "<ul class='stage'><div class='row'>"+
+                "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
+                "<div class='card card-1'><div class='card-content'>"+
+                "<div class='row'>";
+            var cardEnd = "</div></div></div></li></div></div></ul>";
+            var table;
+            var tr;
+            for (var i = 0; i < json.length; i++) {
+                table = $("<table class='responsive-table highlight'></table>");
+                tr = $('<tr/>');
+                tr.append("<th>Id</th>");
+                tr.append("<th>Nom</th>");
+                tr.append("<th>Prenom</th>");
+                $(table).append(tr);
+                tr = $('<tr/>');
+                tr.append("<td>" + json[i].id + "</td>");
+                tr.append("<td>" + json[i].name + "</td>");
+                tr.append("<td>" + json[i].surname + "</td>");
+                $(table).append(tr);
+                // for (var j = 0; j < json[i].users.length; j++) {
+                //     tr = $('<tr/>');
+                //     tr.append("<td>" + json[i].users[j].id + "</td>");
+                //     tr.append("<td>" + json[i].users[j].name+ "</td>");
+                //     tr.append("<td>" + json[i].users[j].surname + "</td>");
+                //     $(table).append(tr);
+                // }
+            var res = cardStart + table.prop('outerHTML') + cardEnd;
+            $("#users").append(res);
+            }
+        }
+    });
+
+    $.ajax ({
+        url: "/getAllClasse",
+        type: "GET",
+        // data: JSON.stringify(data),
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            var cardStart = "<ul class='stage'><div class='row'>"+
+                "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
+                "<div class='card card-1'><div class='card-content'>"+
+                "<div class='row'>";
+            var cardEnd = "</div></div></div></li></div></div></ul>";
+            var table;
+            var tr;
+            for (var i = 0; i < json.length; i++) {
+                table = $("<table class='responsive-table highlight'></table>");
+                tr = $('<tr/>');
+                tr.append("<th>Id</th>");
+                tr.append("<th>Nom</th>");
+                $(table).append(tr);
+                tr = $('<tr/>');
+                tr.append("<td>" + json[i].id + "</td>");
+                tr.append("<td>" + json[i].name + "</td>");
+                $(table).append(tr);
+                // for (var j = 0; j < json[i].users.length; j++) {
+                //     tr = $('<tr/>');
+                //     tr.append("<td>" + json[i].users[j].id + "</td>");
+                //     tr.append("<td>" + json[i].users[j].name+ "</td>");
+                //     tr.append("<td>" + json[i].users[j].surname + "</td>");
+                //     $(table).append(tr);
+                // }
+            var res = cardStart + table.prop('outerHTML') + cardEnd;
+            $("#classe").append(res);
+            }
+        }
+    });
+
     $('.datepicker').pickadate({
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 15 // Creates a dropdown of 15 years to control year

@@ -40,15 +40,25 @@ public class ProjectController extends Controller {
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
             User u = User.find.query().where().eq("id",id).findUnique();
-
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode listResult = mapper.createArrayNode();
             if (u != null) {
                 GroupeProjet grp = GroupeProjet.find.query().where()
                         .eq("id",u.groupe.id)
                         .findUnique();
+                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",grp.id).findList();
+                ArrayNode array = mapper.valueToTree(userList);
+                ObjectNode userNode = mapper.valueToTree(grp);
+                userNode.remove("dateSoutenance");
+                DateTime dt = new DateTime(grp.dateSoutenance);
+                DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
+                DateTimeFormatter frenchFmt = fmt.withLocale(Locale.FRENCH);
+                String date = frenchFmt.print(dt) ;
+                userNode.put("date", date );
+                userNode.putArray("users").addAll(array);
+                listResult.add(userNode);
 
-                JsonNode retour = Json.toJson(grp);
-
-                return ok().sendJson(retour);
+                return ok().sendJson(listResult);
             }
         }
         return notFound();
@@ -93,8 +103,6 @@ public class ProjectController extends Controller {
     }
 
     public Result getProjects() {
-
-
         String idUser = Application.getCurrentUser();
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
@@ -117,9 +125,7 @@ public class ProjectController extends Controller {
     }
 
     public Result addProjectGroup() {
-
         JsonNode json = request().body().asJson();
-        String name = json.get("name").asText();
         String theme = json.get("theme").asText();
         String dateString = json.get("date").asText();
         dateString = dateString.replace(",","");
@@ -133,13 +139,13 @@ public class ProjectController extends Controller {
 
         GroupeProjet u = GroupeProjet.find.query()
                 .where()
-                .ilike("name","%"+name+"%")
+                .ilike("theme","%"+theme+"%")
                 .findUnique();
 
         if (u == null) {
             if (theme != null) {
                 if (!theme.equals("")) {
-                    GroupeProjet person = new GroupeProjet(name, theme, date);
+                    GroupeProjet person = new GroupeProjet(theme, date);
                     person.save();
                     return ok("L'incription s'est bien passée ! :)");
                 } else {
@@ -149,7 +155,40 @@ public class ProjectController extends Controller {
                 return ok("Erreur dans le nom");
             }
         }
+        return ok("Déjà inscrit !");
+    }
 
+    public Result addProject() {
+        JsonNode json = request().body().asJson();
+        String theme = json.get("theme").asText();
+        String dateString = json.get("date").asText();
+        dateString = dateString.replace(",","");
+        Date date = null;
+        SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        try {
+            date = parser.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        GroupeProjet u = GroupeProjet.find.query()
+                .where()
+                .ilike("theme","%"+theme+"%")
+                .findUnique();
+
+        if (u == null) {
+            if (theme != null) {
+                if (!theme.equals("")) {
+                    GroupeProjet person = new GroupeProjet(theme, date);
+                    person.save();
+                    return ok("L'incription s'est bien passée ! :)");
+                } else {
+                    return ok("Erreur dans le nom");
+                }
+            } else {
+                return ok("Erreur dans le nom");
+            }
+        }
         return ok("Déjà inscrit !");
     }
 }
