@@ -93,7 +93,7 @@ $(function()
     });
 
     $("#addSuivi").click(function () {
-        $("#addCard").slideToggle();
+        $("#addCard").toggle('slide');
     });
 
     $("#subSuivi").click(function(){

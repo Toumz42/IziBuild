@@ -69,9 +69,9 @@ public class ProjectController extends Controller {
         JsonNode json = request().body().asJson();
         Long classeId = null;
         if (json != null) {
-          if (json.get("classeId") != null) {
-              classeId = json.get("classeId").asLong();
-          }
+            if (json.get("classeId") != null) {
+                classeId = json.get("classeId").asLong();
+            }
         }
         String idUser = Application.getCurrentUser();
         User u = null;
@@ -82,9 +82,16 @@ public class ProjectController extends Controller {
         }
         if (u != null) {
 
-            List<GroupeProjet> projetList= null;
+            List<GroupeProjet> projetList= new ArrayList<>();
             if (classeId != null) {
-                projetList = GroupeProjet.find.query().fetch("users").fetch("user.classe").where().eq("user.classe.id",classeId).findList();
+                List<User> userList = User.find.query().fetch("groupe").fetch("classe").where().eq("classe.id",classeId).findList();
+                for (User user : userList) {
+                    if (user.groupe != null) {
+                        if (!projetList.contains(user.groupe)) {
+                            projetList.add(user.groupe);
+                        }
+                    }
+                }
             } else {
                 projetList = GroupeProjet.find.all();
             }
@@ -96,9 +103,11 @@ public class ProjectController extends Controller {
                 ArrayNode array = mapper.valueToTree(userList);
                 ObjectNode userNode = mapper.valueToTree(g);
                 userNode.remove("dateSoutenance");
+                userNode.remove("dateSoutenance");
                 DateUtils dU = new DateUtils();
                 String date = dU.toFrenchDateString(g.dateSoutenance);
                 userNode.put("date", date );
+                userNode.put("theme", g.theme );
                 userNode.putArray("users").addAll(array);
                 listResult.add(userNode);
             }
@@ -111,9 +120,14 @@ public class ProjectController extends Controller {
 
     }
 
-
-
     public Result getProjects() {
+        JsonNode json = request().body().asJson();
+        Long grpId = null;
+        if (json != null) {
+            if (json.get("grpId") != null) {
+                grpId = json.get("grpId").asLong();
+            }
+        }
         String idUser = Application.getCurrentUser();
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
@@ -179,8 +193,8 @@ public class ProjectController extends Controller {
                         Long id = jsonNode.asLong();
                         User user = User.find.byId(id);
                         if (user != null) {
-                          user.setGroupe(groupeProjet);
-                          user.update();
+                            user.setGroupe(groupeProjet);
+                            user.update();
                         }
                     }
                     return ok("L'incription s'est bien passée ! :)");
@@ -214,7 +228,7 @@ public class ProjectController extends Controller {
             Integer id = Integer.parseInt(idUser);
             u = User.find.query().where().eq("id", id).findUnique();
             if (u != null) {
-              grp = u.groupe;
+                grp = u.groupe;
             }
         }
         SuiviProjet s = SuiviProjet.find.query()

@@ -70,12 +70,12 @@ $(function()
         }
     });
 
-    $(".tabGroup").click(function () {
-
+    $("#allUser").click(function () {
+        initTabUser()
     });
 
-    $(".tabUser").click(function () {
-
+    $("#allGroup").click(function () {
+        initTabGroup()
     });
 
     $("#subGroupe").click(function(){
@@ -112,7 +112,7 @@ $(function()
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
             var cardStart = "<ul class='stage'><div class='row'>"+
-                "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
+                "<div class='col m12 s12 l12  push-s1 push-m2 push-l1'>"+ "<li>"+
                 "<div class='card card-1'><div class='card-content'>"+
                 "<div class='row'>";
             var cardEnd = "</div></div></div></li></div></div></ul>";
@@ -153,7 +153,7 @@ $(function()
             var json = $.parseJSON(ret);
             initAutoComplete(json);
             var cardStart = "<ul class='stage'><div class='row'>"+
-                "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
+                "<div class='col m12 s12 l12  push-s1 push-m2 push-l1'>"+ "<li>"+
                 "<div class='card card-1'><div class='card-content'>"+
                 "<div class='row'>";
             var cardEnd = "</div></div></div></li></div></div></ul>";
@@ -193,7 +193,7 @@ $(function()
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
             var cardStart = "<ul class='stage'><div class='row'>"+
-                "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
+                "<div class='col m12 s12 l12  push-s1 push-m2 push-l1'>"+ "<li>"+
                 "<div class='card card-1'><div class='card-content'>"+
                 "<div class='row'>";
             var cardEnd = "</div></div></div></li></div></div></ul>";
@@ -208,7 +208,7 @@ $(function()
                 tr = $('<tr/>');
                 tr.append("<td>" + json[i].id + "</td>");
                 tr.append("<td>" + json[i].name + "</td>");
-                // initTab('userTab');
+                initTab('userTab');
                 $('#classeTabUser').children().append("<li class='tab col s3'><a class='TabUser' id="+  json[i].id + ">"+ json[i].name+  "</a></li>");
                 $('#classeTabGroup').children().append("<li class='tab col s3'><a class='TabGroup' id= "+  json[i].id+ ">"+ json[i].name +  "</a></li>");
                 // $('#mainTabs').children().removeAttr("style");
@@ -235,11 +235,11 @@ $(function()
 
     var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
     Materialize.scrollFire(options);
-    $('#mainTabs').tabs(/*{
-        onShow: function () {
-            initTab(this.id)
-        }
-    }*/);
+    $('.ul.tabs').tabs();
+
+    $('#mainTabs').click(function (e) {
+        initTab(e.target.id)
+    });
     $('#userTab').click();
 });
 
@@ -309,33 +309,44 @@ function initTab(tabName) {
     }
 }
 
+
+
 function initTabGroup(classeId) {
-    var dataGroup = {'classeId':classeId };
+    var dataGroup = JSON.stringify({'classeId':classeId});
+    if (classeId == 'allUser') {
+        dataGroup=null;
+    }
     $.ajax ({
         url: "/getAllGroupeProject",
         type: "POST",
-        data: JSON.stringify(dataGroup),
+        data: dataGroup,
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
-            var cardStart = "<ul class='stage'><div class='row'>"+
-                "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
-                "<div class='card card-1'><div class='card-content'>"+
+            var cardStart = "<ul class='stage' >"+
+                "<div class='row' >"+
+                "<div class='col m12 s12 l12  push-s1 push-m2 push-l1'>"+
+                "<li>"+
+                "<ul class='card-2 collapsible' data-collapsible='accordion'>"+
+                "<li>"+
+                "<div class='card-1 card-content collapsible-header'>"+
                 "<div class='row'>";
-            var cardEnd = "</div></div></div></li></div></div></ul>";
+            var cardEnd = "</div></div>";
+            var cardEnd2 = "</li></ul></li></div></div></ul>";
+            var accordContent= "<div class='collapsible-body'></div>";
             var table;
             var tr;
-            $("#projet").empty();
+            $('#projet :not(.of_btn,.btn-floating)').find('*').remove();
             for (var i = 0; i < json.length; i++) {
                 table = $("<table class='responsive-table highlight'></table>");
                 tr = $('<tr/>');
-                tr.append("<th>Id</th>");
+                tr.append("<th >Id</th>");
                 tr.append("<th> Theme </th>");
                 tr.append("<th>Date de soutenance</th>");
                 $(table).append(tr);
                 tr = $('<tr/>');
-                tr.append("<td>" + json[i].id + "</td>");
+                tr.append("<td id='idGroupe'>" + json[i].id + "</td>");
                 tr.append("<td>" + json[i].theme + "</td>");
                 tr.append("<td>" + json[i].date + "</td>");
                 $(table).append(tr);
@@ -346,31 +357,36 @@ function initTabGroup(classeId) {
                     tr.append("<td>" + json[i].users[j].surname + "</td>");
                     $(table).append(tr);
                 }
-                var res = cardStart + table.prop('outerHTML') + cardEnd;
+                getSuivis($(accordContent), json[i].id);
+                var res = cardStart + table.prop('outerHTML') + cardEnd + $(accordContent).prop('outerHTML') + cardEnd2;
                 $("#projet").append(res);
+                $('.collapsible').collapsible();
             }
         }
     });
 }
 
 function initTabUser(classeId) {
-    var dataUser = { 'classeId': classeId };
+    var dataGroup = JSON.stringify({'classeId':classeId});
+    if (classeId == 'allUser') {
+        dataGroup=null;
+    }
     $.ajax ({
-        url: "/getAllUser",
         type: "POST",
-        data: JSON.stringify(dataUser),
+        data: dataGroup,
+        url: "/getAllUser",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
             var cardStart = "<ul class='stage'><div class='row'>"+
-                "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
+                "<div class='col m12 s12 l12  push-s1 push-m2 push-l1'>"+ "<li>"+
                 "<div class='card card-1'><div class='card-content'>"+
                 "<div class='row'>";
             var cardEnd = "</div></div></div></li></div></div></ul>";
             var table;
             var tr;
-            $("#users").empty();
+            $('#users :not(.of_btn,.btn-floating)').find('*').remove();
             for (var i = 0; i < json.length; i++) {
                 table = $("<table class='responsive-table highlight'></table>");
                 tr = $('<tr/>');
@@ -382,7 +398,7 @@ function initTabUser(classeId) {
                 tr.append("<td>" + json[i].id + "</td>");
                 tr.append("<td>" + json[i].name + "</td>");
                 tr.append("<td>" + json[i].surname + "</td>");
-                $(table).append(tr);
+                table.append(tr);
                 // for (var j = 0; j < json[i].users.length; j++) {
                 //     tr = $('<tr/>');
                 //     tr.append("<td>" + json[i].users[j].id + "</td>");
@@ -396,3 +412,42 @@ function initTabUser(classeId) {
         }
     });
 }
+function getSuivis(selector, id ) {
+    var data = {"id" : id};
+    $.ajax ({
+        url: "/getProjects",
+        type: "POST",
+        data: JSON.stringify(data),
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            var table;
+            var tr;
+            for (var i = 0; i < json.length; i++) {
+                table = $("<table class='responsive-table highlight'></table>");
+                table2 = $("<table class='responsive-table highlight'></table>");
+                tr = $('<tr/>');
+                tr.append("<th>Id</th>");
+                tr.append("<th> Theme </th>");
+                tr.append("<th>Date de soutenance</th>");
+                table.append(tr);
+                tr = $('<tr/>');
+                tr.append("<td>" + json[i].id + "</td>");
+                tr.append("<td>" + json[i].dateSuivi + "</td>");
+                tr.append("<td>" + json[i].contenu + "</td>");
+                table.append(tr);
+                // for (var j = 0; j < json[i].users.length; j++) {
+                //     tr = $('<tr/>');
+                //     tr.append("<td>" + json[i].users[j].id + "</td>");
+                //     tr.append("<td>" + json[i].users[j].name+ "</td>");
+                //     tr.append("<td>" + json[i].users[j].surname + "</td>");
+                //     table2.append(tr);
+                // }
+                var res =  table.prop('outerHTML');
+            }
+            selector.append(res);
+        }
+    });
+}
+

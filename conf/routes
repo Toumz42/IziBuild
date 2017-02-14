@@ -13,6 +13,7 @@ GET     /stockage                                  controllers.Application.stock
 GET     /notes                                      controllers.Application.notes()
 GET     /admin                                      controllers.Application.admin()
 GET     /getProjects                                controllers.ProjectController.getProjects
+POST    /getProjects                                controllers.ProjectController.getProjects
 GET     /getGroupeProject                           controllers.ProjectController.getGroupeProject
 GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
