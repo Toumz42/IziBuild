@@ -4,7 +4,7 @@ nav.top-nav {
     box-shadow: none;
 }
 div.nav-wrapper {
-    overflow: hidden;
+    overflow: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
 }

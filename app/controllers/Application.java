@@ -76,10 +76,10 @@ public class Application extends Controller {
             return redirect("/login");
         }
     }
-    public Result note()
+    public Result notes()
     {
         if(checkConnected()) {
-            return ok(views.html.note.render());
+            return ok(views.html.notes.render());
         } else {
             return redirect("/login");
         }

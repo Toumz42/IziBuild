@@ -7,6 +7,8 @@ $(function () {
     if (pathname == "/login") {
         $('.logout').hide();
     }
+    $(".page-title").empty().append("Connexion");
+
     $('#login').val('');
     $('#password').val('');
 
