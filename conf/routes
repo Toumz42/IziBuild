@@ -9,13 +9,15 @@ GET     /projet                                     controllers.Application.proj
 GET     /home                                       controllers.Application.home()
 GET     /admin                                      controllers.Application.admin()
 GET     /getProjects                                controllers.ProjectController.getProjects
-GET     /addProject                                 controllers.ProjectController.addProject
 GET     /getGroupeProject                           controllers.ProjectController.getGroupeProject
 GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
+POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 GET     /getAllUser                                 controllers.UserController.getAllUser
+POST    /getAllUser                                 controllers.UserController.getAllUser
 GET     /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /addUser                                    controllers.UserController.addUser()
+POST    /addProject                                 controllers.ProjectController.addProject
 POST    /addProjectGroup                            controllers.ProjectController.addProjectGroup()
 POST    /addClasse                                  controllers.UserController.addClasse()
 POST    /logout                                     controllers.Application.logout()

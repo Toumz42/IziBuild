@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.ebean.Ebean;
 import models.GroupeProjet;
 import models.SuiviProjet;
 import models.User;
 
 
+import models.utils.DateUtils;
 import models.utils.HtmlUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -50,10 +52,8 @@ public class ProjectController extends Controller {
                 ArrayNode array = mapper.valueToTree(userList);
                 ObjectNode userNode = mapper.valueToTree(grp);
                 userNode.remove("dateSoutenance");
-                DateTime dt = new DateTime(grp.dateSoutenance);
-                DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
-                DateTimeFormatter frenchFmt = fmt.withLocale(Locale.FRENCH);
-                String date = frenchFmt.print(dt) ;
+                DateUtils dU = new DateUtils();
+                String date = dU.toFrenchDateString(grp.dateSoutenance);
                 userNode.put("date", date );
                 userNode.putArray("users").addAll(array);
                 listResult.add(userNode);
@@ -66,7 +66,13 @@ public class ProjectController extends Controller {
     }
 
     public Result getAllGroupeProject() {
-
+        JsonNode json = request().body().asJson();
+        Long classeId = null;
+        if (json != null) {
+          if (json.get("classeId") != null) {
+              classeId = json.get("classeId").asLong();
+          }
+        }
         String idUser = Application.getCurrentUser();
         User u = null;
         if (idUser != null && !idUser.equals("")) {
@@ -75,23 +81,26 @@ public class ProjectController extends Controller {
 
         }
         if (u != null) {
-            List<GroupeProjet> projetList= GroupeProjet.find.all();
+
+            List<GroupeProjet> projetList= null;
+            if (classeId != null) {
+                projetList = GroupeProjet.find.query().fetch("users").fetch("user.classe").where().eq("user.classe.id",classeId).findList();
+            } else {
+                projetList = GroupeProjet.find.all();
+            }
+
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
-            Integer i = 0;
             for (GroupeProjet g : projetList) {
                 List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",g.id).findList();
                 ArrayNode array = mapper.valueToTree(userList);
                 ObjectNode userNode = mapper.valueToTree(g);
                 userNode.remove("dateSoutenance");
-                DateTime dt = new DateTime(g.dateSoutenance);
-                DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
-                DateTimeFormatter frenchFmt = fmt.withLocale(Locale.FRENCH);
-                String date = frenchFmt.print(dt) ;
+                DateUtils dU = new DateUtils();
+                String date = dU.toFrenchDateString(g.dateSoutenance);
                 userNode.put("date", date );
                 userNode.putArray("users").addAll(array);
                 listResult.add(userNode);
-                i++;
             }
 
 
@@ -101,6 +110,8 @@ public class ProjectController extends Controller {
         return notFound();
 
     }
+
+
 
     public Result getProjects() {
         String idUser = Application.getCurrentUser();
@@ -115,6 +126,23 @@ public class ProjectController extends Controller {
 
 //                ObjectMapper mapper = new ObjectMapper();
                 JsonNode result = Json.toJson(list);
+                if (result.isArray() && result.size() == list.size()) {
+                    ArrayNode arrayNode = result.deepCopy();
+                    int i = 0;
+                    for (JsonNode j : arrayNode) {
+                        ObjectNode o = j.deepCopy();
+                        o.remove("dateSuivi");
+                        DateUtils dU = new DateUtils();
+                        String dateSuivi = dU.toFrenchDateString(list.get(i).dateSuivi);
+                        o.put("dateSuivi", dateSuivi );
+                        arrayNode.remove(i);
+                        j=o.deepCopy();
+                        arrayNode.add(j);
+                        i++;
+                    }
+                    result = arrayNode.deepCopy();
+                }
+
                 return ok(result);
 //                JsonNode retourJson = HtmlUtils.ListObjectToJsonTab(list);
 
@@ -128,6 +156,7 @@ public class ProjectController extends Controller {
         JsonNode json = request().body().asJson();
         String theme = json.get("theme").asText();
         String dateString = json.get("date").asText();
+        ArrayNode groupString = json.get("groupids").deepCopy();
         dateString = dateString.replace(",","");
         Date date = null;
         SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
@@ -136,7 +165,6 @@ public class ProjectController extends Controller {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         GroupeProjet u = GroupeProjet.find.query()
                 .where()
                 .ilike("theme","%"+theme+"%")
@@ -145,8 +173,16 @@ public class ProjectController extends Controller {
         if (u == null) {
             if (theme != null) {
                 if (!theme.equals("")) {
-                    GroupeProjet person = new GroupeProjet(theme, date);
-                    person.save();
+                    GroupeProjet groupeProjet = new GroupeProjet(theme, date);
+                    groupeProjet.save();
+                    for (JsonNode jsonNode : groupString ) {
+                        Long id = jsonNode.asLong();
+                        User user = User.find.byId(id);
+                        if (user != null) {
+                          user.setGroupe(groupeProjet);
+                          user.update();
+                        }
+                    }
                     return ok("L'incription s'est bien passée ! :)");
                 } else {
                     return ok("Erreur dans le nom");
@@ -160,8 +196,8 @@ public class ProjectController extends Controller {
 
     public Result addProject() {
         JsonNode json = request().body().asJson();
-        String theme = json.get("theme").asText();
         String dateString = json.get("date").asText();
+        String contenu = json.get("contenu").asText();
         dateString = dateString.replace(",","");
         Date date = null;
         SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
@@ -170,18 +206,34 @@ public class ProjectController extends Controller {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        GroupeProjet u = GroupeProjet.find.query()
+        String idUser = Application.getCurrentUser();
+        User u = null;
+        GroupeProjet grp = null;
+        Integer idGroupe=null;
+        if (idUser != null && !idUser.equals("")) {
+            Integer id = Integer.parseInt(idUser);
+            u = User.find.query().where().eq("id", id).findUnique();
+            if (u != null) {
+              grp = u.groupe;
+            }
+        }
+        SuiviProjet s = SuiviProjet.find.query()
                 .where()
-                .ilike("theme","%"+theme+"%")
+                .ilike("date_suivi","%"+date+"%")
                 .findUnique();
 
-        if (u == null) {
-            if (theme != null) {
-                if (!theme.equals("")) {
-                    GroupeProjet person = new GroupeProjet(theme, date);
-                    person.save();
-                    return ok("L'incription s'est bien passée ! :)");
+        if (s == null) {
+            if (contenu != null) {
+                if (!contenu.equals("")) {
+                    SuiviProjet suivi = new SuiviProjet(date,contenu,0,grp);
+                    suivi.save();
+                    ObjectNode result = Json.toJson(suivi).deepCopy();
+                    result.remove("dateSoutenance");
+                    DateUtils dU = new DateUtils();
+                    String dateSuivi = dU.toFrenchDateString(suivi.dateSuivi);
+                    result.put("dateSuivi", dateSuivi );
+                    return ok(result);
+
                 } else {
                     return ok("Erreur dans le nom");
                 }

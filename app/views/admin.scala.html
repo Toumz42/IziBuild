@@ -4,11 +4,20 @@
     </div>
     <script type='text/javascript' src='/assets/javascripts/index.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/admin.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
     <div class="header-panel white-text">
+        <ul class="tabs light-blue white-text" id="mainTabs">
+            <li class="tab col s3"><a class="active" id="userTab" href="#users">Utilisateurs</a></li>
+            <li class="white-text tab col s3"><a id="classeTab" href="#classe">Classe</a></li>
+            <li class="tab col s3"><a id="projTab" href="#projet">Projet</a></li>
+        </ul>
+    </div>
+    <div class="header-panel white-text" id="classeTabUser" style="display:none">
         <ul class="tabs light-blue white-text">
-            <li class="tab col s3"><a class="active" href="#users">Utilisateurs</a></li>
-            <li class="white-text tab col s3"><a  href="#classe">Classe</a></li>
-            <li class="tab col s3"><a href="#projet">Projet</a></li>
+        </ul>
+    </div>
+    <div class="header-panel white-text" id="classeTabGroup" style="display:none">
+        <ul class="tabs light-blue white-text">
         </ul>
     </div>
 
@@ -100,7 +109,7 @@
                                                             <label for="Nom">Nom</label>
                                                         </div>
                                                     </div>
-                                                    <a id="subClasse" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
+                                                    <a id="subClasse" class="waves-effect waves-light btn blue" style="float: right;">Valider</a>
                                                 </form>
                                             </div>
                                         </div>
@@ -137,12 +146,29 @@
                                                             <input id="theme" type="text" class="">
                                                             <label for="Nom">Theme</label>
                                                         </div>
-                                                    </div><div class="row">
-                                                    <div class="input-field col s12">
-                                                        <input id="date" type="date" class="datepicker">
-                                                        <label for="Nom">Date</label>
                                                     </div>
-                                                </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="date" type="date" class="datepicker">
+                                                            <label for="Nom">Date</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <div class="autocomplete" id="multiple">
+                                                                <div class="ac-users"></div>
+                                                                <div class="ac-input">
+                                                                    <div class="valign-wrapper">
+                                                                        <i class="valign material-icons prefix">account_circle</i>
+                                                                        <input type="text" id="multipleInput" placeholder="Selectionnez les membres du groupe" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                                <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
+                                                                <input type="hidden" name="multipleHidden" />
+                                                            </div>
+                                                            <label class="active" style="padding-bottom: 10px" for="multipleInput">Membres du groupe : </label>
+                                                        </div>
+                                                    </div>
                                                     <a id="subGroupe" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
                                                 </form>
                                             </div>
@@ -155,6 +181,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div>
 }

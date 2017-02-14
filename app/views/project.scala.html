@@ -3,64 +3,58 @@
 @main("Welcome to Play") {
 
     <script type='text/javascript' src='/assets/javascripts/views/project.js'></script>
-    <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
 
-    <div class="row" style="padding: 0 1.5rem">
-        <span style="font-size: 25px;color: #00abff">Bienvenue sur l'ENT Isitech</span><br>
-    </div>
-    <div class="row" style="display: none" id="addCard">
-        <div class="col s12 push-s1  push-l2">
-            <div class="card card-1">
-                <div class="card-content ">
-                    <div class="row">
-                        <form id='formSign' class='col s12 blue-text'>
-                            <span class='card-title blue-text'>Nouveau Suivi Projet</span>
+    <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
+    <div class="row" id="projectMainDiv">
+        <div class="row" style="padding: 0 1.5rem">
+            <span style="font-size: 25px;color: #00abff">Bienvenue sur l'ENT Isitech</span><br>
+        </div>
+        <div class="row" style="display: none" id="addCard">
+            <div class="col m12 s12 l12 push-s1  push-l2">
+                <div class="card card-1">
+                    <div class="card-content ">
+                        <div class="row">
+                            <form id='formSign' class='col s12 blue-text'>
+                                <span class='card-title blue-text'>Nouveau Suivi Projet</span>
                                 <div class='row'>
                                     <div class='input-field col s12'>
                                         <input id="dateSuivi" type='date' class='datepicker'>
                                         <label for='dateSuivi'>Date</label>
                                     </div>
                                 </div>
-                            <div class='row'>
-                                <div class='input-field col s12'>
-                                    <textarea id='textarea1' class='materialize-textarea' length='120'></textarea>
-                                    <label for='textarea1'>Commentaire suivi</label>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <textarea id='contenuSuivi' class='materialize-textarea' length='120'></textarea>
+                                        <label for='contenu'>Commentaire suivi</label>
+                                    </div>
                                 </div>
+                                <a id='subSuivi' class='waves-effect waves-light btn' style='float: right;background: #00abff'>Valider</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class='stage'>
+
+            <div class="row">
+                <div class="col s12 push-s1  push-l2">
+                    <div class="card card-1">
+                        <div class="card-content ">
+                            <div class="row" style="padding: 0 1.5rem" id="tableGrpProjectDiv" >
                             </div>
-                            <a id='sub' class='waves-effect waves-light btn' style='float: right;background: #00abff'>Valider</a>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </ul>
     </div>
-    <div class="row">
-        <div class="col s12 push-s1  push-l2">
-            <div class="card card-1">
-                <div class="card-content ">
-                    <div class="row" style="padding: 0 1.5rem" id="tableGrpProjectDiv" >
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col s12 push-s1  push-l2">
-            <div class="card card-1">
-                <div class="card-content ">
-                    <div class="row" style="padding: 0 1.5rem">
-                        <table id="tableProject" class="responsive-table highlight">
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
 }
+
+
+
+
+
+
+
+

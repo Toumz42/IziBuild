@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormatter;
 import play.data.FormFactory;
 import play.db.jpa.JPAApi;
 import play.db.jpa.Transactional;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import scala.App;
@@ -56,7 +57,13 @@ public class UserController extends Controller {
     }
 
     public Result getAllUser() {
-
+        JsonNode json = request().body().asJson();
+        Long classeId = null;
+        if (json != null) {
+          if (json.get("classeId") != null) {
+              classeId = json.get("classeId").asLong();
+          }
+        }
         String idUser = Application.getCurrentUser();
         User u = null;
         if (idUser != null && !idUser.equals("")) {
@@ -65,7 +72,12 @@ public class UserController extends Controller {
 
         }
         if (u != null) {
-            List<User> userList= User.find.all();
+            List<User> userList= null;
+            if (classeId != null) {
+                userList = User.find.query().where().eq("classe_id",classeId).findList();
+            } else {
+                userList = User.find.all();
+            }
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
             Integer i = 0;
@@ -135,9 +147,10 @@ public class UserController extends Controller {
         if (u == null) {
             if (name != null) {
                 if (!name.equals("")) {
-                    Classe person = new Classe(name);
-                    person.save();
-                    return ok("La création s'est bien passée ! :)");
+                    Classe claz = new Classe(name);
+                    claz.save();
+                    JsonNode result = Json.toJson(claz);
+                    return ok(result);
                 } else {
                     return ok("Erreur dans le theme");
                 }
