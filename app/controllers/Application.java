@@ -1,15 +1,13 @@
 package controllers;
 
-import io.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.ebean.Expr;
 import models.User;
 import models.utils.ErrorUtils;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,6 +55,15 @@ public class Application extends Controller {
     {
         if(checkConnected()) {
             return ok(views.html.admin.render());
+        } else {
+            return redirect("/login");
+        }
+    }
+
+    public Result info()
+    {
+        if(checkConnected()) {
+            return ok(views.html.info.render());
         } else {
             return redirect("/login");
         }
