@@ -7,6 +7,10 @@ GET     /                                           controllers.Application.inde
 GET     /login                                      controllers.Application.login()
 GET     /projet                                     controllers.Application.projet()
 GET     /home                                       controllers.Application.home()
+GET     /agenda                                    controllers.Application.agenda()
+GET     /info                                      controllers.Application.info()
+GET     /stockage                                  controllers.Application.stockage()
+GET     /note                                      controllers.Application.note()
 GET     /admin                                      controllers.Application.admin()
 GET     /getProjects                                controllers.ProjectController.getProjects
 GET     /getGroupeProject                           controllers.ProjectController.getGroupeProject

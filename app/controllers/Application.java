@@ -68,6 +68,30 @@ public class Application extends Controller {
             return redirect("/login");
         }
     }
+    public Result agenda()
+    {
+        if(checkConnected()) {
+            return ok(views.html.agenda.render());
+        } else {
+            return redirect("/login");
+        }
+    }
+    public Result note()
+    {
+        if(checkConnected()) {
+            return ok(views.html.note.render());
+        } else {
+            return redirect("/login");
+        }
+    }
+    public Result stockage()
+    {
+        if(checkConnected()) {
+            return ok(views.html.stockage.render());
+        } else {
+            return redirect("/login");
+        }
+    }
 
     public Result identifyUser()
     {
