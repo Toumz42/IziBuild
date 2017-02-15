@@ -168,3 +168,8 @@ textarea.materialize-textarea:focus:not([readonly])+label {
         width: 85%;
     }
 }
+body
+{
+    background-image: url(/assets/images/03.jpg)
+}
+
