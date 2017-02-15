@@ -170,6 +170,6 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 }
 body
 {
-    background-image: url(/assets/images/03.jpg)
+    background-image: url(../images/03.jpg)
 }
 
