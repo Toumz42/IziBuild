@@ -5,10 +5,15 @@ $(function()
 {
     $(".page-title").empty().append("Projet");
     var cardStart = "<ul class='stage'><div class='row'>"+
-        "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
+        "<div class='col m12 s12 l12 push-s1 push-l1'>"+ "<li>"+
         "<div class='card card-1'><div class='card-content'>"+
         "<div class='row'>";
     var cardEnd = "</div></div></div></li></div></div></ul>";
+    var toggle ="<div class='switch right-align'><label>"+
+                "   Validation  " +
+                "   <input disabled type='checkbox'> "+
+                "   <span class='lever'></span> "+
+                "   </label></div> " ;
     data=null;
 
     $.ajax ({
@@ -54,7 +59,7 @@ $(function()
 
         }
     });
-    var res = null;
+    var res = '';
     $.ajax ({
         url: "/getProjects",
         type: "GET",
@@ -69,12 +74,12 @@ $(function()
                 table = $("<table class='responsive-table highlight'></table>");
                 table2 = $("<table class='responsive-table highlight'></table>");
                 tr = $('<tr/>');
-                tr.append("<th>Id</th>");
+                tr.append("<th style='display: none'>Id</th>");
                 tr.append("<th> Theme </th>");
                 tr.append("<th>Date de soutenance</th>");
                 table.append(tr);
                 tr = $('<tr/>');
-                tr.append("<td>" + json[i].id + "</td>");
+                tr.append("<td style='display: none'>" + json[i].id + "</td>");
                 tr.append("<td>" + json[i].dateSuivi + "</td>");
                 tr.append("<td>" + json[i].contenu + "</td>");
                 table.append(tr);
@@ -85,7 +90,7 @@ $(function()
                 //     tr.append("<td>" + json[i].users[j].surname + "</td>");
                 //     table2.append(tr);
                 // }
-                var res = cardStart + table.prop('outerHTML') + cardEnd;
+                res = res + cardStart + table.prop('outerHTML') + toggle + cardEnd;
             }
             $("#projectMainDiv").append(res);
 
@@ -114,6 +119,7 @@ $(function()
 
                     var table;
                     var tr;
+                    var res='';
                     for (var i = 0; i < json.length; i++) {
                         table = $("<table class='responsive-table highlight'></table>");
                         tr = $('<tr/>');
@@ -126,7 +132,7 @@ $(function()
                         tr.append("<td>" + json[i].theme + "</td>");
                         tr.append("<td>" + json[i].date + "</td>");
                         table.append(tr);
-                        var res = cardStart + table.prop('outerHTML') + cardEnd;
+                        res = res + cardStart + table.prop('outerHTML') + cardEnd;
                     }
                     $("#projectMainDiv").append(res);
                 }
@@ -134,8 +140,25 @@ $(function()
         }
     });
 
+
     $('.datepicker').pickadate({
+        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
+        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+
+        labelMonthNext: 'Mois suivant',
+        labelMonthPrev: 'Mois precédent',
+        labelMonthSelect: 'Selection mois',
+        labelYearSelect: 'Selection année',
+
+        today: 'Auj',
+        clear: 'Effacer',
+        close: 'Fermer',
+        firstDay: true,
+        formatSubmit: 'yyyy-mm-dd',
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 15 // Creates a dropdown of 15 years to control year
-    });
+    })
 });
