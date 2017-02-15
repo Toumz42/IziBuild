@@ -19,6 +19,8 @@ GET     /getAllGroupeProject                        controllers.ProjectControlle
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 GET     /getAllUser                                 controllers.UserController.getAllUser
 POST    /getAllUser                                 controllers.UserController.getAllUser
+GET     /checkAdmin                                 controllers.Application.checkAdminJson
+GET     /checkCfProjet                              controllers.Application.checkCfProjetJson
 GET     /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /addUser                                    controllers.UserController.addUser()

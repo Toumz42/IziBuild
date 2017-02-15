@@ -47,6 +47,20 @@ $(function () {
     //
     //     }
     // });
+    $.ajax ({
+        url: "/checkAdmin",
+        type: "GET",
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+
+            if (json){
+                $(".linkproj").prop("href","/admin")
+            }
+        }
+    });
+
 
     $('.logout').on("click", function () {
         $.post(

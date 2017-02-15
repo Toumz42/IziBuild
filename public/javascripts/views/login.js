@@ -46,7 +46,7 @@ $(function () {
         }
     });
 
-   
+
 
     Materialize.showStaggeredList($("#stage"));
 });

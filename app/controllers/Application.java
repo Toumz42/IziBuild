@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ebean.Expr;
 import models.User;
 import models.utils.ErrorUtils;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -53,7 +54,7 @@ public class Application extends Controller {
 
     public Result admin()
     {
-        if(checkConnected()) {
+        if(checkConnected() && checkAdmin()) {
             return ok(views.html.admin.render());
         } else {
             return redirect("/login");
@@ -141,6 +142,45 @@ public class Application extends Controller {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public Boolean checkAdmin() {
+        Long user = Long.parseLong(session("userId"));
+        int droit = User.find.query().select("droit").where().eq("id", user).findUnique().droit;
+        if (droit == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public Result checkAdminJson() {
+        if (checkAdmin())
+        {
+            JsonNode jsonNode = Json.toJson(true);
+            return ok(jsonNode);
+        } else {
+            return forbidden();
+        }
+    }
+
+    public Boolean checkCfProjet()
+    {
+        Long user = Long.parseLong(session("userId"));
+        int droit = User.find.query().select("droit").where().eq("id",user).findUnique().droit;
+        if(droit == 1 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public Result checkCfProjetJson() {
+        if (checkCfProjet())
+        {
+            JsonNode jsonNode = Json.toJson(true);
+            return ok(jsonNode);
+        } else {
+            return forbidden();
         }
     }
 
