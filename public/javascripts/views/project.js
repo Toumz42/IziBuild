@@ -3,7 +3,7 @@
  */
 $(function()
 {
-    $(".page-title").empty().append("Projets");
+    $(".page-title").empty().append("Projet");
     var cardStart = "<ul class='stage'><div class='row'>"+
         "<div class='col m12 s12 l12 push-s1 push-l2'>"+ "<li>"+
         "<div class='card card-1'><div class='card-content'>"+
