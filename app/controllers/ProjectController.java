@@ -1,28 +1,17 @@
 package controllers;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.ebean.Ebean;
 import models.GroupeProjet;
 import models.SuiviProjet;
 import models.User;
-
-
 import models.utils.DateUtils;
-import models.utils.HtmlUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -255,5 +244,26 @@ public class ProjectController extends Controller {
             }
         }
         return ok("Déjà inscrit !");
+    }
+
+    public Boolean checkCfProjet()
+    {
+        Long user = Long.parseLong(session("userId"));
+        int droit = User.find.query().select("droit").where().eq("id",user).findUnique().droit;
+        if( droit == 1 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Result checkCfProjetJson() {
+        if (checkCfProjet())
+        {
+            JsonNode jsonNode = Json.toJson(true);
+            return ok(jsonNode);
+        } else {
+            return forbidden();
+        }
     }
 }
