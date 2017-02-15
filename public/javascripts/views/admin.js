@@ -363,10 +363,13 @@ function initTabGroup(classeId) {
                     tr.append("<td>" + json[i].users[j].surname + "</td>");
                     $(table).append(tr);
                 }
-                accordContent = getSuivis( json[i].id);
-                var res = cardStart + table.prop('outerHTML') + cardEnd + $(accordContent).prop('outerHTML') + cardEnd2;
-                $("#projetContent").append(res);
-                $('.collapsible').collapsible();
+                getSuivis($(accordContent),json[i].id).success(function (ret) {
+                        $(accordContent).append(formatSuivis(ret));
+                        var res = cardStart + table.prop('outerHTML') + cardEnd + $(accordContent).prop('outerHTML') + cardEnd2;
+                        $("#projetContent").append(res);
+                        $('.collapsible').collapsible();
+                    }
+                );
             }
         }
     });
@@ -420,41 +423,43 @@ function initTabUser(classeId) {
 }
 function getSuivis(selector, id ) {
     var data = {"id" : id};
-    $.ajax ({
+    return $.ajax ({
         url: "/getProjects",
         type: "POST",
         async: false,
         data: JSON.stringify(data),
         dataType: "text",
         contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            var table;
-            var tr;
-            for (var i = 0; i < json.length; i++) {
-                table = $("<table class='responsive-table highlight'></table>");
-                table2 = $("<table class='responsive-table highlight'></table>");
-                tr = $('<tr/>');
-                tr.append("<th>Id</th>");
-                tr.append("<th> Theme </th>");
-                tr.append("<th>Date de soutenance</th>");
-                table.append(tr);
-                tr = $('<tr/>');
-                tr.append("<td>" + json[i].id + "</td>");
-                tr.append("<td>" + json[i].dateSuivi + "</td>");
-                tr.append("<td>" + json[i].contenu + "</td>");
-                table.append(tr);
-                // for (var j = 0; j < json[i].users.length; j++) {
-                //     tr = $('<tr/>');
-                //     tr.append("<td>" + json[i].users[j].id + "</td>");
-                //     tr.append("<td>" + json[i].users[j].name+ "</td>");
-                //     tr.append("<td>" + json[i].users[j].surname + "</td>");
-                //     table2.append(tr);
-                // }
-                res = res + table.prop('outerHTML');
-            }
-            return res;
-        }
     });
+}
+
+function formatSuivis(ret) {
+    var json = $.parseJSON(ret);
+    var table;
+    var tr;
+    var res='';
+    for (var i = 0; i < json.length; i++) {
+        table = $("<table class='responsive-table highlight'></table>");
+        table2 = $("<table class='responsive-table highlight'></table>");
+        tr = $('<tr/>');
+        tr.append("<th>Id</th>");
+        tr.append("<th> Theme </th>");
+        tr.append("<th>Date de soutenance</th>");
+        table.append(tr);
+        tr = $('<tr/>');
+        tr.append("<td>" + json[i].id + "</td>");
+        tr.append("<td>" + json[i].dateSuivi + "</td>");
+        tr.append("<td>" + json[i].contenu + "</td>");
+        table.append(tr);
+        // for (var j = 0; j < json[i].users.length; j++) {
+        //     tr = $('<tr/>');
+        //     tr.append("<td>" + json[i].users[j].id + "</td>");
+        //     tr.append("<td>" + json[i].users[j].name+ "</td>");
+        //     tr.append("<td>" + json[i].users[j].surname + "</td>");
+        //     table2.append(tr);
+        // }
+        res = res + table.prop('outerHTML');
+    }
+    return res;
 }
 
