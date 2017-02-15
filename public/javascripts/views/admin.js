@@ -6,7 +6,13 @@ var groupids = [];
 
 $(function()
 {
-
+    var toggle ="<div class='switch'><label>"+
+        "   Off" +
+    "   <input disabled type='checkbox'> "+
+    "   <span class='lever'></span> "+
+    "   On "+
+    "   </label></div> " ;
+    
     $(".page-title").empty().append("Administration");
 
     $("#signInCheck").click(function(){
@@ -138,7 +144,7 @@ $(function()
                     $(table).append(tr);
                 }
                 var res = cardStart + table.prop('outerHTML') + cardEnd;
-                $("#projet").append(res);
+                $("#projetContent").append(res);
             }
         }
     });
@@ -179,7 +185,7 @@ $(function()
                 //     $(table).append(tr);
                 // }
                 var res = cardStart + table.prop('outerHTML') + cardEnd;
-                $("#users").append(res);
+                $("#usersContent").append(res);
             }
         }
     });
@@ -334,10 +340,10 @@ function initTabGroup(classeId) {
                 "<div class='row'>";
             var cardEnd = "</div></div>";
             var cardEnd2 = "</li></ul></li></div></div></ul>";
-            var accordContent= "<div class='collapsible-body'></div>";
+            var accordContent= "<div class='collapsible-body' id='suiviProjDiv'></div>";
             var table;
             var tr;
-            $('#projet :not(.of_btn,.btn-floating)').find('*').remove();
+            $('#projetContent').empty();
             for (var i = 0; i < json.length; i++) {
                 table = $("<table class='responsive-table highlight'></table>");
                 tr = $('<tr/>');
@@ -357,9 +363,9 @@ function initTabGroup(classeId) {
                     tr.append("<td>" + json[i].users[j].surname + "</td>");
                     $(table).append(tr);
                 }
-                getSuivis($(accordContent), json[i].id);
+                accordContent = getSuivis( json[i].id);
                 var res = cardStart + table.prop('outerHTML') + cardEnd + $(accordContent).prop('outerHTML') + cardEnd2;
-                $("#projet").append(res);
+                $("#projetContent").append(res);
                 $('.collapsible').collapsible();
             }
         }
@@ -386,7 +392,7 @@ function initTabUser(classeId) {
             var cardEnd = "</div></div></div></li></div></div></ul>";
             var table;
             var tr;
-            $('#users :not(.of_btn,.btn-floating)').find('*').remove();
+            $('#usersContent').empty();
             for (var i = 0; i < json.length; i++) {
                 table = $("<table class='responsive-table highlight'></table>");
                 tr = $('<tr/>');
@@ -407,7 +413,7 @@ function initTabUser(classeId) {
                 //     $(table).append(tr);
                 // }
                 var res = cardStart + table.prop('outerHTML') + cardEnd;
-                $("#users").append(res);
+                $("#usersContent").append(res);
             }
         }
     });
@@ -417,6 +423,7 @@ function getSuivis(selector, id ) {
     $.ajax ({
         url: "/getProjects",
         type: "POST",
+        async: false,
         data: JSON.stringify(data),
         dataType: "text",
         contentType: "application/json; charset=utf-8",
@@ -444,9 +451,9 @@ function getSuivis(selector, id ) {
                 //     tr.append("<td>" + json[i].users[j].surname + "</td>");
                 //     table2.append(tr);
                 // }
-                var res =  table.prop('outerHTML');
+                res = res + table.prop('outerHTML');
             }
-            selector.append(res);
+            return res;
         }
     });
 }

@@ -142,8 +142,8 @@ public class ProjectController extends Controller {
                 JsonNode result = Json.toJson(list);
                 if (result.isArray() && result.size() == list.size()) {
                     ArrayNode arrayNode = result.deepCopy();
-                    int i = 0;
-                    for (JsonNode j : arrayNode) {
+                    for ( int i = arrayNode.size() - 1; i >= 0; i--) {
+                        JsonNode j = arrayNode.get(i);
                         ObjectNode o = j.deepCopy();
                         o.remove("dateSuivi");
                         DateUtils dU = new DateUtils();
@@ -152,7 +152,6 @@ public class ProjectController extends Controller {
                         arrayNode.remove(i);
                         j=o.deepCopy();
                         arrayNode.add(j);
-                        i++;
                     }
                     result = arrayNode.deepCopy();
                 }

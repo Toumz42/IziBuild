@@ -11,6 +11,16 @@ div.nav-wrapper {
 .card-title {
     white-space: normal;
 }
+
+.picker__close, .picker__today,
+.picker__day.picker__day--today {
+    color: #00abff;
+}
+.picker--focused .picker__day--selected,
+.picker__date-display, .picker__weekday-display{
+    background-color: #00abff;
+}
+
 /*.tabs .tab a {*/
     /*color: #00abff;*/
 
