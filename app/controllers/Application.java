@@ -164,26 +164,6 @@ public class Application extends Controller {
         }
     }
 
-    public Boolean checkCfProjet()
-    {
-        Long user = Long.parseLong(session("userId"));
-        int droit = User.find.query().select("droit").where().eq("id",user).findUnique().droit;
-        if(droit == 1 ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public Result checkCfProjetJson() {
-        if (checkCfProjet())
-        {
-            JsonNode jsonNode = Json.toJson(true);
-            return ok(jsonNode);
-        } else {
-            return forbidden();
-        }
-    }
-
     public static String getCurrentUser()
     {
         String user = session("userId");

@@ -175,4 +175,18 @@ $(function()
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 15 // Creates a dropdown of 15 years to control year
     })
+
+    $.ajax ({
+        url: "/checkCfProjet",
+        type: "GET",
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+
+            if (!json){
+                $(".chefP").hide();
+            }
+        }
+    });
 });
