@@ -9,11 +9,6 @@ $(function()
         "<div class='card card-1'><div class='card-content'>"+
         "<div class='row'>";
     var cardEnd = "</div></div></div></li></div></div></ul>";
-    var toggle ="<div class='switch right-align'><label>"+
-                "   Validation  " +
-                "   <input disabled type='checkbox'> "+
-                "   <span class='lever'></span> "+
-                "   </label></div> " ;
     data=null;
 
     $.ajax ({
@@ -83,21 +78,40 @@ $(function()
                 tr.append("<td>" + json[i].dateSuivi + "</td>");
                 tr.append("<td>" + json[i].contenu + "</td>");
                 table.append(tr);
-                // for (var j = 0; j < json[i].users.length; j++) {
-                //     tr = $('<tr/>');
-                //     tr.append("<td>" + json[i].users[j].id + "</td>");
-                //     tr.append("<td>" + json[i].users[j].name+ "</td>");
-                //     tr.append("<td>" + json[i].users[j].surname + "</td>");
-                //     table2.append(tr);
-                // }
-                res = res + cardStart + table.prop('outerHTML') + toggle + cardEnd;
+                var checked = "";
+                if (json[i].etat == 1) {
+                    checked = "checked";
+                }
+                var toggle ="<div class='switch right-align'><label>"+
+                    "   Validation  " +
+                    "   <input disabled type='checkbox' "+checked+">"+
+                    "   <span class='lever'></span> "+
+                    "   </label></div> " ;
+                var res = cardStart + table.prop('outerHTML') + toggle + cardEnd;
+                $("#projectMainDiv").append(res);
             }
-            $("#projectMainDiv").append(res);
 
         }
     });
-
+    var turned = false;
     $("#addSuivi").click(function () {
+        if (turned) {
+            $(this).css({
+                '-webkit-transform': 'rotate(0deg)',
+                '-moz-transform': 'rotate(0deg)',
+                '-ms-transform': 'rotate(0deg)',
+                'transform': 'rotate(0deg)'
+            });
+            turned = false;
+        } else {
+            $(this).css({
+                '-webkit-transform': 'rotate(45deg)',
+                '-moz-transform': 'rotate(45deg)',
+                '-ms-transform': 'rotate(45deg)',
+                'transform': 'rotate(45deg)'
+            });
+            turned = true;
+        }
         $("#addCard").toggle('slide');
     });
 

@@ -124,8 +124,8 @@ public class ProjectController extends Controller {
         JsonNode json = request().body().asJson();
         Long grpId = null;
         if (json != null) {
-            if (json.get("grpId") != null) {
-                grpId = json.get("grpId").asLong();
+            if (json.get("id") != null) {
+                grpId = json.get("id").asLong();
             }
         }
         String idUser = Application.getCurrentUser();
@@ -134,9 +134,17 @@ public class ProjectController extends Controller {
             User u = User.find.query().where().eq("id",id).findUnique();
 
             if (u != null) {
-                List<SuiviProjet> list = SuiviProjet.find.query().fetch("groupe").fetch("groupe","id").where()
-                        .eq("groupe.id",u.groupe.id)
-                        .findList();
+
+                List<SuiviProjet> list = null;
+                if (grpId != null) {
+                    list = SuiviProjet.find.query().fetch("groupe").fetch("groupe", "id").where()
+                            .eq("groupe.id", grpId)
+                            .findList();
+                } else {
+                    list = SuiviProjet.find.query().fetch("groupe").fetch("groupe", "id").where()
+                            .eq("groupe.id", u.groupe.id)
+                            .findList();
+                }
 
 //                ObjectMapper mapper = new ObjectMapper();
                 JsonNode result = Json.toJson(list);
@@ -205,6 +213,18 @@ public class ProjectController extends Controller {
             }
         }
         return ok("Déjà inscrit !");
+    }
+
+    public Result toggleStateSuivi() {
+        JsonNode json = request().body().asJson();
+        Long id = json.get("id").asLong();
+        Boolean state = json.get("state").asBoolean();
+        SuiviProjet suiviProjet = SuiviProjet.find.byId(id);
+        if (suiviProjet != null) {
+          suiviProjet.setEtatBoolean(state);
+          suiviProjet.update();
+        }
+        return ok();
     }
 
     public Result addProject() {

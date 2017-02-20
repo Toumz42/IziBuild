@@ -1,7 +1,12 @@
 @()
 
 @main("Agenda") {
+    <link type="text/css" rel="stylesheet" href='/assets/stylesheets/fullcalendar.css'  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialFullCalendar.css'  media="screen,projection"/>
 
+    <script type='text/javascript' src='/assets/javascripts/fullcalendar/moment.min.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/fullcalendar/fullcalendar.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/fullcalendar/fr.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/agenda.js'></script>
 
     <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
@@ -13,10 +18,11 @@
         <ul class='stage'>
 
             <div class="row">
-                <div class="col s12 push-s1  push-l2">
+                <div class="col s12 m12 l12 push-s1  push-l1">
                     <div class="card card-1">
                         <div class="card-content ">
-                            <div class="row" style="padding: 0 1.5rem" id="" >
+                            <div class="row" id='calendar' >
+
                             </div>
                         </div>
                     </div>

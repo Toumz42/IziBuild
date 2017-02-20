@@ -32,6 +32,54 @@ public class SuiviProjet extends Model {
         this.groupe = groupe;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getDateSuivi() {
+        return dateSuivi;
+    }
+
+    public void setDateSuivi(Date dateSuivi) {
+        this.dateSuivi = dateSuivi;
+    }
+
+    public String getContenu() {
+        return contenu;
+    }
+
+    public void setContenu(String contenu) {
+        this.contenu = contenu;
+    }
+
+    public Integer getEtat() {
+        return etat;
+    }
+
+    public void setEtat(Integer etat) {
+        this.etat = etat;
+    }
+
+    public Boolean getEtatBoolean() {
+        return etat == 1 ;
+    }
+
+    public void setEtatBoolean(Boolean etat) {
+        this.etat = etat ? 1 : 0;
+    }
+
+    public GroupeProjet getGroupe() {
+        return groupe;
+    }
+
+    public void setGroupe(GroupeProjet groupe) {
+        this.groupe = groupe;
+    }
+
     public static Finder<Long, SuiviProjet> find = new Finder<Long,SuiviProjet>(SuiviProjet.class);
 
 }

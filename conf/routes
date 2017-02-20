@@ -14,6 +14,7 @@ GET     /notes                                      controllers.Application.note
 GET     /admin                                      controllers.Application.admin()
 GET     /getProjects                                controllers.ProjectController.getProjects
 POST    /getProjects                                controllers.ProjectController.getProjects
+POST    /toggleStateSuivi                           controllers.ProjectController.toggleStateSuivi
 GET     /getGroupeProject                           controllers.ProjectController.getGroupeProject
 GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
