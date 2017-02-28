@@ -41,7 +41,7 @@ $(function()
             },
             week: {
                 // options apply to basicWeek and agendaWeek views
-                columnFormat: 'ddd\nD'
+                columnFormat: '  ddd\nD'
             },
             day: {
                 // options apply to basicDay and agendaDay views
@@ -53,7 +53,9 @@ $(function()
                 url: '/getCalendar',
                 type: 'POST',
                 error: function() {
-                    alert('there was an error while fetching events!');
+                    // alert('there was an error while fetching events!');
+                    // $(".fc-now-indicator").hide();
+                    // $(".fc-now-indicator-arrow").hide()
                 },
                 color: '#D32F2F',   // a non-ajax option
                 textColor: 'black' // a non-ajax option
