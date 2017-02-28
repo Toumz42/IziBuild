@@ -4,5 +4,5 @@
 $(function()
 {
     $(".page-title").empty().append("Informations");
-   
+    $('a.embed').gdocsViewer();
 });

@@ -53,5 +53,25 @@ $(function () {
             });
     });
     $(".button-collapse").sideNav();
-    
+
+
+$.ajax ({
+    url: "/checkAdmin",
+    type: "GET",
+    dataType: "text",
+    contentType: "application/json; charset=utf-8",
+    success: function(ret, textStatus, jqXHR){
+        var json = $.parseJSON(ret);
+        if (json){
+            $(".linkNote").prop("href","/admnote");
+            $(".noteText").text("Administration Notes");
+        }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+        if(xhr.status==403) {
+            $(".linknote").prop("href","/note")
+        }
+    }
+});
+
 });

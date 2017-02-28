@@ -7,7 +7,7 @@ var arrayData = [];
 
 $(function()
 {
-    $(".page-title").empty().append("Administration");
+    $(".page-title").empty().append("Administration Projet");
 
     $("#signInCheck").click(function(){
         if ( $("#signInCheck").is( ":checked" ) ){

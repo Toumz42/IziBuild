@@ -81,10 +81,18 @@ public class Application extends Controller {
             return redirect("/login");
         }
     }
-    public Result notes()
+    public Result note()
     {
         if(checkConnected()) {
-            return ok(views.html.notes.render());
+            return ok(views.html.note.render());
+        } else {
+            return redirect("/login");
+        }
+    }
+    public Result admNote()
+    {
+        if(checkAdmin() && checkConnected()) {
+            return ok(views.html.admnote.render());
         } else {
             return redirect("/login");
         }
