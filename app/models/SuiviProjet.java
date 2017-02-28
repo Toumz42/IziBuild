@@ -1,4 +1,5 @@
 package models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.ebean.Finder;
 import io.ebean.Model;
 import scala.reflect.internal.Trees;
@@ -20,6 +21,7 @@ public class SuiviProjet extends Model {
     public String contenu;
     public Integer etat;
     @ManyToOne
+    @JsonBackReference
     public GroupeProjet groupe;
 
     public SuiviProjet() {

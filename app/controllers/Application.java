@@ -57,7 +57,11 @@ public class Application extends Controller {
         if(checkConnected() && checkAdmin()) {
             return ok(views.html.admin.render());
         } else {
-            return redirect("/login");
+            if(checkConnected()) {
+                return ok(views.html.home.render());
+            } else {
+                return redirect("/login");
+            }
         }
     }
 
@@ -108,16 +112,12 @@ public class Application extends Controller {
         User p = null;
         try
         {
-//            p = User.find.query().where().eq("login", login)
-//                    .and(Expr.eq("login", login),Expr.eq("password", pswd))
-//                    .findUnique();
-
             p = User.find.query().where().eq("login", login)
                     .and(Expr.eq("login", login),Expr.eq("password", pswd))
                     .findUnique();
 
             if (p != null) {
-                session("userId",p.id.toString());
+                session("userId",p.getId().toString());
                 return ok("/home");
             } else {
                 retour = ErrorUtils.createError( true, "Pas de Compte", "erreur" );
@@ -138,22 +138,27 @@ public class Application extends Controller {
     public Boolean checkConnected()
     {
         String user = session("userId");
-        if(user != null) {
-            return true;
-        } else {
-            return false;
+        User u = null;
+        if (user != null) {
+            Long id = Long.parseLong(user);
+            u = User.find.byId(id);
         }
+        if(u != null) {
+            return true;
+        }
+        return false;
     }
 
     public Boolean checkAdmin() {
-        Long user = Long.parseLong(session("userId"));
-        int droit = User.find.query().select("droit").where().eq("id", user).findUnique().droit;
-        if (droit == 0) {
-            return true;
-        } else {
-            return false;
+        User u = Application.getCurrentUserObj();
+        if (u!=null) {
+            if (u.getDroit() == 0) {
+                return true;
+            }
         }
+        return false;
     }
+
     public Result checkAdminJson() {
         if (checkAdmin())
         {
@@ -176,14 +181,13 @@ public class Application extends Controller {
 
     public static User getCurrentUserObj()
     {
+        User u = null;
         String user = session("userId");
-        Long id = Long.parseLong(user);
-        User u = User.find.byId(id);
-        if(u != null) {
-            return u;
-        } else {
-            return null;
+        if (user != null) {
+            Long id = Long.parseLong(user);
+            u = User.find.byId(id);
         }
+        return u;
     }
 
     public Result logout() {

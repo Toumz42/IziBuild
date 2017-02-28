@@ -39,14 +39,29 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 
 /* Remove that awful yellow color and border from today in Schedule */
 .fc-today {
-    opacity: 0;
+    opacity: 1;
     border: none;
+    text-underline: none;
 }
 .fc-center {
     display: block !important;
     clear: both !important;
+    padding-top: 20px;
+}
+.fc-center h2 {
+    font-size: 3rem;
+}
+.fc-past a{
+    color:lightgray !important;
 }
 
+.fc-future a{
+    color: black !important;
+}
+
+.fc-today a{
+    color:#00abff !important;
+}
 
 /* Styling for each event from Schedule */
 .fc-time-grid-event.fc-v-event.fc-event {
@@ -97,11 +112,27 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
     margin-left: 12px !important;
     padding: 5px! important;
 }
+.fc-time-grid-event.fc-v-event.fc-event {
+    opacity: .65 !important;
+}
 .ui-icon-arrow-material-p:after {
     content: "PREC.";
 }
 .ui-icon-arrow-material-n:after {
     content: "SUIV.";
+}
+.ui-icon {
+    padding: 10px;
+}
+.fc-now-indicator {
+    position: absolute;
+    border: 0 solid #00abff;
+}
+.fc-time-grid .fc-now-indicator-arrow {
+    border-width: 5px 5px 5px 5px !important;
+    border-top-color: #00abff !important;
+    border-bottom-color: #00abff !important;
+    border-radius: 10px !important;
 }
 .fc-divider {
     color: #607D8B;

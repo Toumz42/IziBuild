@@ -80,7 +80,17 @@
         this.value = '';
         this.initialize();
     };
-
+    
+    function highlight(string, $el) {
+        var matchStart = $el.text().toLowerCase().indexOf("" + string.toLowerCase() + ""),
+            matchEnd = matchStart + string.length - 1,
+            beforeMatch = $el.text().slice(0, matchStart),
+            matchText = $el.text().slice(matchStart, matchEnd + 1),
+            afterMatch = $el.text().slice(matchEnd + 1);
+        $el.html("<span>" + beforeMatch + "<span class='highlight'>" + matchText + "</span>" + afterMatch + "</span>");
+        return $el[0].outerHTML;
+    }
+    
     Autocomplete.defaults = {
         cacheable: true,
         limit: 10,
@@ -141,7 +151,7 @@
             var timer;
             var fetching = false;
 
-            function getItemsHtml (list) {
+            function getItemsHtml (value, list) {
                 var itemsHtml = '';
 
                 if (!list.length) {
@@ -153,15 +163,17 @@
                     if (idx >= self.options.limit) {
                         return false;
                     }
-
-                    itemsHtml += self.compiled.item({ 'item': item});
+                    var $el = $(self.compiled.item({ 'item' : item}));
+                    var elHiglight = highlight(value, $el) ;
+                    itemsHtml += elHiglight;
                 });
 
                 return itemsHtml;
             }
 
-            function handleList (value, list) {
-                var itemsHtml = getItemsHtml(list);
+            function handleList(value, list) {
+                var listS =  performSearch(value, list);
+                var itemsHtml = getItemsHtml(value,listS);
                 var currentValue = self.$el.val();
 
                 if (self.options.ignoreCase) {
@@ -175,7 +187,7 @@
                 if (value !== currentValue) {
                     return false;
                 }
-
+                
                 if(itemsHtml) {
                     self.$dropdown.html(itemsHtml);
                     self.$dropdown.show();
@@ -183,6 +195,23 @@
                     self.$dropdown.hide();
                 }
 
+            }
+
+            function performSearch(input, list) {
+                var res = [];
+                var val = input.toLowerCase();
+                for (var i = 0 ; i < list.length; i++) {
+                    var key = list[i];
+                    var keyText = list[i].text;
+                    if (keyText.toLowerCase().indexOf(val) !== -1 &&
+                        keyText.toLowerCase() !== val) {
+                        // var autocompleteOption = $('<li></li>');
+                        // autocompleteOption.append('<span>'+ key +'</span>');
+                        res.push(key);
+                        // highlight(val, autocompleteOption);
+                    }
+                }
+                return res;
             }
 
             self.value = self.options.multiple.enable ? [] : '';

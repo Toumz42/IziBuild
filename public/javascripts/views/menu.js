@@ -15,38 +15,7 @@ $(function () {
     if (is_touch_device()) {
         $('#nav-mobile').css({ overflow: 'auto'});
     }
-
-    // $("#button").on('click', function () {
-    //     this.classList.toggle('open');
-    //     container.classList.toggle('active');
-    //     container.classList.toggle('enable');
-    //
-    //     var child = $(this).find(".material-design-hamburger__layer")
-    //     if (child.hasClass('material-design-hamburger__icon--to-arrow')) {
-    //         child.removeClass('material-design-hamburger__icon--to-arrow');
-    //         child.addClass('material-design-hamburger__icon--from-arrow');
-    //         $(".swipe-area").width("50px");
-    //     } else {
-    //         child.removeClass('material-design-hamburger__icon--from-arrow');
-    //         child.addClass('material-design-hamburger__icon--to-arrow');
-    //         $(".swipe-area").width("300px");
-    //     }
-    // });
-    //
-    // $(".swipe-area").swipe({
-    //     swipeLeft:function(event, phase, direction, distance, duration, fingers) {
-    //         $("#button").click();
-    //         $(".swipe-area").width("50px");
-    //     },
-    //     swipeRight:function(event, phase, direction, distance, duration, fingers)
-    //     {
-    //
-    //         $("#button").click();
-    //         $(".swipe-area").width("300px");
-    //
-    //
-    //     }
-    // });
+    
     $.ajax ({
         url: "/checkAdmin",
         type: "GET",
@@ -54,13 +23,17 @@ $(function () {
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
-
             if (json){
-                $(".linkproj").prop("href","/admin")
+                $(".linkproj").prop("href","/admin");
+                $(".projText").text("Administration");
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            if(xhr.status==403) {
+                $(".linkproj").prop("href","/projet")
             }
         }
-    });
-
+    });  
 
     $('.logout').on("click", function () {
         $.post(

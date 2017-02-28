@@ -27,10 +27,10 @@ import static play.libs.Json.toJson;
 public class UserController extends Controller {
 
     public Result addUser(/*String name, String surname, String email, String password*/) {
-//        return redirect(routes.UserController.index());
         JsonNode json = request().body().asJson();
         String name = json.get("name").asText();
         String surname = json.get("surname").asText();
+        Integer droit = json.get("droit").asInt();
         String email = json.get("email").asText();
         String pass = json.get("password").asText();
 
@@ -42,18 +42,19 @@ public class UserController extends Controller {
         if (u == null) {
             if (email != null) {
                 if (!email.equals("")) {
-                    User person = new User(name, surname, email, pass);
+                    User person = new User(name, surname, email, pass,droit);
                     person.save();
-                    return ok("L'incription s'est bien passée ! :)");
+                    JsonNode retour = Json.toJson(person);
+                    return ok().sendJson(retour);
                 } else {
-                    return ok("Erreur dans le mail");
+                    return badRequest("Erreur dans le mail");
                 }
             } else {
-                return ok("Erreur dans le mail");
+                return badRequest("Erreur dans le mail");
             }
         }
 
-        return ok("Déjà inscrit !");
+        return badRequest("Déjà inscrit !");
     }
 
     public Result getAllUser() {
@@ -80,23 +81,11 @@ public class UserController extends Controller {
             }
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
-            Integer i = 0;
+
             for (User user : userList) {
-//                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",g.id).findList();
-//                ArrayNode array = mapper.valueToTree(userList);
                 ObjectNode userNode = mapper.valueToTree(user);
-//                ObjectNode userNode = mapper.valueToTree(g);
-//                userNode.remove("dateSoutenance");
-//                DateTime dt = new DateTime(g.dateSoutenance);
-//                DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
-//                DateTimeFormatter frenchFmt = fmt.withLocale(Locale.FRENCH);
-//                String date = frenchFmt.print(dt) ;
-//                userNode.put("date", date );
-//                userNode.putArray("users").addAll(array);
                 listResult.add(userNode);
-                i++;
             }
-//                JsonNode retour = Json.toJson(projetList);
             return ok().sendJson(listResult);
         }
         return notFound();
@@ -113,23 +102,10 @@ public class UserController extends Controller {
             List<Classe> classeList= Classe.find.all();
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
-            Integer i = 0;
             for (Classe classe : classeList) {
-//                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",g.id).findList();
-//                ArrayNode array = mapper.valueToTree(userList);
                 ObjectNode classeNode = mapper.valueToTree(classe);
-//                ObjectNode userNode = mapper.valueToTree(g);
-//                userNode.remove("dateSoutenance");
-//                DateTime dt = new DateTime(g.dateSoutenance);
-//                DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
-//                DateTimeFormatter frenchFmt = fmt.withLocale(Locale.FRENCH);
-//                String date = frenchFmt.print(dt) ;
-//                userNode.put("date", date );
-//                userNode.putArray("users").addAll(array);
                 listResult.add(classeNode);
-                i++;
             }
-//                JsonNode retour = Json.toJson(projetList);
             return ok().sendJson(listResult);
         }
         return notFound();
@@ -159,15 +135,5 @@ public class UserController extends Controller {
             }
         }
         return ok("Déjà inscrit !");
-    }
-
-    public Boolean checkAdmin() {
-        User u = Application.getCurrentUserObj();
-        if (u!=null) {
-            if (u.droit == 0) {
-                return true;
-            }
-        }
-        return false;
     }
 }

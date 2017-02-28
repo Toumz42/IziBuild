@@ -7,9 +7,9 @@ GET     /                                           controllers.Application.inde
 GET     /login                                      controllers.Application.login()
 GET     /projet                                     controllers.Application.projet()
 GET     /home                                       controllers.Application.home()
-GET     /agenda                                    controllers.Application.agenda()
-GET     /info                                      controllers.Application.info()
-GET     /stockage                                  controllers.Application.stockage()
+GET     /agenda                                     controllers.Application.agenda()
+GET     /info                                       controllers.Application.info()
+GET     /stockage                                   controllers.Application.stockage()
 GET     /notes                                      controllers.Application.notes()
 GET     /admin                                      controllers.Application.admin()
 GET     /getProjects                                controllers.ProjectController.getProjects
@@ -21,6 +21,7 @@ POST    /getAllGroupeProject                        controllers.ProjectControlle
 GET     /getAllUser                                 controllers.UserController.getAllUser
 POST    /getAllUser                                 controllers.UserController.getAllUser
 GET     /checkAdmin                                 controllers.Application.checkAdminJson
+POST    /getCalendar                                controllers.CalendarController.getCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
 GET     /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()

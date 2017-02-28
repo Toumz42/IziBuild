@@ -11,6 +11,26 @@ $(function()
     var cardEnd = "</div></div></div></li></div></div></ul>";
     data=null;
 
+
+    $.ajax ({
+        url: "/checkCfProjet",
+        type: "GET",
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+
+            if (json){
+                $(".chefP").show();
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            if(xhr.status==403) {
+                //handle error
+            }
+        }
+    });
+
     $.ajax ({
         url: "/getGroupeProject",
         type: "GET",
@@ -174,19 +194,7 @@ $(function()
         formatSubmit: 'yyyy-mm-dd',
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 15 // Creates a dropdown of 15 years to control year
-    })
-
-    $.ajax ({
-        url: "/checkCfProjet",
-        type: "GET",
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-
-            if (!json){
-                $(".chefP").hide();
-            }
-        }
     });
+
+
 });

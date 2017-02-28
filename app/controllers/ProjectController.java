@@ -25,29 +25,30 @@ import java.util.Locale;
 public class ProjectController extends Controller {
 
     public Result getGroupeProject() {
+        User u = Application.getCurrentUserObj();
+        if (u != null ) {
 
-
-        String idUser = Application.getCurrentUser();
-        if (idUser != null && !idUser.equals("")) {
-            Integer id = Integer.parseInt(idUser);
-            User u = User.find.query().where().eq("id",id).findUnique();
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
             if (u != null) {
                 GroupeProjet grp = GroupeProjet.find.query().where()
-                        .eq("id",u.groupe.id)
+                        .eq("id",u.getGroupe().getId())
                         .findUnique();
-                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",grp.id).findList();
-                ArrayNode array = mapper.valueToTree(userList);
-                ObjectNode userNode = mapper.valueToTree(grp);
-                userNode.remove("dateSoutenance");
-                DateUtils dU = new DateUtils();
-                String date = dU.toFrenchDateString(grp.dateSoutenance);
-                userNode.put("date", date );
-                userNode.putArray("users").addAll(array);
-                listResult.add(userNode);
+                List<User> userList = null;
+                userList = grp.getUserList();
+//                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",grp.getId()).findList();
+                if (userList !=null) {
+                    ArrayNode array = mapper.valueToTree(userList);
+                    ObjectNode userNode = mapper.valueToTree(grp);
+                    userNode.remove("dateSoutenance");
+                    DateUtils dU = new DateUtils();
+                    String date = dU.toFrenchDateString(grp.getDateSoutenance());
+                    userNode.put("date", date );
+                    userNode.putArray("users").addAll(array);
+                    listResult.add(userNode);
 
-                return ok().sendJson(listResult);
+                    return ok().sendJson(listResult);
+                }
             }
         }
         return notFound();
@@ -75,9 +76,9 @@ public class ProjectController extends Controller {
             if (classeId != null) {
                 List<User> userList = User.find.query().fetch("groupe").fetch("classe").where().eq("classe.id",classeId).findList();
                 for (User user : userList) {
-                    if (user.groupe != null) {
-                        if (!projetList.contains(user.groupe)) {
-                            projetList.add(user.groupe);
+                    if (user.getGroupe() != null) {
+                        if (!projetList.contains(user.getGroupe())) {
+                            projetList.add(user.getGroupe());
                         }
                     }
                 }
@@ -88,20 +89,17 @@ public class ProjectController extends Controller {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
             for (GroupeProjet g : projetList) {
-                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",g.id).findList();
+                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",g.getId()).findList();
                 ArrayNode array = mapper.valueToTree(userList);
                 ObjectNode userNode = mapper.valueToTree(g);
                 userNode.remove("dateSoutenance");
-                userNode.remove("dateSoutenance");
                 DateUtils dU = new DateUtils();
-                String date = dU.toFrenchDateString(g.dateSoutenance);
+                String date = dU.toFrenchDateString(g.getDateSoutenance());
                 userNode.put("date", date );
-                userNode.put("theme", g.theme );
+                userNode.put("theme", g.getTheme() );
                 userNode.putArray("users").addAll(array);
                 listResult.add(userNode);
             }
-
-
 //                JsonNode retour = Json.toJson(projetList);
             return ok().sendJson(listResult);
         }
@@ -131,7 +129,7 @@ public class ProjectController extends Controller {
                             .findList();
                 } else {
                     list = SuiviProjet.find.query().fetch("groupe").fetch("groupe", "id").where()
-                            .eq("groupe.id", u.groupe.id)
+                            .eq("groupe.id", u.getGroupe().getId())
                             .findList();
                 }
 
@@ -152,10 +150,8 @@ public class ProjectController extends Controller {
                     }
                     result = arrayNode.deepCopy();
                 }
-
                 return ok(result);
 //                JsonNode retourJson = HtmlUtils.ListObjectToJsonTab(list);
-
             }
         }
         return notFound();
@@ -236,7 +232,7 @@ public class ProjectController extends Controller {
             Integer id = Integer.parseInt(idUser);
             u = User.find.query().where().eq("id", id).findUnique();
             if (u != null) {
-                grp = u.groupe;
+                grp = u.getGroupe();
             }
         }
         SuiviProjet s = SuiviProjet.find.query()
@@ -269,7 +265,7 @@ public class ProjectController extends Controller {
     public Boolean checkCfProjet()
     {
         Long user = Long.parseLong(session("userId"));
-        int droit = User.find.query().select("droit").where().eq("id",user).findUnique().droit;
+        int droit = User.find.query().select("droit").where().eq("id",user).findUnique().getDroit();
         if( droit == 1 ) {
             return true;
         } else {

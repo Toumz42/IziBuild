@@ -3,6 +3,7 @@
 @main("Administration") {
     </div>
     <script type='text/javascript' src='/assets/javascripts/index.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/utils/adminUtils.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/admin.js'></script>
     <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
     <div class="header-panel white-text">
@@ -65,17 +66,35 @@
                                                     <div class="row">
                                                         <div class="input-field col s12">
                                                             <input id="password" type="password" class="validate">
-                                                            <label for="password">Password</label>
+                                                            <label for="password">Mot de Passe</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <select id="droit">
+                                                                <option value="" disabled selected>Choisir une option</option>
+                                                                <option value="0">Professeur</option>
+                                                                <option value="2">Utilisateur</option>
+                                                            </select>
+                                                            <label>Profil</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <select id="classeUser">
+                                                                <option value="" disabled selected>Choisir une option</option>
+                                                            </select>
+                                                            <label>Classe</label>
                                                         </div>
                                                     </div>
                                                     <div class="row" id="signInNameDiv">
                                                         <div class="input-field col s6">
                                                             <input id="last_name" type="text" class="validate">
-                                                            <label for="last_name">Last Name</label>
+                                                            <label for="last_name">Nom</label>
                                                         </div>
                                                         <div class="input-field col s6">
                                                             <input id="first_name" type="text" class="validate">
-                                                            <label for="first_name">First Name</label>
+                                                            <label for="first_name">Prénom</label>
                                                         </div>
                                                     </div>
                                                     <a id="sub" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
@@ -91,7 +110,7 @@
                 <div id="usersContent"></div>
             </div>
             <div id="classe">
-                <a id="addClasse" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
+                <a id="addClasse" class="btn-floating btn-large hasTab waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
                 <div id="classeAdderDiv" style="display: none">
                     <ul class="stage">
                         <div class="row">
@@ -121,6 +140,7 @@
                         </div>
                     </ul>
                 </div>
+                <div id="classeContent"></div>
             </div>
             <div id="projet">
                 <a id="addGroupe" class="btn-floating twoTabLines hasTab btn-large waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>

@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.ebean.Model;
 import io.ebean.Finder;
 
@@ -11,22 +12,25 @@ public class User extends Model {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-	public Long id;
-    public String name;
-    public String surname;
-    public String email;
-    public String login = surname+"."+name;
-    public String password;
-    public Integer droit;
-    @OneToOne
-    public Classe classe;
-    @OneToOne
-    public GroupeProjet groupe;
+    private Long id;
+    private String name;
+    private String surname;
+    private String email;
+    private String login = surname+"."+name;
+    private String password;
+    private Integer droit;
+    @ManyToOne
+    @JsonBackReference
+    private Classe classe;
+    @ManyToOne
+    @JsonBackReference
+    private GroupeProjet groupe;
 
-    public User(String name, String surname, String email, String password) {
+    public User(String name, String surname, String email, String password, Integer droit) {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.droit = droit;
         this.password = password;
     }
 

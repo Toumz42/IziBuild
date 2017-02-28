@@ -7711,10 +7711,12 @@ var TimeGrid = FC.TimeGrid = Grid.extend(DayTableMixin, {
 		}
 
 		// render an arrow over the axis
-		if (segs.length > 0) { // is the current time in view?
+		// if (segs.length > 0) { // is the current time in view?
+		for (i = 0; i < segs.length; i++) {
 			nodes.push($('<div class="fc-now-indicator fc-now-indicator-arrow"></div>')
 				.css('top', top)
-				.appendTo(this.el.find('.fc-content-skeleton'))[0]);
+				.appendTo(this.colContainerEls.eq(segs[i].col))[0]);
+				// .appendTo(this.el.find('.fc-content-skeleton'))[0]);
 		}
 
 		this.nowIndicatorEls = $(nodes);
