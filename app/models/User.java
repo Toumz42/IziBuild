@@ -31,6 +31,7 @@ public class User extends Model {
     @JsonManagedReference
     private List<Note> noteList;
 
+
     public User(String name, String surname, String email, String password, Integer droit) {
         this.name = name;
         this.surname = surname;
