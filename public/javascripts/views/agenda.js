@@ -29,6 +29,24 @@ $(function()
         navLinks: true,
         // editable: true,
         eventLimit: true, // allow "more" link when too many events
+        viewRender: function ( view, element ) {
+            // alert("coucou");
+        },
+        views: {
+            basic: {
+                // options apply to basicWeek and basicDay views
+            },
+            agenda: {
+                // options apply to agendaWeek and agendaDay views
+            },
+            week: {
+                // options apply to basicWeek and agendaWeek views
+                columnFormat: 'ddd\nD'
+            },
+            day: {
+                // options apply to basicDay and agendaDay views
+            }
+        },
         eventSources: [
             // your event source
             {

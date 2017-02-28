@@ -104,12 +104,6 @@ public class CalendarEvent extends Model {
         this.classe = classe;
     }
 
-    public String toCalendarString(Date date) {
-        String res = "";
-
-
-        return res;
-    }
     public String generateColor() {
         int randomNum = ThreadLocalRandom.current().nextInt(0, (colorList.size()) + 1);
         String res = this.colorList.get(randomNum);
