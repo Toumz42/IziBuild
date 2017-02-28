@@ -1,10 +1,12 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Model;
 import io.ebean.Finder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 //@Table(name="user")
@@ -25,6 +27,10 @@ public class User extends Model {
     @ManyToOne
     @JsonBackReference
     private GroupeProjet groupe;
+    @OneToMany(mappedBy="user")
+    @JsonManagedReference
+    private List<Note> noteList;
+
 
     public User(String name, String surname, String email, String password, Integer droit) {
         this.name = name;
