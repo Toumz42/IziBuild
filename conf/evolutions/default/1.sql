@@ -28,6 +28,18 @@ create table groupe_projet (
   constraint pk_groupe_projet primary key (id)
 );
 
+create table matiere (
+  id                            bigint auto_increment not null,
+  matiere                       varchar(255),
+  constraint pk_matiere primary key (id)
+);
+
+create table note (
+  user_id                       bigint,
+  matiere_id                    bigint,
+  note                          integer
+);
+
 create table suivi_projet (
   id                            bigint auto_increment not null,
   date_suivi                    datetime(6),
@@ -55,6 +67,12 @@ alter table calendar_event add constraint fk_calendar_event_prof_id foreign key 
 alter table calendar_event add constraint fk_calendar_event_classe_id foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 create index ix_calendar_event_classe_id on calendar_event (classe_id);
 
+alter table note add constraint fk_note_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_note_user_id on note (user_id);
+
+alter table note add constraint fk_note_matiere_id foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
+create index ix_note_matiere_id on note (matiere_id);
+
 alter table suivi_projet add constraint fk_suivi_projet_groupe_id foreign key (groupe_id) references groupe_projet (id) on delete restrict on update restrict;
 create index ix_suivi_projet_groupe_id on suivi_projet (groupe_id);
 
@@ -72,6 +90,12 @@ alter table calendar_event drop foreign key fk_calendar_event_prof_id;
 alter table calendar_event drop foreign key fk_calendar_event_classe_id;
 drop index ix_calendar_event_classe_id on calendar_event;
 
+alter table note drop foreign key fk_note_user_id;
+drop index ix_note_user_id on note;
+
+alter table note drop foreign key fk_note_matiere_id;
+drop index ix_note_matiere_id on note;
+
 alter table suivi_projet drop foreign key fk_suivi_projet_groupe_id;
 drop index ix_suivi_projet_groupe_id on suivi_projet;
 
@@ -86,6 +110,10 @@ drop table if exists calendar_event;
 drop table if exists classe;
 
 drop table if exists groupe_projet;
+
+drop table if exists matiere;
+
+drop table if exists note;
 
 drop table if exists suivi_projet;
 
