@@ -33,7 +33,7 @@ $(function()
     });
 
     $("#sub").click(function(){
-        if ( ($("#email").size()!=0) && ($("#password").size()!=0) )
+        if ( check())
         {
 
             var data = {"name" : $("#last_name").val(),
@@ -232,6 +232,45 @@ $(function()
     $('#userTab').click();
 });
 
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+function check() {
+
+    if ($("#email").val() == "" || !validateEmail($("#email").val())) {
+        $("#email").addClass("invalid");
+        myToast("Merci d'ajouter un email valide");
+        return false;
+
+    } else
+    {
+
+        $("#email").addClass("valid");
+        if ($("#password").val() == "") {
+            myToast("Merci d'ajouter un Mot de passe");
+            return false;
+        }
+        else if ($("#droit").val() == "") {
+            myToast("Merci d'ajouter un type de Profil")
+            return false;
+        }
+        else if ($("#classe").val() == "") {
+            myToast("Merci d'ajouter une Classe")
+            return false;
+        }
+        else if ($("#first_name").val() == "") {
+            myToast("Merci d'ajouter un Prenom")
+            return false;
+        }
+        else if ($("#last_name").val() == "") {
+            myToast("Merci d'ajouter un Nom")
+            return false;
+        }
+    }
+    return true
+}
 
 function initAutoComplete(json) {
     if (!Array.isArray(json)) {
