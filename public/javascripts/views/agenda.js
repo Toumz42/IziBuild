@@ -30,7 +30,13 @@ $(function()
         // editable: true,
         eventLimit: true, // allow "more" link when too many events
         viewRender: function ( view, element ) {
-            // alert("coucou");
+            var val = $('.fc-day-header a');
+            $.each(val,function (index, element) {
+                var $el = $(element);
+                var val = $el.html().split("|");
+                var res = "<div style='text-align: left; padding-left:2em'><div>"+ val[0]  +"</div><div style='font-size: 2em'>"+ val[1] +"</div></div>"
+                $el.html(res);
+            });
         },
         views: {
             basic: {
@@ -41,7 +47,7 @@ $(function()
             },
             week: {
                 // options apply to basicWeek and agendaWeek views
-                columnFormat: '  ddd\nD'
+                columnFormat: '  ddd | D'
             },
             day: {
                 // options apply to basicDay and agendaDay views

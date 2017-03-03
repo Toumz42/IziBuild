@@ -124,7 +124,7 @@
             el: '',
             tagName: 'ul',
             className: 'ac-appender',
-            tagTemplate: '<div class="chip" data-id="<%= item.id %>" data-text="<% item.text %>"><%= item.text %>(<%= item.id %>)<i class="material-icons close">close</i></div>'
+            tagTemplate: '<div class="chip" data-id="<%= item.id %>" data-text="<% item.text %>"><div class="chipText"> <%= item.text %></div> <i class="material-icons close">close</i></div>'
         },
         dropdown: {
             el: '',

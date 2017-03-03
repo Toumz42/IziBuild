@@ -51,11 +51,11 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 .fc-center h2 {
     font-size: 3em;
 }
-.fc-past a{
+.fc-past, .fc-past a{
     color:lightgray !important;
 }
 
-.fc-future a{
+.fc-future, .fc-future a{
     color: black !important;
 }
 
@@ -121,12 +121,20 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 .ui-icon-arrow-material-n:after {
     content: "SUIV.";
 }
-.ui-icon {
-    padding: 10px;
+.ui-button {
+    padding: 0.1em 1.3em 2.3em !important;
+    margin: 0.2em !important;
 }
+.fc .fc-time-grid-container td{
+    border-style: inset !important;
+}
+
 .fc-now-indicator {
     position: absolute;
     border: 0 solid #00abff;
+}
+a[data-goto]:hover {
+    text-decoration: none;
 }
 .fc-time-grid .fc-now-indicator-arrow {
     border-width: 5px 5px 5px 5px !important;

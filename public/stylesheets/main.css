@@ -219,6 +219,14 @@ body
 .highlight {
     color: #444;
 }
+.chip .close {
+    float:none !important;
+}
+.chipText {
+    display: inline-block;
+    position: relative;
+    bottom: -moz-calc(3px);
+}
 .chefP {
     display: none;
 }

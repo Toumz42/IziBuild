@@ -139,11 +139,6 @@ $(function()
         success: function(ret, textStatus, jqXHR){
             var res;
             var json = $.parseJSON(ret);
-            var cardStart = "<ul class='stage'><div class='row'>"+
-                "<div class='col m12 s12 l12  push-s1 push-m2 push-l1'>"+ "<li>"+
-                "<div class='card card-1'><div class='card-content'>"+
-                "<div class='row'>";
-            var cardEnd = "</div></div></div></li></div></div></ul>";
             if ( json.length != 0 ) {
                 var res = groupeToTab(json);
                 $.each(res, function (index, element) {
