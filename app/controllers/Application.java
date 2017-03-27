@@ -97,14 +97,7 @@ public class Application extends Controller {
             return redirect("/login");
         }
     }
-    public Result stockage()
-    {
-        if(checkConnected()) {
-            return ok(views.html.stockage.render());
-        } else {
-            return redirect("/login");
-        }
-    }
+
 
     public Result identifyUser()
     {
