@@ -254,9 +254,20 @@ $(function()
     });
 
     $('#droit').change(function (e) {
-        $('#classeUser').val(0);
+        var val = $(this).val();
+        if (val == 0) {
+            $('#classeUser').val(0);
+            $('#classeUser option').prop("disabled",true);
+            $('#classeUser').material_select();
+        }
+        else{
+            $('#classeUser option:not(".remain")').removeAttr("disabled");
+            $('#classeUser').material_select();
+        }
     });
     Materialize.showStaggeredList($("#stage1"));
+    $('.parallax').parallax();
+
 
     var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
     Materialize.scrollFire(options);
@@ -413,7 +424,7 @@ function initSelectClasse(json) {
         reset = false;
     }
     if (reset) {
-        var $a = $("#classeUser .remain");
+        var $a = $($("#classeUser .remain")[0].outerHTML);
         $("#classeUser").empty();
         $("#classeUser").append($a);
     }
