@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.ebean.Ebean;
 import models.Classe;
 import models.GroupeProjet;
 import models.User;
@@ -33,6 +34,8 @@ public class UserController extends Controller {
         Integer droit = json.get("droit").asInt();
         String email = json.get("email").asText();
         String pass = json.get("password").asText();
+        Long classeId = json.get("classe").asLong();
+        Classe classe = Classe.find.byId(classeId);
 
         User u = User.find.query()
                 .where()
@@ -42,7 +45,7 @@ public class UserController extends Controller {
         if (u == null) {
             if (email != null) {
                 if (!email.equals("")) {
-                    User person = new User(name, surname, email, pass,droit);
+                    User person = new User(name, surname, email, pass, droit, classe);
                     person.save();
                     JsonNode retour = Json.toJson(person);
                     return ok().sendJson(retour);
@@ -53,9 +56,64 @@ public class UserController extends Controller {
                 return badRequest("Erreur dans le mail");
             }
         }
-
         return badRequest("Déjà inscrit !");
     }
+
+    public Result updateUser() {
+        JsonNode json = request().body().asJson();
+        Long id = json.get("idUser").asLong();
+        String name = json.get("name").asText();
+        String surname = json.get("surname").asText();
+        Integer droit = json.get("droit").asInt();
+        Long classe = json.get("classe").asLong();
+        String email = json.get("email").asText();
+        String pass = json.get("password").asText();
+
+        User u = User.find.byId(id);
+        Classe c = Classe.find.byId(classe);
+
+        if (u != null) {
+            if (email != null) {
+                if (!email.equals("")) {
+                    u.setName(name);
+                    u.setSurname(surname);
+                    u.setDroit(droit);
+                    u.setEmail(email);
+                    u.setPassword(pass);
+                    u.setClasse(c);
+                    u.save();
+                    JsonNode retour = Json.toJson(u);
+                    return ok().sendJson(retour);
+                } else {
+                    return badRequest("Erreur dans le mail");
+                }
+            } else {
+                return badRequest("Erreur dans le mail");
+            }
+        }
+        return badRequest("Déjà inscrit !");
+    }
+
+
+    public static Result deleteUser(Long id) {
+        User u = User.find.byId(id);
+        if (u != null) {
+            u.delete();
+            return ok(Json.toJson(true));
+        }
+        return badRequest("Erreur dans la suppression");
+    }
+
+    public static Result deleteClasse(Long id) {
+        Classe c = Classe.find.byId(id);
+        if (c != null) {
+            Ebean.delete(c);
+            return ok(Json.toJson(true));
+        }
+        return badRequest("Erreur dans la suppression");
+    }
+
+
 
     public Result getAllUser() {
         JsonNode json = request().body().asJson();
@@ -91,6 +149,28 @@ public class UserController extends Controller {
         return notFound();
     }
 
+    public Result getAllProf() {
+
+
+        List<User> userList= null;
+
+        userList = User.find.query().where().eq("droit",0).findList();
+
+        if (userList != null) {
+
+              ObjectMapper mapper = new ObjectMapper();
+              ArrayNode listResult = mapper.createArrayNode();
+
+              for (User user : userList) {
+                  ObjectNode userNode = mapper.valueToTree(user);
+                  listResult.add(userNode);
+              }
+              return ok().sendJson(listResult);
+        }
+
+        return notFound();
+    }
+
     public Result getAllClasse() {
         String idUser = Application.getCurrentUser();
         User u = null;
@@ -114,7 +194,6 @@ public class UserController extends Controller {
     public Result addClasse() {
         JsonNode json = request().body().asJson();
         String name = json.get("name").asText();
-
         Classe u = Classe.find.query()
                 .where()
                 .ilike("name","%"+name+"%")
@@ -128,12 +207,36 @@ public class UserController extends Controller {
                     JsonNode result = Json.toJson(claz);
                     return ok(result);
                 } else {
-                    return ok("Erreur dans le theme");
+                    return badRequest("Erreur dans le theme");
                 }
             } else {
-                return ok("Erreur dans le theme");
+                return badRequest("Erreur dans le theme");
             }
         }
-        return ok("Déjà inscrit !");
+        return badRequest("Déjà inscrit !");
     }
+
+    public Result updateClasse() {
+        JsonNode json = request().body().asJson();
+        Long id = json.get("idClasse").asLong();
+        String name = json.get("name").asText();
+        Classe classe = Classe.find.byId(id);
+
+        if (classe != null) {
+            if (name != null) {
+                if (!name.equals("")) {
+                    classe.setName(name);
+                    classe.save();
+                    JsonNode result = Json.toJson(classe);
+                    return ok(result);
+                } else {
+                    return badRequest("Erreur dans le theme");
+                }
+            } else {
+                return badRequest("Erreur dans le theme");
+            }
+        }
+        return badRequest("Déjà inscrit !");
+    }
+
 }

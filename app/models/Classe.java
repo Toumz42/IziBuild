@@ -3,6 +3,9 @@ package models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Finder;
 import io.ebean.Model;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,12 +20,24 @@ public class Classe extends Model {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
-    @OneToMany(mappedBy="classe")
+    @OneToMany(mappedBy="classe",cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CalendarEvent> calendarEventList;
     @OneToMany(mappedBy="classe")
     @JsonManagedReference
     private List<User> userList;
+
+    @PreRemove
+    private void preRemove() {
+        for (CalendarEvent c : this.calendarEventList) {
+            c.setClasse(null);
+            c.save();
+        }
+        for (User u : this.userList) {
+            u.setClasse(null);
+            u.save();
+        }
+    }
 
     public Classe() {
     }

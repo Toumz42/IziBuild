@@ -8,10 +8,9 @@ create table calendar_event (
   title                         varchar(255),
   start                         datetime(6),
   end                           datetime(6),
-  prof_id                       bigint,
   color                         varchar(255),
   classe_id                     bigint,
-  constraint uq_calendar_event_prof_id unique (prof_id),
+  prof_id                       bigint,
   constraint pk_calendar_event primary key (id)
 );
 
@@ -62,10 +61,11 @@ create table user (
   constraint pk_user primary key (id)
 );
 
-alter table calendar_event add constraint fk_calendar_event_prof_id foreign key (prof_id) references user (id) on delete restrict on update restrict;
-
 alter table calendar_event add constraint fk_calendar_event_classe_id foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 create index ix_calendar_event_classe_id on calendar_event (classe_id);
+
+alter table calendar_event add constraint fk_calendar_event_prof_id foreign key (prof_id) references user (id) on delete restrict on update restrict;
+create index ix_calendar_event_prof_id on calendar_event (prof_id);
 
 alter table note add constraint fk_note_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_note_user_id on note (user_id);
@@ -85,10 +85,11 @@ create index ix_user_groupe_id on user (groupe_id);
 
 # --- !Downs
 
-alter table calendar_event drop foreign key fk_calendar_event_prof_id;
-
 alter table calendar_event drop foreign key fk_calendar_event_classe_id;
 drop index ix_calendar_event_classe_id on calendar_event;
+
+alter table calendar_event drop foreign key fk_calendar_event_prof_id;
+drop index ix_calendar_event_prof_id on calendar_event;
 
 alter table note drop foreign key fk_note_user_id;
 drop index ix_note_user_id on note;

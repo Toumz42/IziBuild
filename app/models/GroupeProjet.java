@@ -2,8 +2,10 @@ package models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Finder;
 import io.ebean.Model;
+import models.utils.DateUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,6 +52,11 @@ public class GroupeProjet extends Model {
 
     public Date getDateSoutenance() {
         return dateSoutenance;
+    }
+
+    public String getDateSoutenanceString() {
+        DateUtils dU = new DateUtils();
+        return dU.toFrenchDateString(dateSoutenance);
     }
 
     public void setDateSoutenance(Date dateSoutenance) {

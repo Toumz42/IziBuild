@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.GroupeProjet;
 import models.SuiviProjet;
@@ -11,6 +12,9 @@ import models.utils.DateUtils;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import scala.util.parsing.json.JSON;
+import scala.util.parsing.json.JSONObject;
+import scala.util.parsing.json.JSONObject$;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +27,7 @@ import java.util.Locale;
  * Created by ttomc on 06/01/2017.
  */
 public class ProjectController extends Controller {
+
 
     public Result getGroupeProject() {
         User u = Application.getCurrentUserObj();
@@ -41,10 +46,9 @@ public class ProjectController extends Controller {
                     ArrayNode array = mapper.valueToTree(userList);
                     ObjectNode userNode = mapper.valueToTree(grp);
                     userNode.remove("dateSoutenance");
-                    DateUtils dU = new DateUtils();
-                    String date = dU.toFrenchDateString(grp.getDateSoutenance());
+                    String date = grp.getDateSoutenanceString();
                     userNode.put("date", date );
-                    userNode.putArray("users").addAll(array);
+                    userNode.putArray("userList").addAll(array);
                     listResult.add(userNode);
 
                     return ok().sendJson(listResult);
@@ -53,6 +57,31 @@ public class ProjectController extends Controller {
         }
         return notFound();
 
+    }
+
+    public static Result deleteGroupe(Long id) {
+        GroupeProjet grp = GroupeProjet.find.byId(id);
+        if (grp != null) {
+            if (grp.getUserList()!=null) {
+                List<User> users =  grp.getUserList();
+                for (User u : users) {
+                    u.setGroupe(null);
+                    u.update();
+                }
+            }
+            grp.delete();
+            return ok(Json.toJson(true));
+        }
+        return badRequest("Erreur dans la suppression");
+    }
+
+    public static Result deleteSuivi(Long id) {
+        SuiviProjet suivi = SuiviProjet.find.byId(id);
+        if (suivi != null) {
+            suivi.delete();
+            return ok(Json.toJson(true));
+        }
+        return badRequest("Erreur dans la suppression");
     }
 
     public Result getAllGroupeProject() {
@@ -93,9 +122,7 @@ public class ProjectController extends Controller {
                 ArrayNode array = mapper.valueToTree(userList);
                 ObjectNode userNode = mapper.valueToTree(g);
                 userNode.remove("dateSoutenance");
-                DateUtils dU = new DateUtils();
-                String date = dU.toFrenchDateString(g.getDateSoutenance());
-                userNode.put("date", date );
+                userNode.put("date", g.getDateSoutenanceString());
                 userNode.put("theme", g.getTheme() );
                 userNode.putArray("users").addAll(array);
                 listResult.add(userNode);
@@ -133,7 +160,6 @@ public class ProjectController extends Controller {
                             .findList();
                 }
 
-//                ObjectMapper mapper = new ObjectMapper();
                 JsonNode result = Json.toJson(list);
                 if (result.isArray() && result.size() == list.size()) {
                     ArrayNode arrayNode = result.deepCopy();
@@ -151,7 +177,6 @@ public class ProjectController extends Controller {
                     result = arrayNode.deepCopy();
                 }
                 return ok(result);
-//                JsonNode retourJson = HtmlUtils.ListObjectToJsonTab(list);
             }
         }
         return notFound();
@@ -165,7 +190,7 @@ public class ProjectController extends Controller {
         ArrayNode groupString = json.get("groupids").deepCopy();
         dateString = dateString.replace(",","");
         Date date = null;
-        SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH);
         try {
             date = parser.parse(dateString);
         } catch (ParseException e) {
@@ -181,24 +206,82 @@ public class ProjectController extends Controller {
                 if (!theme.equals("")) {
                     GroupeProjet groupeProjet = new GroupeProjet(theme, date);
                     groupeProjet.save();
+                    ObjectMapper mapper = new ObjectMapper();
+                    ObjectNode groupeNode = mapper.valueToTree(groupeProjet);
+                    groupeNode.remove("dateSoutenance");
+                    groupeNode.put("date", groupeProjet.getDateSoutenanceString());
+                    ArrayNode userList = mapper.createArrayNode();
                     for (JsonNode jsonNode : groupString ) {
                         Long id = jsonNode.asLong();
                         User user = User.find.byId(id);
                         if (user != null) {
                             user.setGroupe(groupeProjet);
                             user.update();
+                            userList.add(Json.toJson(user));
                         }
                     }
-                    return ok("L'incription s'est bien passée ! :)");
+                    groupeProjet.update();
+                    groupeNode.set("userList", userList );
+                    return ok(groupeNode);
                 } else {
-                    return ok("Erreur dans le nom");
+                    return badRequest("Erreur dans le nom");
                 }
             } else {
-                return ok("Erreur dans le nom");
+                return badRequest("Erreur dans le nom");
             }
         }
-        return ok("Déjà inscrit !");
+        return badRequest("Déjà inscrit !");
     }
+
+    public Result updateProjectGroup() {
+        JsonNode json = request().body().asJson();
+        Long id = json.get("idGroup").asLong();
+        String theme = json.get("theme").asText();
+        String dateString = json.get("date").asText();
+        ArrayNode groupString = json.get("groupids").deepCopy();
+        dateString = dateString.replace(",","");
+        Date date = null;
+        SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH);
+        try {
+            date = parser.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        GroupeProjet u = GroupeProjet.find.byId(id);
+
+        if (u != null) {
+            if (theme != null) {
+                if (!theme.equals("")) {
+                    u.setTheme(theme);
+                    u.setDateSoutenance(date);
+                    List<User> userList = new ArrayList<>();
+                    for (JsonNode jsonNode : groupString ) {
+                        Long idGroupUser = jsonNode.asLong();
+                        User user = User.find.byId(idGroupUser);
+                        if (user != null) {
+                            user.setGroupe(u);
+                            user.save();
+                        }
+                    }
+                    u.save();
+                    u.refresh();
+                    ObjectMapper mapper = new ObjectMapper();
+                    ObjectNode groupeNode = mapper.valueToTree(u);
+                    groupeNode.remove("dateSoutenance");
+                    groupeNode.put("date", u.getDateSoutenanceString());
+                    ArrayNode usersNode = mapper.valueToTree(u.getUserList());
+                    groupeNode.set("userList", usersNode );
+                    return ok(groupeNode);
+                } else {
+                    return badRequest("Erreur dans le nom");
+                }
+            } else {
+                return badRequest("Erreur dans le nom");
+            }
+        }
+        return badRequest("Déjà inscrit !");
+    }
+
 
     public Result toggleStateSuivi() {
         JsonNode json = request().body().asJson();

@@ -13,6 +13,7 @@ GET     /stockage                                   controllers.Application.stoc
 GET     /note                                       controllers.Application.note()
 GET     /admnote                                    controllers.Application.admNote()
 GET     /admin                                      controllers.Application.admin()
+POST    /delete                                     controllers.Application.deleteDispatcher()
 GET     /getProjects                                controllers.ProjectController.getProjects
 POST    /getProjects                                controllers.ProjectController.getProjects
 POST    /toggleStateSuivi                           controllers.ProjectController.toggleStateSuivi
@@ -21,15 +22,21 @@ GET     /getAllGroupeProject                        controllers.ProjectControlle
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 GET     /getAllUser                                 controllers.UserController.getAllUser
 POST    /getAllUser                                 controllers.UserController.getAllUser
+GET     /getAllProf                                 controllers.UserController.getAllProf
 GET     /checkAdmin                                 controllers.Application.checkAdminJson
 POST    /getCalendar                                controllers.CalendarController.getCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
 GET     /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /addUser                                    controllers.UserController.addUser()
-POST    /addProject                                 controllers.ProjectController.addProject
+POST    /addEvent                                   controllers.CalendarController.addEvent()
+POST    /updateEvent                                controllers.CalendarController.updateEvent()
+POST    /addProject                                 controllers.ProjectController.addProject()
 POST    /addProjectGroup                            controllers.ProjectController.addProjectGroup()
 POST    /addClasse                                  controllers.UserController.addClasse()
+POST    /updateUser                                 controllers.UserController.updateUser()
+POST    /updateProjectGroup                         controllers.ProjectController.updateProjectGroup()
+POST    /updateClasse                               controllers.UserController.updateClasse()
 POST    /logout                                     controllers.Application.logout()
 
 # Map static resources from the /public folder to the /assets URL path

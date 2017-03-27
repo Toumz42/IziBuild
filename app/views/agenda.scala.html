@@ -3,22 +3,97 @@
 @main("Agenda") {
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/fullcalendar.css'  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialFullCalendar.css'  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href='/assets/stylesheets/clockpicker.css'  media="screen,projection"/>
 
     <script type='text/javascript' src='/assets/javascripts/fullcalendar/moment.min.js'></script>
     <script type='text/javascript' src='/assets/javascripts/fullcalendar/fullcalendar.js'></script>
     <script type='text/javascript' src='/assets/javascripts/fullcalendar/fr.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/agenda.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/materialize.clockpicker.js'></script>
 
-    <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
-    <div class="row" id="projectMainDiv">
+
+    <a id="addEvent" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
+    <div id="datepicker-container"></div>
+    <div class="container" >
         <div class="row" style="padding: 0 1.5rem">
             <span style="font-size: 25px;color: #00abff"></span><br>
         </div>
-
+        <div id="agendaAdderDiv" style="display: none">
+            <ul class="stage">
+                <div class="row">
+                    <div class="col m12 s12 l12 ">
+                        <li>
+                            <div class="card card-1">
+                                <div class="card-content ">
+                                    <div class="row" id="formParent">
+                                        <form id="formAgenda" class="blue-text">
+                                            <div class="modal-content">
+                                                <h4 class="@*card-title*@ blue-text">Ajouter un evenement</h4>
+                                                <input type="hidden" id="idEvent" value="">
+                                                <div class="row">
+                                                    <div class="input-field col s12">
+                                                        <input id="titleEvent" type="text" class="">
+                                                        <label for="titleEvent">Titre</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="input-field col s12">
+                                                        <select id="classeEvent">
+                                                            <option value="" disabled selected>Choisir une option</option>
+                                                        </select>
+                                                        <label>Classe</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="input-field col s12">
+                                                        <div class="autocomplete" id="multiple">
+                                                            <div class="ac-users"></div>
+                                                            <div class="ac-input">
+                                                                <div class="valign-wrapper">
+                                                                    <i class="valign material-icons prefix">account_circle</i>
+                                                                    <input type="text" id="multipleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez le professeur" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
+                                                                </div>
+                                                            </div>
+                                                            <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
+                                                            <input type="hidden" name="multipleHidden" />
+                                                        </div>
+                                                        <label class="active" style="padding-bottom: 10px" for="multipleInput">Professeur : </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="input-field col s12">
+                                                        <input id="dateEvent" type="date" class="datepicker">
+                                                        <label for="dateEvent">Date</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="input-field col s6">
+                                                        <input id="hourStart" type="time" class="timepicker">
+                                                        <label for="hourStart">Date</label>
+                                                    </div>
+                                                    <div class="input-field col s6">
+                                                        <input id="hourEnd" type="time" class="timepicker">
+                                                        <label for="hourEnd">Date</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="#!" id="subEvent" class="modal-action modal-close waves-effect waves-light btn light-blue right-align">Valider</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </ul>
+        </div>
         <ul class='stage'>
 
             <div class="row">
-                <div class="col s12 m12 l12 push-s1  push-l1">
+                <div class="col s12 m12 l12">
                     <div class="card card-1">
                         <div class="card-content ">
                             <div class="row" id='calendar' >

@@ -3,8 +3,10 @@
  */
 var groupids = [];
 var arrayData = [];
-
-
+var classes = {};
+var groupes = {};
+var users = {};
+var autocomplete;
 $(function()
 {
     $(".page-title").empty().append("Administration Projet");
@@ -17,33 +19,43 @@ $(function()
         }
     });
 
-    $("#addUser").click(function () {
+    $(".addButton").click(function () {
         turn($(this));
-        $("#usersAdderDiv").toggle("slide");
-    });
-
-    $("#addClasse").click(function () {
-        turn($(this));
-        $("#classeAdderDiv").toggle("slide");
-    });
-
-    $("#addGroupe").click(function () {
-        turn($(this));
-        $("#projetAdderDiv").toggle("slide");
+        switch (this.id) {
+            case "addUser":
+                modalize($("#formSign"),$("#usersAdderDiv"),false);
+                $("#usersAdderDiv").toggle("slide");
+                break;
+            case "addClasse":
+                modalize($("#formClasse"),$("#classeAdderDiv"),false);
+                $("#classeAdderDiv").toggle("slide");
+                break;
+            case "addGroupe":
+                modalize($("#formGroupe"),$("#projetAdderDiv"),false);
+                $("#projetAdderDiv").toggle("slide");
+                break;
+        }
     });
 
     $("#sub").click(function(){
-        if ( check())
+        if (check())
         {
-
-            var data = {"name" : $("#last_name").val(),
+            var url = "/addUser";
+            var update = $("#idUser").val() != "";
+            if (update) {
+                url  = "/updateUser"
+            }
+            var data = {
+                "idUser" : $("#idUser").val(),
+                "name" : $("#last_name").val(),
                 "surname" : $("#first_name").val(),
                 "email" : $("#email").val(),
                 "droit" : $("#droit").val(),
+                "classe" : $("#classeUser").val(),
                 "password" :  $("#password").val()};
-
+            
             $.ajax ({
-                url: "/addUser",
+                url: url,
                 type: "POST",
                 data: JSON.stringify(data),
                 dataType: "text",
@@ -52,10 +64,33 @@ $(function()
                     $("#usersAdderDiv").toggle("slide");
                     var json = $.parseJSON(ret);
                     var res = userToTab(json);
-                    $("#usersContent").append(res);
-                    turn($("#addUser"));
-                    $("#usersAdderDiv").toggle("slide");
-                    myToast("L'utilisateur a bien été ajouté");
+                    users = jsonToGlobalArray(users, json);
+                    if ($("#usersContent").find("#noData").length) {
+                        $("#usersContent").empty();
+                    }
+                    emptyFields(userFields);
+                    if (update) {
+                        var ids = $("#usersContent").find(".idUser");
+                        if (ids.length) {
+                            $.each(ids, function (index, el) {
+                                $.each(res, function (index, element) {
+                                    if ($(el).val() == $(element).find(".idUser").val()) {
+                                        $(el).parents("ul.stage").remove();
+                                        $("#usersContent").append(element);
+                                    }
+                                });
+                            });
+                        } else {
+                            $("#usersContent").append(res);
+                        }
+                        myToast("L'utilisateur a bien été mis à jour");
+                    } else{
+                        initAutoComplete(json);
+                        turn($("#addUser"));
+                        $("#usersContent").append(res);
+                        $("#usersAdderDiv").toggle("slide");
+                        myToast("L'utilisateur a bien été ajouté");
+                    }
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout de l'utilisateur");
@@ -67,10 +102,18 @@ $(function()
     $("#subClasse").click(function(){
         if ( ($("#classeName").size()!=0))
         {
-            var data = {"name" : $("#classeName").val()};
+            var url = "/addClasse";
+            var update = $("#idClasse").val() != "";
+            if (update) {
+                url  = "/updateClasse"
+            }
+            var data = {
+                "idClasse" : $("#idClasse").val(),
+                "name" : $("#classeName").val()
+            };
             data = JSON.stringify(data);
             $.ajax ({
-                url: "/addClasse",
+                url: url,
                 type: "POST",
                 data: data,
                 dataType: "text",
@@ -78,10 +121,33 @@ $(function()
                 success: function(ret, textStatus, jqXHR){
                     var json = $.parseJSON(ret);
                     var res = classeToTab(json);
-                    $("#classeContent").append(res);
-                    turn($("#addClasse"));
-                    $("#classeAdderDiv").toggle("slide");
-                    myToast("La classe a bien été ajouté");
+                    classes = jsonToGlobalArray(classes, json);
+                    if ($("#classeContent").find("#noData").length) {
+                        $("#classeContent").empty();
+                    }
+                    emptyFields(classeFields);
+                    if (update) {
+                        var ids = $("#classeContent").find(".idClasse");
+                        if (ids.length) {
+                            $.each(ids, function (index, el) {
+                                $.each(res, function (index, element) {
+                                    if ($(el).val() == $(element).find(".idClasse").val()) {
+                                        $(el).parents("ul.stage").remove();
+                                        $("#classeContent").append(element);
+                                    }
+                                });
+                            });
+                        }else {
+                            $("#classeContent").append(res);
+                        }
+                        myToast("La classe a bien été mise à jour");
+                    } else{
+                        $("#classeContent").append(res);
+                        turn($("#addClasse"));
+                        initSelectClasse(json);
+                        $("#classeAdderDiv").toggle("slide");
+                        myToast("La classe a bien été ajouté");
+                    }
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout de la classe");
@@ -93,14 +159,22 @@ $(function()
     $("#subGroupe").click(function(){
         if ( ($("#groupeName").val()!=""))
         {
+            var url = "/addProjectGroup";
+            var update =  $("#idGroupe").val() != "";
+            if (update) {
+                url  = "/updateProjectGroup";
+                if (groupids) {
+
+                }
+            }
             var data = {
-                "name" : $("#groupeName").val(),
-                "theme" : $("#theme").val(),
+                "idGroup" : $("#idGroupe").val(),
+                "theme": $("#theme").val(),
                 "date" : $("#date").val(),
                 "groupids" : groupids
             };
             $.ajax ({
-                url: "/addProjectGroup",
+                url: url,
                 type: "POST",
                 data: JSON.stringify(data),
                 dataType: "text",
@@ -109,10 +183,33 @@ $(function()
                     var res;
                     var json = $.parseJSON(ret);
                     res = groupeToTab(json);
-                    $("#projetContent").append(res);
-                    turn($("#addGroupe"));
-                    $("#projetAdderDiv").toggle("slide");
-                    myToast(" Le groupe de projet a bien été ajouté");
+                    groupes = jsonToGlobalArray(groupes, json);
+                    if ($("#projetContent").find("#noData").length) {
+                        $("#projetContent").empty();
+                    }
+                    emptyFields(grpFields);
+                    emptyComplete(groupids);
+                    if (update) {
+                        var ids = $("#projetContent").find(".idGroupe");
+                        if (ids.length) {
+                            $.each(ids, function (index, el) {
+                                $.each(res, function (index, element) {
+                                    if ($(el).val() == $(element).find(".idGroupe").val()) {
+                                        $(el).parents("ul.stage").remove();
+                                        $("#projetContent").append(element);
+                                    } 
+                                });
+                            });
+                        } else {
+                            $("#projetContent").append(res);
+                        }
+                        myToast("Le groupe a bien été mis à jour");
+                    } else {
+                        $("#projetContent").append(res);
+                        turn($("#addGroupe"));
+                        $("#projetAdderDiv").toggle("slide");
+                        myToast("Le groupe de projet a bien été ajouté");
+                    }
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout du groupe de projet");
@@ -121,82 +218,18 @@ $(function()
         }
     });
 
-    $("#allUser").click(function () {
-        initTabUser()
-    });
+    // $("#allUser").click(function () {
+    //     initTabUser()
+    // });
+    //
+    //
+    // $("#allGroup").click(function () {
+    //     initTabGroup()
+    // });
 
-
-    $("#allGroup").click(function () {
-        initTabGroup()
-    });
-
-    $.ajax ({
-        url: "/getAllGroupeProject",
-        type: "GET",
-        // data: JSON.stringify(data),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var res;
-            var json = $.parseJSON(ret);
-            if ( json.length != 0 ) {
-                var res = groupeToTab(json);
-                $.each(res, function (index, element) {
-                    $("#projetContent").append(element);
-                });
-            } else
-            {
-                $('#projetContent').empty();
-                res = cardStart + imgEmptyDiv + cardEnd;
-                $("#projetContent").append(res);
-            }
-        }
-    });
-
-    $.ajax ({
-        url: "/getAllUser",
-        type: "GET",
-        // data: JSON.stringify(data),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            initAutoComplete(json);
-            if ( json.length != 0 ) {
-                var res = userToTab(json);
-                initTab('userTab');
-                $.each(res, function (index, element) {
-                    $("#usersContent").append(element);
-                });
-            } else {
-                $("#usersContent").empty();
-                res = cardStart + imgEmptyDiv + cardEnd;
-                $("#usersContent").append(res);
-            }
-        }
-    });
-
-    $.ajax ({
-        url: "/getAllClasse",
-        type: "GET",
-        // data: JSON.stringify(data),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            initSelectClasse(json);
-            if ( json.length != 0 ) {
-                var res = classeToTab(json);
-                $.each(res, function (index, element) {
-                    $("#classeContent").append(element);
-                });
-            } else {
-                $("#classeContent").empty();
-                res = cardStart + imgEmptyDiv + cardEnd;
-                $("#classeContent").append(res);
-            }
-        }
-    });
+    initTabClasse();
+    initTabGroup('allGroup');
+    initTabUser('allUser');
 
     $('.datepicker').pickadate({
         monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -209,6 +242,7 @@ $(function()
         labelMonthPrev: 'Mois precédent',
         labelMonthSelect: 'Selection mois',
         labelYearSelect: 'Selection année',
+        container: '#datepicker-container',
 
         today: 'Auj',
         clear: 'Effacer',
@@ -219,16 +253,75 @@ $(function()
         selectYears: 15 // Creates a dropdown of 15 years to control year
     });
 
-
+    $('#droit').change(function (e) {
+        $('#classeUser').val(0);
+    });
     Materialize.showStaggeredList($("#stage1"));
 
     var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
     Materialize.scrollFire(options);
-    $('.ul.tabs').tabs();
+    $('#mainTabs').tabs({
+        onShow: function () {
+            $(".scale-transition").addClass("scale-in");
+        }
+    });
 
     $('#mainTabs').click(function (e) {
-        initTab(e.target.id)
+        initTab(e.target.id);
     });
+    $(document).ajaxStop(function(event,request,settings){
+        $(".delete").click(function () {
+            var self = $(this);
+            var id = this.id;
+            var type = self.attr("type");
+            var data = {
+                "type" : type,
+                "id" : id
+            };
+            $.ajax ({
+                url: "/delete",
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function(ret, textStatus, jqXHR){
+                    var json = $.parseJSON(ret);
+                    initTabClasse();
+                    initTabGroup('allGroup');
+                    initTabUser('allUser');
+                    if ( json ) {
+                        self.closest("ul").remove();
+                        myToast("La suppression a bien été effectuée");
+                    }
+                }
+            });
+        });
+
+        $(".edit").click(function () {
+            var self = $(this);
+            var id = this.id;
+            var type = $(this).attr("type");
+            switch (type) {
+                case "user" :
+                    modalize($('#formSign'),$('#usersAdderDiv'),true);
+                    var user = find(users,id);
+                    fillEditFormUser(user,id);
+                    break;
+                case "classe" :
+                    modalize($('#formClasse'),$('#classeAdderDiv'),true);
+                    var classe = find(classes,id);
+                    fillEditFormClasse(classe,id);
+                    break;
+                case "groupe" :
+                    modalize($('#formGroupe'),$('#projetAdderDiv'),true);
+                    var groupe = find(groupes,id);
+                    fillEditFormGroupe(groupe,id);
+                    break;
+            }
+        });
+
+    });
+    
     $('#userTab').click();
 });
 
@@ -243,29 +336,27 @@ function check() {
         $("#email").addClass("invalid");
         myToast("Merci d'ajouter un email valide");
         return false;
-
     } else
     {
-
         $("#email").addClass("valid");
         if ($("#password").val() == "") {
             myToast("Merci d'ajouter un Mot de passe");
             return false;
         }
         else if ($("#droit").val() == "") {
-            myToast("Merci d'ajouter un type de Profil")
+            myToast("Merci d'ajouter un type de Profil");
             return false;
         }
-        else if ($("#classe").val() == "") {
-            myToast("Merci d'ajouter une Classe")
+        else if ($("#classeUser").val() == "") {
+            myToast("Merci d'ajouter une Classe");
             return false;
         }
         else if ($("#first_name").val() == "") {
-            myToast("Merci d'ajouter un Prenom")
+            myToast("Merci d'ajouter un Prenom");
             return false;
         }
         else if ($("#last_name").val() == "") {
-            myToast("Merci d'ajouter un Nom")
+            myToast("Merci d'ajouter un Nom");
             return false;
         }
     }
@@ -273,17 +364,25 @@ function check() {
 }
 
 function initAutoComplete(json) {
+    var reset = true;
     if (!Array.isArray(json)) {
         json = [json];
+        reset = false;
+    }
+    if (reset) {
+        arrayData = [];
     }
     for (var i = 0; i < json.length; i++) {
-        var objDataComplete = {};
-        objDataComplete["id"] = json[i].id;
-        objDataComplete["text"] = json[i].name + " " + json[i].surname;
-        arrayData.push(objDataComplete);
+        var objDataComplete = {
+            "id" : json[i].id,
+            "text": json[i].name + " " + json[i].surname
+        };
+        if (arrayData.indexOf(objDataComplete) == -1) {
+            arrayData.push(objDataComplete);
+        }
     }
-    var multiple = $('#multipleInput').materialize_autocomplete({
-        data: objDataComplete,
+    autocomplete = $('#multipleInput').materialize_autocomplete({
+        // data: objDataComplete,
         multiple: {
             enable: true,
             onAppend: function (item) {
@@ -306,15 +405,25 @@ function initAutoComplete(json) {
     });
 }
 
+
 function initSelectClasse(json) {
+    var reset=true;
     if (!Array.isArray(json)) {
         json = [json];
+        reset = false;
+    }
+    if (reset) {
+        var $a = $("#classeUser .remain");
+        $("#classeUser").empty();
+        $("#classeUser").append($a);
     }
     $.each(json,function (index, elem) {
         var opt = $("<option />");
         opt.prop("value",elem.id);
         opt.text(elem.name);
-        $("#classeUser").append(opt);
+        if (!$("#classeUser option[value="+elem.id+"]").length ) {
+            $("#classeUser").append(opt);
+        }
     });
     $('select').material_select();
 
@@ -325,7 +434,10 @@ function pushToGroup(item) {
 }
 
 function removeFromGroup(item){
-    groupids.pop(item)
+    var i = groupids.indexOf(item);
+    if (i > -1) {
+        groupids.splice(i, 1);
+    }
 }
 function initTab(tabName) {
     if (tabName == 'userTab') {
@@ -334,7 +446,7 @@ function initTab(tabName) {
         $("#classeTabUser").children().removeAttr("style");
         $("#classeTabUser").children().tabs({
             onShow: function () {
-                initTabUser(this.id)
+                initTabUser(this.id);
             }
         });
     }
@@ -344,7 +456,7 @@ function initTab(tabName) {
         $("#classeTabGroup").children().removeAttr("style");
         $("#classeTabGroup").children().tabs({
             onShow: function () {
-                initTabGroup(this.id)
+                initTabGroup(this.id);
             }
         });
     }
@@ -357,31 +469,88 @@ function initTab(tabName) {
 
 
 
+function initTabClasse() {
+    $.ajax ({
+        url: "/getAllClasse",
+        type: "GET",
+        // data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            initSelectClasse(json);
+            if ( json.length != 0 ) {
+                classes = jsonToGlobalArray(classes, json);
+                var res = classeToTab(json);
+                if ($("#classeContent").find("#noData").length) {
+                    $("#classeContent").empty();
+                }
+                var ids = $("#classeContent").find(".idClasse");
+                if (ids.length) {
+                    $.each(ids, function (index, el) {
+                        $.each(res, function (index, element) {
+                            if ($(el).val() == $(element).find(".idClasse").val()) {
+                                $(el).parents("ul.stage").remove();
+                                $("#classeContent").append(element);
+                            } else {
+                                $(el).parents("ul.stage").remove();
+                            }
+                        });
+                    });
+                }else {
+                    $("#classeContent").append(res);
+                }
+            } else {
+                $("#classeContent").empty();
+                res = cardStart + imgEmptyDiv + cardEnd;
+                $("#classeContent").append(res);
+            }
+        }
+    });
+}
+
 function initTabGroup(classeId) {
-    var dataGroup = {'classeId':classeId};
+    var dataGroup = { 'classeId' : classeId };
     if (classeId == 'allGroup') {
-        dataGroup=null;
+        dataGroup={};
+        $('#projetContent').empty();
     }
+    dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
         url: "/getAllGroupeProject",
         type: "POST",
-        data: JSON.stringify(dataGroup),
+        data: dataGroup,
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var res;
             var json = $.parseJSON(ret);
-            if (json.length != 0) {
-                var table;
+            if ( json.length != 0 ) {
+                groupes = jsonToGlobalArray(groupes, json);
+                res = groupeToTab(json);
+                if ($("#projetContent").find("#noData").length
+                    /*|| $("#projetContent").find(".idGroupe").val()*/) {
+                    $("#projetContent").empty();
+                }
+                var ids = $("#projetContent").find(".idGroupe");
+                if (ids.length) {
+                    $.each(ids, function (index, el) {
+                        $.each(res, function (index, element) {
+                            if ($(el).val() == $(element).find(".idGroupe").val()) {
+                                $(el).parents("ul.stage").remove();
+                                $("#projetContent").append(element);
+                            } else {
+                                $(el).parents("ul.stage").remove();
+                            }
+                        });
+                    });
+                } else {
+                    $("#projetContent").append(res);
+                }
+            } else
+            {
                 $('#projetContent').empty();
-                var res = groupeToTab(json);
-                $.each(res,function (index,elem) {
-                    $("#projetContent").append(elem);
-                });
-                $(".collapsible").collapsible({accordion: false});
-            } else {
-                $('#projetContent').empty();
-                res = cardCollapseStart + imgEmptyDiv + cardCollapseMiddle + cardCollapseEnd2;
+                res = cardStart + imgEmptyDiv + cardEnd;
                 $("#projetContent").append(res);
             }
         }
@@ -389,24 +558,43 @@ function initTabGroup(classeId) {
 }
 
 function initTabUser(classeId) {
-    var dataGroup = JSON.stringify({'classeId':classeId});
+    var dataGroup = { 'classeId' : classeId };
     if (classeId == 'allUser') {
-        dataGroup=null;
+        dataGroup={};
+        $("#usersContent").empty();
     }
+    dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
+        url: "/getAllUser",
         type: "POST",
         data: dataGroup,
-        url: "/getAllUser",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
-            $('#usersContent').empty();
+            initAutoComplete(json);
             if ( json.length != 0 ) {
+                users = jsonToGlobalArray(users, json);
                 var res = userToTab(json);
-                $.each(res, function (index, element) {
-                    $("#usersContent").append(element);
-                });
+                // initTab('userTab');
+                if ($("#usersContent").find("#noData").length) {
+                    $("#usersContent").empty();
+                }
+                var ids = $("#usersContent").find(".idUser");
+                if (ids.length) {
+                    $.each(ids, function (index, el) {
+                        $.each(res, function (index, element) {
+                            if ($(el).val() == $(element).find(".idUser").val()) {
+                                $(el).parents("ul.stage").remove();
+                                $("#usersContent").append(element);
+                            } else {
+                                $(el).parents("ul.stage").remove();
+                            }
+                        });
+                    });
+                } else {
+                    $("#usersContent").append(res);
+                }
             } else {
                 $("#usersContent").empty();
                 res = cardStart + imgEmptyDiv + cardEnd;
@@ -415,75 +603,6 @@ function initTabUser(classeId) {
         }
     });
 }
-function getSuivis( id ) {
-    var data = {"id" : id};
-    $.ajax ({
-        url: "/getProjects",
-        type: "POST",
-        data: JSON.stringify(data),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success : function (ret) {
-            var json = $.parseJSON(ret);
-            var table;
-            var tr;
-            var res='';
-            for (var i = 0; i < json.length; i++) {
-                table = $("<table class='responsive-table highlight'></table>");
-                table2 = $("<table class='responsive-table highlight'></table>");
-                tr = $('<tr/>');
-                tr.append("<th>Id</th>");
-                tr.append("<th>Date de suivi </th>");
-                tr.append("<th>Contenu </th>");
-                table.append(tr);
-                tr = $('<tr/>');
-                tr.append("<td>" + json[i].id + "</td>");
-                tr.append("<td>" + json[i].dateSuivi + "</td>");
-                tr.append("<td>" + json[i].contenu + "</td>");
-                table.append(tr);
-                var checked = "";
-                if (json[i].etat == 1) {
-                    checked = "checked";
-                }
-                var toggle ="<div class='switch right-align'><label>"+
-                    "   Validation  " +
-                    "   <input type='checkbox' id='"+json[i].id+"' type='checkbox' "+checked+">"+
-                    "   <span class='lever'>" +
-                    "</span></label></div> ";
-                res = res + cardStart + table.prop('outerHTML') + toggle + cardEnd;
-            }
-            $("#suiviProjDiv"+id).empty().append(res);
-            $(".switch").find("input[type=checkbox]").on("change",function() {
-                var status = $(this).prop('checked');
-                var data = {id: this.id, state: status};
-                $.ajax({
-                    url: "/toggleStateSuivi",
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    dataType: "text",
-                    contentType: "application/json; charset=utf-8",
-                    success: function(ret, textStatus, jqXHR){
 
-                    }
-                });
-            });
-        }
-    });
-}
-function turn(selector) {
-    var turned = selector.hasClass("rotate45");
-    if (turned) {
-        selector.addClass("unRotate");
-        selector.removeClass("rotate45");
-    } else {
-        selector.addClass("rotate45");
-        selector.removeClass("unRotate");
-    }
-}
-
-function myToast(toastContent) {
-    $toastContent = $("<span style='white-space: nowrap'>"+toastContent+"</span>");
-    Materialize.toast($toastContent, 3000, 'rounded')
-}
 
 

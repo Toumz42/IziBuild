@@ -142,6 +142,27 @@ public class Application extends Controller {
         return ok().sendJson(retourJson);
     }
 
+    public Result deleteDispatcher() {
+        JsonNode json = request().body().asJson();
+        String type = json.get("type").asText();
+        Long id = json.get("id").asLong();
+        Result r = badRequest();
+        switch (type) {
+            case "user":
+                r = UserController.deleteUser(id);
+                break;
+            case "groupe":
+                r = ProjectController.deleteGroupe(id);
+                break;
+            case "suivi":
+                r = ProjectController.deleteSuivi(id);
+                break;
+            case "classe":
+                r = UserController.deleteClasse(id);
+                break;
+        }
+        return r;
+    }
 
     public Boolean checkConnected()
     {

@@ -2,15 +2,14 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.ebean.Finder;
-import io.ebean.LikeType;
+
 import io.ebean.Model;
-import io.ebean.annotation.Formula;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Random;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -33,18 +32,23 @@ public class CalendarEvent extends Model {
     private String title;
     private Date start;
     private Date end;
-    @OneToOne
-    private User prof;
     private String color;
     @ManyToOne
     @JsonBackReference
     private Classe classe;
+    @ManyToOne
+    private User prof;
+
 
     public CalendarEvent() {
     }
 
-    public CalendarEvent(String title) {
+    public CalendarEvent(String title, Date start, Date end, User prof, Classe classe) {
         this.title = title;
+        this.start = start;
+        this.end = end;
+        this.prof = prof;
+        this.classe = classe;
     }
 
     public Long getId() {
@@ -89,7 +93,7 @@ public class CalendarEvent extends Model {
     }
 
     public User getProf() {
-        return prof;
+        return this.prof;
     }
 
     public void setProf(User prof) {
@@ -102,6 +106,10 @@ public class CalendarEvent extends Model {
 
     public void setClasse(Classe classe) {
         this.classe = classe;
+    }
+
+    public Long getClasseId() {
+        return classe.getId();
     }
 
     public String generateColor() {

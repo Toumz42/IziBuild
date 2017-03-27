@@ -2,7 +2,7 @@
 
 @main("Administration") {
     </div>
-    <script type='text/javascript' src='/assets/javascripts/utils/adminUtils.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/utils/adminUtils.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/admin.js'></script>
     <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
     <div class="header-panel white-text">
@@ -22,81 +22,72 @@
             <li class="tab col s3"><a class="active" id="allGroup" >Tout</a></li>
         </ul>
     </div>
-
+    <div id="datepicker-container"></div>
     <div class="container push-down-50">
         <div class="row">
-            <ul class="stage">
-                <div class="row">
-                    <div class="col m12 s12 l12 push-s1 push-l1 push-m1">
-                        <li>
-                            <div class="card card-1">
-                                <div class="card-content">
-                                    <div class="row" id="formParent">
-                                        <span class="card-title blue-text">Bienvenue sur l'espace Administrateur</span><br>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
-                </div>
-            </ul>
-
             <div id="users">
-                <a id="addUser" class="btn-floating twoTabLines hasTab btn-large waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
+                <a id="addUser" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
                 <div id="usersAdderDiv" style="display: none">
                     <ul class="stage">
                         <div class="row">
-                            <div class="col m12 s12 l12 push-s1 push-m2 push-l1">
+                            <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
                                 <li>
                                     <div class="card card-1">
                                         <div class="card-content ">
                                             <div class="row" id="formParent">
-                                                <form id="formSign" class="col s12 blue-text">
-                                                    <span class="card-title blue-text">Nouvel Utilisateur</span>
-                                                    <div class="row" style="color: grey; margin-left: 2px">
-                                                        <span>Veuillez saisir ses identifiants</span>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="email" type="email" class="validate">
-                                                            <label for="email">Email</label>
+                                                <form id="formSign">
+                                                    <div class="modal-content">
+                                                        <h4 class="@*card-title*@ blue-text">Editer Utilisateur</h4>
+                                                        <input type="hidden" id="idUser" value="">
+                                                        <div class="row" style="color: grey; margin-left: 2px">
+                                                            <span>Veuillez saisir ses identifiants</span>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <input id="email" type="email" class="validate">
+                                                                <label for="email">Email</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <input id="password" type="password" class="validate">
+                                                                <label for="password">Mot de Passe</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <select id="droit">
+                                                                    <option value="" disabled selected>Choisir une option</option>
+                                                                    <option value="0">Professeur</option>
+                                                                    <option value="1">Chef de projet</option>
+                                                                    <option value="2">Utilisateur</option>
+                                                                </select>
+                                                                <label>Profil</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <select id="classeUser">
+                                                                    <option value="" disabled selected>Choisir une option</option>
+                                                                    <option value="0" class="remain" disabled>Professeur</option>
+                                                                </select>
+                                                                <label>Classe</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="signInNameDiv">
+                                                            <div class="input-field col s6">
+                                                                <input id="last_name" type="text" class="validate">
+                                                                <label for="last_name">Nom</label>
+                                                            </div>
+                                                            <div class="input-field col s6">
+                                                                <input id="first_name" type="text" class="validate">
+                                                                <label for="first_name">Prénom</label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="password" type="password" class="validate">
-                                                            <label for="password">Mot de Passe</label>
-                                                        </div>
+                                                    <div class="modal-footer">
+                                                        <a href="#!" id="sub" class="waves-effect waves-light right-align btn" style="float: right;background: #00abff">Valider</a>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <select id="droit">
-                                                                <option value="" disabled selected>Choisir une option</option>
-                                                                <option value="0">Professeur</option>
-                                                                <option value="2">Utilisateur</option>
-                                                            </select>
-                                                            <label>Profil</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <select id="classeUser">
-                                                                <option value="" disabled selected>Choisir une option</option>
-                                                            </select>
-                                                            <label>Classe</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" id="signInNameDiv">
-                                                        <div class="input-field col s6">
-                                                            <input id="last_name" type="text" class="validate">
-                                                            <label for="last_name">Nom</label>
-                                                        </div>
-                                                        <div class="input-field col s6">
-                                                            <input id="first_name" type="text" class="validate">
-                                                            <label for="first_name">Prénom</label>
-                                                        </div>
-                                                    </div>
-                                                    <a id="sub" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
                                                 </form>
                                             </div>
                                         </div>
@@ -109,27 +100,29 @@
                 <div id="usersContent"></div>
             </div>
             <div id="classe">
-                <a id="addClasse" class="btn-floating btn-large hasTab waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
+                <a id="addClasse" class="addButton btn-floating btn-large hasTab waves-effect waves-light yellow scale-out scale-transition"><i class="material-icons of_btn">add</i></a>
                 <div id="classeAdderDiv" style="display: none">
                     <ul class="stage">
                         <div class="row">
-                            <div class="col m12 s12 l12 push-s1  push-l1">
+                            <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
                                 <li>
                                     <div class="card card-1">
                                         <div class="card-content ">
                                             <div class="row" id="formParent">
-                                                <form id="formClasse" class="col s12 blue-text">
-                                                    <span class="card-title blue-text">Nouvelle Classe</span>
-                                                    @*<div class="row" style="color: grey; margin-left: 12px">*@
-                                                    @*<span>Veuillez saisir ses identifiants</span>*@
-                                                    @*</div>*@
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="classeName" type="text" class="">
-                                                            <label for="Nom">Nom</label>
+                                                <form id="formClasse">
+                                                    <div class="modal-content">
+                                                        <h4 class="@*card-title*@ blue-text">Editer Classe</h4>
+                                                        <input type="hidden" id="idClasse" value="">
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <input id="classeName" type="text" class="">
+                                                                <label for="Nom">Nom</label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <a id="subClasse" class="waves-effect waves-light btn blue" style="float: right;">Valider</a>
+                                                    <div class="modal-footer">
+                                                        <a href="#!" class="modal-action modal-close waves-effect waves-light btn light-blue right-align" id="subClasse" class="waves-effect waves-light btn blue">Valider</a>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -142,7 +135,7 @@
                 <div id="classeContent"></div>
             </div>
             <div id="projet">
-                <a id="addGroupe" class="btn-floating twoTabLines hasTab btn-large waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
+                <a id="addGroupe" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
                 <div id="projetAdderDiv" style="display: none">
                     <ul class="stage">
                         <div class="row">
@@ -151,46 +144,42 @@
                                     <div class="card card-1">
                                         <div class="card-content ">
                                             <div class="row" id="formParent">
-                                                <form id="formGroupe" class="col s12 blue-text">
-                                                    <span class="card-title blue-text">Nouveau groupe de projet</span>
-                                                    @*<div class="row" style="color: grey; margin-left: 12px">*@
-                                                    @*<span>Veuillez saisir ses identifiants</span>*@
-                                                    @*</div>*@
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="groupeName" type="text" class="">
-                                                            <label for="groupeName">Nom</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="theme" type="text" class="">
-                                                            <label for="theme">Theme</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="date" type="text" class="datepicker">
-                                                            <label for="date">Date</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <div class="autocomplete" id="multiple">
-                                                                <div class="ac-users"></div>
-                                                                <div class="ac-input">
-                                                                    <div class="valign-wrapper">
-                                                                        <i class="valign material-icons prefix">account_circle</i>
-                                                                        <input type="text" id="multipleInput" placeholder="Selectionnez les membres du groupe" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
-                                                                    </div>
-                                                                </div>
-                                                                <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
-                                                                <input type="hidden" name="multipleHidden" />
+                                                <form id="formGroupe" class="blue-text">
+                                                    <div class="modal-content">
+                                                        <h4 class="@*card-title*@ blue-text">Editer groupe de projet</h4>
+                                                        <input type="hidden" id="idGroupe" value="">
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <input id="theme" type="text" class="">
+                                                                <label for="theme">Theme</label>
                                                             </div>
-                                                            <label class="active" style="padding-bottom: 10px" for="multipleInput">Membres du groupe : </label>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <input id="date" type="text" class="datepicker">
+                                                                <label for="date">Date</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <div class="autocomplete" id="multiple">
+                                                                    <div class="ac-users"></div>
+                                                                    <div class="ac-input">
+                                                                        <div class="valign-wrapper">
+                                                                            <i class="valign material-icons prefix">account_circle</i>
+                                                                            <input type="text" id="multipleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez les membres du groupe" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
+                                                                    <input type="hidden" name="multipleHidden" />
+                                                                </div>
+                                                                <label class="active" style="padding-bottom: 10px" for="multipleInput">Membres du groupe : </label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <a id="subGroupe" class="waves-effect waves-light btn" style="float: right;background: #00abff">Valider</a>
+                                                    <div class="modal-footer">
+                                                        <a href="#!" id="subGroupe" class="modal-action modal-close waves-effect waves-light btn light-blue right-align">Valider</a>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>

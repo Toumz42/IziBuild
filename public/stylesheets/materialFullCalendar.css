@@ -60,7 +60,7 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 }
 
 .fc-today a{
-    color:#00abff !important;
+    color:#03a9f4 !important;
 }
 
 /* Styling for each event from Schedule */
@@ -131,15 +131,15 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 
 .fc-now-indicator {
     position: absolute;
-    border: 0 solid #00abff;
+    border: 0 solid #03a9f4;
 }
 a[data-goto]:hover {
     text-decoration: none;
 }
 .fc-time-grid .fc-now-indicator-arrow {
     border-width: 5px 5px 5px 5px !important;
-    border-top-color: #00abff !important;
-    border-bottom-color: #00abff !important;
+    border-top-color: #03a9f4 !important;
+    border-bottom-color: #03a9f4 !important;
     border-radius: 10px !important;
 }
 .fc-row {

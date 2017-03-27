@@ -32,12 +32,13 @@ public class User extends Model {
     private List<Note> noteList;
 
 
-    public User(String name, String surname, String email, String password, Integer droit) {
+    public User(String name, String surname, String email, String password, Integer droit,Classe classe) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.droit = droit;
         this.password = password;
+        this.classe = classe;
     }
 
     public User() {
@@ -101,6 +102,9 @@ public class User extends Model {
 
     public Classe getClasse() {
         return classe;
+    }
+    public Long getClasseId() {
+        return classe.getId();
     }
 
     public void setClasse(Classe classe) {
