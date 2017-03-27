@@ -3,7 +3,7 @@
  */
 $(function()
 {
-    $(".page-title").empty().append("Notes");
+    $(".page-title").empty().append("Administration Notes");
     $.ajax ({
         url: "/getAllClasse",
         type: "GET",

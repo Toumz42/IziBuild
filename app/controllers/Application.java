@@ -65,10 +65,10 @@ public class Application extends Controller {
         }
     }
 
-    public Result info()
+    public Result doc()
     {
         if(checkConnected()) {
-            return ok(views.html.info.render());
+            return ok(views.html.doc.render());
         } else {
             return redirect("/login");
         }

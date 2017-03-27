@@ -8,7 +8,7 @@ GET     /login                                      controllers.Application.logi
 GET     /projet                                     controllers.Application.projet()
 GET     /home                                       controllers.Application.home()
 GET     /agenda                                     controllers.Application.agenda()
-GET     /info                                       controllers.Application.info()
+GET     /doc                                        controllers.Application.doc()
 GET     /note                                       controllers.Application.note()
 GET     /admnote                                    controllers.Application.admNote()
 GET     /admin                                      controllers.Application.admin()

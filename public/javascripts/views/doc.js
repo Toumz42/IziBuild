@@ -3,6 +3,6 @@
  */
 $(function()
 {
-    $(".page-title").empty().append("Informations");
+    $(".page-title").empty().append("Documents Isitech");
     //    $('a.embed').gdocsViewer();
 });

@@ -18,11 +18,11 @@ public class ErrorUtils {
      * Permet de creer un enregistrement d'une erreur renvoyée via json
      *
      * @param isError
-     *            : true = erreur, false = info ou message de retour à afficher
+     *            : true = erreur, false = doc ou message de retour à afficher
      * @param messageRetour
      *            : message à afficher coté client
      * @param gravite
-     *            : niveau de gravité de l'erreur (info, warn ou erreur)
+     *            : niveau de gravité de l'erreur (doc, warn ou erreur)
      */
     public static ErrorUtils createError( boolean isError, String messageRetour, String gravite )
     {

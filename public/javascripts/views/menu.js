@@ -33,7 +33,26 @@ $(function () {
                 $(".linkproj").prop("href","/projet")
             }
         }
-    });  
+    });
+
+    $.ajax ({
+        url: "/checkAdmin",
+        type: "GET",
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            if (json){
+                $(".linknote").prop("href","/admnote");
+                $(".noteText").text("Administration Note");
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            if(xhr.status==403) {
+                $(".linkproj").prop("href","/note")
+            }
+        }
+    });
 
     $('.logout').on("click", function () {
         $.post(
