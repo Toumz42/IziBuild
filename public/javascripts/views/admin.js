@@ -266,7 +266,6 @@ $(function()
         }
     });
     Materialize.showStaggeredList($("#stage1"));
-    $('.parallax').parallax();
 
 
     var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
@@ -279,6 +278,9 @@ $(function()
 
     $('#mainTabs').click(function (e) {
         initTab(e.target.id);
+        var height =  $('.section').height() + 50;
+        // $('.section').css("margin-top",(- (height / 2 ))+"px");
+        // $('.section').css("margin-bottom",(- (height / 2 ))+"px");
     });
     $(document).ajaxStop(function(event,request,settings){
         $(".delete").click(function () {
@@ -330,6 +332,8 @@ $(function()
                     break;
             }
         });
+        $('.parallax').parallax();
+
 
     });
     

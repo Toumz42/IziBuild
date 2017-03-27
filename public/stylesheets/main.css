@@ -13,7 +13,7 @@ div.nav-wrapper {
 }
 
 .parallax-container {
-    height: 800px;
+    height: 100px;
 }
 
 #datepicker-container {
@@ -222,7 +222,7 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 }
 body
 {
-    background-image: url(../images/01.png)
+    background-image: url(../images/02.jpg);
 }
 .dropdown-content li>a, .dropdown-content li>span {
     color: #03a9f4;

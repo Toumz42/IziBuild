@@ -10,7 +10,7 @@ var datePicker;
 $(function()
 {
     $(".page-title").empty().append("Agenda");
-
+    var data = { "classeId" : $('#classeId').val()};
     var calendar = $('#calendar').fullCalendar({
         locale: 'fr',
         header: {
@@ -69,13 +69,18 @@ $(function()
             {
                 url: '/getCalendar',
                 type: 'POST',
+                data: JSON.stringify(data),
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
                 error: function() {
                     // alert('there was an error while fetching events!');
                     // $(".fc-now-indicator").hide();
                     // $(".fc-now-indicator-arrow").hide()
                 },
                 color: '#D32F2F',   // a non-ajax option
-                textColor: 'black' // a non-ajax option
+                textColor: 'black', // a non-ajax option
+                startParam:"",
+                endParam:""
             }
             // any other sources...
         ]
@@ -132,17 +137,7 @@ $(function()
             initAutoComplete(json);
         }
     });
-    $.ajax({
-        url: "/getAllClasse",
-        type: "GET",
-        // data: dataGroup,
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function (ret, textStatus, jqXHR) {
-            var json = $.parseJSON(ret);
-            initSelectClasse(json);
-        }
-    });
+    initTabClasse();
 
     $("#calendar button").each(function () {
         $(this).addClass("waves-effect waves-light btn light-blue")
@@ -193,6 +188,16 @@ $(function()
             });
         }
     });
+    $(document).ajaxStop(function () {
+        $("#mainTabs").tabs(
+            {
+                onShow: function () {
+                    $("#classeId").val(this.id);
+                    calendar.fullCalendar( 'refetchEvents' );
+                }
+            }
+        );
+    });
 });
 
 function initAutoComplete(json) {
@@ -238,8 +243,6 @@ function initSelectClasse(json) {
 
 }
 function check() {
-
-
     if ($("#titleEvent").val() == "") {
         myToast("Merci d'ajouter un Titre");
         return false;
@@ -280,4 +283,34 @@ function fillEditFormAgenda(val) {
     $('select').material_select();
     $("#password").val(event.password);
     activeFields(agendaFields);
+}
+
+function initTabClasse() {
+    $.ajax ({
+        url: "/getAllClasse",
+        type: "GET",
+        // data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            initSelectClasse(json);
+            if ( json.length != 0 ) {
+                classeToTabs(json);
+            }
+        }
+    });
+}
+function classeToTabs(json) {
+    var reset = true;
+    if (!Array.isArray(json)) {
+        json = [json];
+        reset = false;
+    }
+    if (reset) {
+        $('#mainTabs').find(".TabAgenda").remove();
+    }
+    for (var i = 0; i < json.length; i++) {
+        $('#mainTabs').append("<li class='tab col s3'><a class='TabAgenda' id= " + json[i].id + ">" + json[i].name + "</a></li>");
+    }
 }

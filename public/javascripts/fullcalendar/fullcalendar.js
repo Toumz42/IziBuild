@@ -12089,7 +12089,8 @@ function EventManager() { // assumed to be a calendar
 
 				// use a copy of the custom data so we can modify the parameters
 				// and not affect the passed-in object.
-				var data = $.extend({}, customData || {});
+				// var data = $.extend({}, customData || {});
+				var data =  customData;
 
 				var startParam = firstDefined(source.startParam, t.options.startParam);
 				var endParam = firstDefined(source.endParam, t.options.endParam);

@@ -27,18 +27,27 @@ import java.util.Locale;
 public class CalendarController extends Controller{
 
     public Result getCalendar() {
+        JsonNode json = request().body().asJson();
+        Long classeId = json.get("classeId").asLong();
         User u = Application.getCurrentUserObj();
         if (u != null) {
             ObjectMapper mapper = new ObjectMapper();
-                List<CalendarEvent> eventList = CalendarEvent.find.query().where()
-                        .eq("classe_id", u.getClasse().getId()).findList();
+            Long id = u.getClasse().getId();
+            if (classeId != null) {
+                id = classeId;
+            }
+            List<CalendarEvent> eventList = CalendarEvent.find.all();
 
-                if (eventList != null) {
-                    ArrayNode listResult = mapper.valueToTree(eventList);
+            if (classeId > 0 ) {
+                eventList = CalendarEvent.find.query().where()
+                    .eq("classe_id",id).findList();
+            }
+
+            if (eventList != null) {
+                ArrayNode listResult = mapper.valueToTree(eventList);
 //                    listResult = Json.toJson(eventList).deepCopy();
-                    return ok().sendJson(listResult);
-                }
-
+                return ok().sendJson(listResult);
+            }
         }
         return ok();
     }
