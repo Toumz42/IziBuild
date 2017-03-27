@@ -37,6 +37,16 @@ public class UserController extends Controller {
         Long classeId = json.get("classe").asLong();
         Classe classe = Classe.find.byId(classeId);
 
+        if (classe == null) {
+            if (classeId == 0) {
+                Classe c = Classe.find.query().where().eq("name","Professeur").findUnique();
+                if (c == null) {
+                    c = new Classe("Professeur");
+                }
+            }
+        }
+
+
         User u = User.find.query()
                 .where()
                 .ilike("email","%"+email+"%")
@@ -71,6 +81,15 @@ public class UserController extends Controller {
 
         User u = User.find.byId(id);
         Classe c = Classe.find.byId(classe);
+
+        if (c == null) {
+            if (classe == 0) {
+                Classe cl = Classe.find.query().where().eq("name","Professeur").findUnique();
+                if (cl == null) {
+                    cl = new Classe("Professeur");
+                }
+            }
+        }
 
         if (u != null) {
             if (email != null) {

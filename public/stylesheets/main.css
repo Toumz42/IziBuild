@@ -11,6 +11,11 @@ div.nav-wrapper {
 .card-title {
     white-space: normal;
 }
+
+.parallax-container {
+    height: 800px;
+}
+
 #datepicker-container {
     position: fixed;
     z-index: 10000;
