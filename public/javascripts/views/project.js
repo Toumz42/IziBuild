@@ -59,11 +59,11 @@ $(function()
                 tr.append("<th> Nom </th>");
                 tr.append("<th>Prénom</th>");
                 table2.append(tr);
-                for (var j = 0; j < json[i].users.length; j++) {
+                for (var j = 0; j < json[i].userList.length; j++) {
                     tr = $('<tr/>');
-                    tr.append("<td>" + json[i].users[j].id + "</td>");
-                    tr.append("<td>" + json[i].users[j].name+ "</td>");
-                    tr.append("<td>" + json[i].users[j].surname + "</td>");
+                    tr.append("<td>" + json[i].userList[j].id + "</td>");
+                    tr.append("<td>" + json[i].userList[j].name+ "</td>");
+                    tr.append("<td>" + json[i].userList[j].surname + "</td>");
                     table2.append(tr);
                 }
                 res = table.prop('outerHTML');

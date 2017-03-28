@@ -67,10 +67,10 @@ $(function()
         eventSources: [
             // your event source
             {
+                id: 1,
                 url: '/getCalendar',
                 type: 'POST',
                 data: JSON.stringify(data),
-                dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 error: function() {
                     // alert('there was an error while fetching events!');
@@ -78,9 +78,7 @@ $(function()
                     // $(".fc-now-indicator-arrow").hide()
                 },
                 color: '#D32F2F',   // a non-ajax option
-                textColor: 'black', // a non-ajax option
-                startParam:"",
-                endParam:""
+                textColor: 'black' // a non-ajax option
             }
             // any other sources...
         ]
@@ -193,7 +191,10 @@ $(function()
             {
                 onShow: function () {
                     $("#classeId").val(this.id);
-                    calendar.fullCalendar( 'refetchEvents' );
+                    var source = calendar.fullCalendar( 'getEventSourceById', 1 );
+                    var data = { "classeId" : $('#classeId').val()};
+                    source.data = JSON.stringify(data);
+                    calendar.fullCalendar( 'refetchEvents');
                 }
             }
         );
