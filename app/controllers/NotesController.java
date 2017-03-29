@@ -96,29 +96,29 @@ public class NotesController extends Controller{
 
     public Result getMatiere() {
         JsonNode json = request().body().asJson();
-        Long classeId = json.get("classeId").asLong();
+        JsonNode jsonNode = json.get("classeId");
+        Long classeId =null;
+        if (jsonNode != null) {
+          classeId = jsonNode.asLong();
+        }
         User u = Application.getCurrentUserObj();
         if (u != null) {
             ObjectMapper mapper = new ObjectMapper();
-            Long id = u.getClasse().getId();
-            if (classeId != null) {
-                id = classeId;
-            }
             List<Matiere> matiereList = Matiere.find.all();
-
-            if (classeId > 0 ) {
-                Classe classe = Classe.find.byId(id);
-                if (classe != null) {
-                    matiereList = classe.getMatiereList();
+            if (classeId != null) {
+                if (classeId > 0 ) {
+                    Classe classe = Classe.find.byId(classeId);
+                    if (classe != null) {
+                        matiereList = classe.getMatiereList();
+                    }
                 }
             }
-
             if (matiereList != null) {
                 ArrayNode listResult = mapper.valueToTree(matiereList);
                 return ok().sendJson(listResult);
             }
         }
-        return ok();
+        return ok().sendJson(Json.toJson(false));
     }
 
 }

@@ -32,7 +32,7 @@ $(function()
             if (!Array.isArray(json)) {
                 json = [json];
             }
-
+            initSelectClasse(json);
             $.each(json, function (index, element) {
                 $('#matieresTabs').append("<li class='tab col s3'><a class='TabUser' id="+  element.id + ">"+ element.name+  "</a></li>");
                 $('#notesTabs').append("<li class='tab col s3'><a class='TabUser' id="+  element.id + ">"+ element.name+  "</a></li>");
@@ -92,7 +92,6 @@ $(function()
                     } else{
                         $("#noteContent").append(res);
                         turn($("#addNote"));
-                        initSelectClasse(json);
                         $("#noteAdderDiv").toggle("slide");
                         myToast("La classe a bien été ajouté");
                     }
@@ -224,6 +223,7 @@ function initTabMatiere(classeId) {
                     $("#matiereContent").append(res);
                 }
             } else {
+                initTabNote('allUser');
                 $("#matiereContent").empty();
                 res = cardStart + imgEmptyDiv + cardEnd;
                 $("#matiereContent").append(res);
@@ -334,4 +334,27 @@ function matiereToTab(json) {
         res.push(cardStart + table.prop('outerHTML') + cardEnd);
     }
     return res;
+}
+function initSelectClasse(json) {
+    var reset=true;
+    if (!Array.isArray(json)) {
+        json = [json];
+        reset = false;
+    }
+    if (reset) {
+        if ($("#classeMatiere .remain").length) {
+            var $a = $($("#classeMatiere .remain")[0].outerHTML);
+            $("#classeMatiere").empty();
+            $("#classeMatiere").append($a);
+        }
+    }
+    $.each(json,function (index, elem) {
+        var opt = $("<option />");
+        opt.prop("value",elem.id);
+        opt.text(elem.name);
+        if (!$("#classeMatiere option[value="+elem.id+"]").length ) {
+            $("#classeMatiere").append(opt);
+        }
+    });
+    $('select').material_select();
 }
