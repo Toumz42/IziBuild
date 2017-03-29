@@ -103,8 +103,12 @@ public class User extends Model {
     public Classe getClasse() {
         return classe;
     }
+
     public Long getClasseId() {
-        return classe.getId();
+        if (this.classe != null) {
+            return classe.getId();
+        }
+        return null;
     }
 
     public void setClasse(Classe classe) {

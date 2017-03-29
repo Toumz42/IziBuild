@@ -329,9 +329,6 @@ $(function()
                     break;
             }
         });
-        $('.parallax').parallax();
-
-
     });
     
     $('#userTab').click();

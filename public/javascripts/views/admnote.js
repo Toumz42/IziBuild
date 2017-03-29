@@ -1,6 +1,8 @@
 /**
  * Created by ttomc on 06/01/2017.
  */
+var arrayData = [];
+var users = {};
 $(function()
 {
     $(".page-title").empty().append("Administration Notes");
@@ -40,8 +42,11 @@ $(function()
         }
     });
 
-    $("#subClasse").click(function(){
-        if ( ($("#classeName").size()!=0))
+    initTabMatiere('allUser');
+
+
+    $("#subNote").click(function(){
+        if ( ($("#note").size()!=0))
         {
             var url = "/addNote";
             var update = $("#idNote").val() != "";
@@ -51,8 +56,8 @@ $(function()
             var data = {
                 "idNote" : $("#idNote").val(),
                 "note" : $("#note").val(),
-                "user" : $("#not").val(),
-                "matiere" : $("#classeName").val()
+                "user" : autocomplete.$el.data("value"),
+                "matiere" : $("#matiereNote").val()
             };
             data = JSON.stringify(data);
             $.ajax ({
@@ -65,30 +70,30 @@ $(function()
                     var json = $.parseJSON(ret);
                     var res = classeToTab(json);
                     classes = jsonToGlobalArray(classes, json);
-                    if ($("#classeContent").find("#noData").length) {
-                        $("#classeContent").empty();
+                    if ($("#noteContent").find("#noData").length) {
+                        $("#noteContent").empty();
                     }
                     emptyFields(classeFields);
                     if (update) {
-                        var ids = $("#classeContent").find(".idClasse");
+                        var ids = $("#noteContent").find(".idClasse");
                         if (ids.length) {
                             $.each(ids, function (index, el) {
                                 $.each(res, function (index, element) {
                                     if ($(el).val() == $(element).find(".idClasse").val()) {
                                         $(el).parents("ul.stage").remove();
-                                        $("#classeContent").append(element);
+                                        $("#noteContent").append(element);
                                     }
                                 });
                             });
                         }else {
-                            $("#classeContent").append(res);
+                            $("#noteContent").append(res);
                         }
                         myToast("La classe a bien été mise à jour");
                     } else{
-                        $("#classeContent").append(res);
-                        turn($("#addClasse"));
+                        $("#noteContent").append(res);
+                        turn($("#addNote"));
                         initSelectClasse(json);
-                        $("#classeAdderDiv").toggle("slide");
+                        $("#noteAdderDiv").toggle("slide");
                         myToast("La classe a bien été ajouté");
                     }
                 },
@@ -99,11 +104,11 @@ $(function()
         }
     });
 
-
     $('#mainTabs').click(function (e) {
         initTab(e.target.id);
     });
     $("#notesTabs").show();
+    $("select").material_select();
 
 });
 
@@ -132,9 +137,9 @@ function initTab(tabName) {
     }
 }
 
-function initTabNote(classeId) {
+function initTabNote(classeId , matieres) {
     var dataGroup = { 'classeId' : classeId };
-    if (classeId == 'allGroup') {
+    if (classeId == 'allUser') {
         dataGroup={};
         $('#noteContent').empty();
     }
@@ -149,8 +154,9 @@ function initTabNote(classeId) {
             var res;
             var json = $.parseJSON(ret);
             if ( json.length != 0 ) {
-                groupes = jsonToGlobalArray(groupes, json);
-                res = groupeToTab(json);
+                users = jsonToGlobalArray(users, json);
+                res = noteToTab(json,matieres);
+                initAutoComplete(json);
                 if ($("#noteContent").find("#noData").length
                 /*|| $("#projetContent").find(".idGroupe").val()*/) {
                     $("#noteContent").empty();
@@ -195,11 +201,10 @@ function initTabMatiere(classeId) {
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
-            initAutoComplete(json);
             if ( json.length != 0 ) {
-                users = jsonToGlobalArray(users, json);
-                var res = userToTab(json);
+                var res = matiereToTab(json);
                 // initTab('userTab');
+                initTabNote('allUser', json);
                 if ($("#matiereContent").find("#noData").length) {
                     $("#matiereContent").empty();
                 }
@@ -225,4 +230,108 @@ function initTabMatiere(classeId) {
             }
         }
     });
+}
+
+function initAutoComplete(json) {
+    var reset = true;
+    if (!Array.isArray(json)) {
+        json = [json];
+        reset = false;
+    }
+    if (reset) {
+        arrayData = [];
+    }
+    for (var i = 0; i < json.length; i++) {
+        var objDataComplete = {
+            "id" : json[i].id,
+            "text": json[i].name + " " + json[i].surname
+        };
+        if (arrayData.indexOf(objDataComplete) == -1) {
+            arrayData.push(objDataComplete);
+        }
+    }
+    autocomplete = $('#multipleInput').materialize_autocomplete({
+        // data: objDataComplete,
+        multiple: {
+            enable: true,
+            onAppend: function (item) {
+                pushToGroup(item.id);
+            },
+            onRemove: function (item) {
+                removeFromGroup(item.id);
+            }
+        },
+        appender: {
+            el: '.ac-users'
+        },
+        dropdown: {
+            el: '#multipleDropdown',
+            itemTemplate: '<li class="ac-item autocomplete-content" data-id="<%= item.id %>" data-text=\'<%= item.text %>\'><a href="javascript:void(0)"><%= item.text %></a></li>'
+        },
+        getData: function (value, callback) {
+            callback(value, arrayData);
+        }
+    });
+}
+function noteToTab(json, matieres) {
+    var table;
+    var tr;
+    var res = [];
+    if (!Array.isArray(json)) {
+        json = [json];
+    }
+    table = $("<table class='responsive-table highlight'></table>");
+    th = $('<tr id="headerTabNotes"/>');
+    th.append("<th>Eleve</th>");
+    if (matieres) {
+        for (var k = 0; k < matieres.length; k++) {
+            th.append("<th>"+matieres[k].matiere+"</th>");
+        }
+    }
+    $(table).append(th);
+    for (var i = 0; i < json.length; i++) {
+        tr = $('<tr/>');
+        tr.append("<td>" + json[i].id +
+            "<input type='hidden' class='idUser' value='" + json[i].id +"'>" +
+            json[i].name +" "+ json[i].surname + "</td>");
+        if (json[i].noteList) {
+            for (var j = 0; j < json[i].noteList.length; i++) {
+                if (json[i].noteList[j].matiere.id) {
+                tr.append("<td>" + json[i].id +
+                    "<input type='hidden' class='idUser' value='" + json[i].id +"'>" +
+                    json[i].name +" "+ json[i].surname + "</td>");
+                }
+            }
+        }
+        tr.append("<td><div class='buttonIcon edit' type='user' id='"+json[i].id+"'>" + editIcon + "</div></td>");
+        tr.append("<td><div class='buttonIcon delete' type='user' id='"+json[i].id+"'>" + deleteIcon + "</div></td>");
+        $(table).append(tr);
+    }
+    res.push(cardStart + table.prop('outerHTML') + cardEnd);
+    return res;
+}
+function matiereToTab(json) {
+    var table;
+    var tr;
+    var res = [];
+    if (!Array.isArray(json)) {
+        json = [json];
+    }
+    for (var i = 0; i < json.length; i++) {
+        table = $("<table class='responsive-table highlight'></table>");
+        tr = $('<tr/>');
+        tr.append("<th>Id</th>");
+        tr.append("<th>Nom</th>");
+        tr.append("<th>Coeficient</th>");
+        $(table).append(tr);
+        tr = $('<tr/>');
+        tr.append("<td>" + json[i].id + "<input type='hidden' class='idMatiere' value='" + json[i].id +"'>"+ "</td>");
+        tr.append("<td>" + json[i].matiere + "</td>");
+        tr.append("<td>" + json[i].coef+ "</td>");
+        tr.append("<td><div class='buttonIcon edit' type='user' id='"+json[i].id+"'>" + editIcon + "</div></td>");
+        tr.append("<td><div class='buttonIcon delete' type='user' id='"+json[i].id+"'>" + deleteIcon + "</div></td>");
+        $(table).append(tr);
+        res.push(cardStart + table.prop('outerHTML') + cardEnd);
+    }
+    return res;
 }

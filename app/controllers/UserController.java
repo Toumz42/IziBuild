@@ -161,9 +161,11 @@ public class UserController extends Controller {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
 
-            for (User user : userList) {
-                ObjectNode userNode = mapper.valueToTree(user);
-                listResult.add(userNode);
+            if (userList != null) {
+                for (User user : userList) {
+                    ObjectNode userNode = mapper.valueToTree(user);
+                    listResult.add(userNode);
+                }
             }
             return ok().sendJson(listResult);
         }
@@ -171,8 +173,6 @@ public class UserController extends Controller {
     }
 
     public Result getAllProf() {
-
-
         List<User> userList= null;
 
         userList = User.find.query().where().eq("droit",0).findList();

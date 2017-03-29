@@ -28,6 +28,11 @@ GET     /checkCfProjet                              controllers.ProjectControlle
 GET     /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /addUser                                    controllers.UserController.addUser()
+POST    /addMatiere                                 controllers.NotesController.addMatiere()
+POST    /addNote                                    controllers.NotesController.addNote()
+POST    /updateNote                                 controllers.NotesController.updateMatiere()
+POST    /updateMatiere                              controllers.NotesController.updateNote()
+POST    /getAllMatiere                              controllers.NotesController.getMatiere
 POST    /addEvent                                   controllers.CalendarController.addEvent()
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
 POST    /addProject                                 controllers.ProjectController.addProject()
