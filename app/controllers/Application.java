@@ -10,6 +10,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.util.Map;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Created by ttomc on 02/01/2017.
@@ -108,13 +109,14 @@ public class Application extends Controller {
 //        pswd =  json.get("pswd").asText();
         login = param.get("login")[0];
         pswd =  param.get("pswd")[0];
+        String sha1pswd = DigestUtils.sha1Hex(pswd);
 
         ErrorUtils retour = null;
         User p = null;
         try
         {
             p = User.find.query().where().eq("login", login)
-                    .and(Expr.eq("login", login),Expr.eq("password", pswd))
+                    .and(Expr.eq("login", login),Expr.eq("password", sha1pswd))
                     .findUnique();
 
             if (p != null) {

@@ -22,6 +22,7 @@ import scala.App;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Locale;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import static play.libs.Json.toJson;
 
@@ -36,6 +37,7 @@ public class UserController extends Controller {
         String pass = json.get("password").asText();
         Long classeId = json.get("classe").asLong();
         Classe classe = Classe.find.byId(classeId);
+        String sha1pass = DigestUtils.sha1Hex(pass);
 
         if (classe == null) {
             if (classeId == 0) {
@@ -55,7 +57,7 @@ public class UserController extends Controller {
         if (u == null) {
             if (email != null) {
                 if (!email.equals("")) {
-                    User person = new User(name, surname, email, pass, droit, classe);
+                    User person = new User(name, surname, email, sha1pass, droit, classe);
                     person.save();
                     JsonNode retour = Json.toJson(person);
                     return ok().sendJson(retour);
@@ -78,6 +80,7 @@ public class UserController extends Controller {
         Long classe = json.get("classe").asLong();
         String email = json.get("email").asText();
         String pass = json.get("password").asText();
+        String sha1pass = DigestUtils.sha1Hex(pass);
 
         User u = User.find.byId(id);
         Classe c = Classe.find.byId(classe);
@@ -98,7 +101,7 @@ public class UserController extends Controller {
                     u.setSurname(surname);
                     u.setDroit(droit);
                     u.setEmail(email);
-                    u.setPassword(pass);
+                    u.setPassword(sha1pass);
                     u.setClasse(c);
                     u.save();
                     JsonNode retour = Json.toJson(u);
