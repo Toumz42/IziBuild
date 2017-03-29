@@ -48,7 +48,6 @@ public class UserController extends Controller {
             }
         }
 
-
         User u = User.find.query()
                 .where()
                 .ilike("email","%"+email+"%")

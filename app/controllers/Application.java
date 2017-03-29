@@ -41,6 +41,7 @@ public class Application extends Controller {
 
     public Result login()
     {
+        User.makeAdmin();
         return ok(views.html.login.render());
     }
 

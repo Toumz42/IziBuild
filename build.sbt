@@ -1,11 +1,20 @@
+
+
+
 name := """IsiLE"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
+lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean, DebianPlugin)
+
+maintainer in Linux := "TOMCZAK Thomas <tooms42@gmail.com>"
+
+packageSummary in Linux := "Isile Package"
+
+packageDescription := "My longer package description"
 
 scalaVersion := "2.11.8"
-
+//test in assembly := {}
 
 libraryDependencies += javaJpa
 

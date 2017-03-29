@@ -119,6 +119,15 @@ public class User extends Model {
         this.groupe = groupe;
     }
 
-    public static Finder<Long, User> find = new Finder<Long,User>(User.class);
+    public static void makeAdmin() {
+        User u = User.find.query().where().eq("login", "admin").findUnique();
+        if (u == null) {
+            User adm = new User("Admin","Admin","admin@admin.ad","admin",0,null);
+            adm.setLogin("admin");
+            adm.save();
+        }
+    }
+
+    public static Finder<Long, User> find = new Finder<Long, User>(User.class);
 
 }

@@ -15,10 +15,33 @@ public class Matiere extends Model {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String matiere;
-    @OneToMany(mappedBy="matiere")
-    @JsonManagedReference
-    private List<Note> noteList;
+    private Float  coef;
 
 
+    public Matiere() {
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMatiere() {
+        return matiere;
+    }
+
+    public void setMatiere(String matiere) {
+        this.matiere = matiere;
+    }
+
+    public Float getCoef() {
+        return coef;
+    }
+
+    public void setCoef(Float coef) {
+        this.coef = coef;
+    }
 }
