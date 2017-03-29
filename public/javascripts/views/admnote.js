@@ -8,17 +8,13 @@ $(function()
     $(".addButton").click(function () {
         turn($(this));
         switch (this.id) {
-            case "addUser":
-                modalize($("#formSign"),$("#usersAdderDiv"),false);
-                $("#usersAdderDiv").toggle("slide");
+            case "addNote":
+                modalize($("#formNote"),$("#noteAdderDiv"),false);
+                $("#noteAdderDiv").toggle("slide");
                 break;
-            case "addClasse":
-                modalize($("#formClasse"),$("#classeAdderDiv"),false);
-                $("#classeAdderDiv").toggle("slide");
-                break;
-            case "addGroupe":
-                modalize($("#formGroupe"),$("#projetAdderDiv"),false);
-                $("#projetAdderDiv").toggle("slide");
+            case "addMatiere":
+                modalize($("#formMatiere"),$("#matiereAdderDiv"),false);
+                $("#matiereAdderDiv").toggle("slide");
                 break;
         }
     });
@@ -43,6 +39,67 @@ $(function()
 
         }
     });
+
+    $("#subClasse").click(function(){
+        if ( ($("#classeName").size()!=0))
+        {
+            var url = "/addNote";
+            var update = $("#idNote").val() != "";
+            if (update) {
+                url  = "/updateNote"
+            }
+            var data = {
+                "idNote" : $("#idNote").val(),
+                "note" : $("#note").val(),
+                "user" : $("#not").val(),
+                "matiere" : $("#classeName").val()
+            };
+            data = JSON.stringify(data);
+            $.ajax ({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function(ret, textStatus, jqXHR){
+                    var json = $.parseJSON(ret);
+                    var res = classeToTab(json);
+                    classes = jsonToGlobalArray(classes, json);
+                    if ($("#classeContent").find("#noData").length) {
+                        $("#classeContent").empty();
+                    }
+                    emptyFields(classeFields);
+                    if (update) {
+                        var ids = $("#classeContent").find(".idClasse");
+                        if (ids.length) {
+                            $.each(ids, function (index, el) {
+                                $.each(res, function (index, element) {
+                                    if ($(el).val() == $(element).find(".idClasse").val()) {
+                                        $(el).parents("ul.stage").remove();
+                                        $("#classeContent").append(element);
+                                    }
+                                });
+                            });
+                        }else {
+                            $("#classeContent").append(res);
+                        }
+                        myToast("La classe a bien été mise à jour");
+                    } else{
+                        $("#classeContent").append(res);
+                        turn($("#addClasse"));
+                        initSelectClasse(json);
+                        $("#classeAdderDiv").toggle("slide");
+                        myToast("La classe a bien été ajouté");
+                    }
+                },
+                error : function (xhr, ajaxOptions, thrownError) {
+                    myToast("Erreur dans l'ajout de la classe");
+                }
+            });
+        }
+    });
+
+
     $('#mainTabs').click(function (e) {
         initTab(e.target.id);
     });

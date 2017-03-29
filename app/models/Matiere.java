@@ -15,9 +15,8 @@ public class Matiere extends Model {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String matiere;
-    @OneToMany(mappedBy="matiere")
-    @JsonManagedReference
-    private List<Note> noteList;
+    private Float  coef;
+
 
     public Matiere() {
     }
@@ -38,11 +37,11 @@ public class Matiere extends Model {
         this.matiere = matiere;
     }
 
-    public List<Note> getNoteList() {
-        return noteList;
+    public Float getCoef() {
+        return coef;
     }
 
-    public void setNoteList(List<Note> noteList) {
-        this.noteList = noteList;
+    public void setCoef(Float coef) {
+        this.coef = coef;
     }
 }
