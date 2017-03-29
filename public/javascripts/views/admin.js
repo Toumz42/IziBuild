@@ -156,6 +156,8 @@ $(function()
         }
     });
 
+
+
     $("#subGroupe").click(function(){
         if ( ($("#groupeName").val()!=""))
         {
@@ -369,6 +371,22 @@ function check() {
             return false;
         }
     }
+    return true
+}
+function checkGroupe() {
+
+        if ($("#theme").val() == "") {
+            myToast("Merci d'ajouter un Theme au Groupe");
+            return false;
+        }
+        else if ($("#date").val() == "") {
+            myToast("Merci d'ajouter une date d'oral");
+            return false;
+        }
+        else if (groupids == [] ) {
+            myToast("Merci d'ajouter des élèves");
+            return false;
+        }
     return true
 }
 
