@@ -4,12 +4,9 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.CalendarEvent;
 import models.Classe;
-import models.GroupeProjet;
 import models.User;
-import models.utils.DateUtils;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -104,7 +101,6 @@ public class CalendarController extends Controller{
         calendarEvent.setClasse(classe);
         calendarEvent.setStart(dateStart);
         calendarEvent.setEnd(dateEnd);
-
         calendarEvent.save();
         JsonNode retour = Json.toJson(calendarEvent);
         return ok().sendJson(retour);

@@ -3,10 +3,9 @@ package models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Finder;
 import io.ebean.Model;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,6 +25,9 @@ public class Classe extends Model {
     @OneToMany(mappedBy="classe")
     @JsonManagedReference
     private List<User> userList;
+    @ManyToMany
+    @JsonManagedReference
+    private List<Matiere> matiereList = new ArrayList<>();
 
     @PreRemove
     private void preRemove() {
@@ -76,6 +78,28 @@ public class Classe extends Model {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public List<Matiere> getMatiereList() {
+        return matiereList;
+    }
+
+    public void setMatiereList(List<Matiere> matiereList) {
+        this.matiereList = matiereList;
+    }
+
+    public void addMatiereList(Matiere matiere) {
+        if (!this.matiereList.contains(matiere)) {
+            this.matiereList.add(matiere);
+        }
+    }
+
+    public static Finder<Long, Classe> getFind() {
+        return find;
+    }
+
+    public static void setFind(Finder<Long, Classe> find) {
+        Classe.find = find;
     }
 
     public static Finder<Long, Classe> find = new Finder<Long,Classe>(Classe.class);

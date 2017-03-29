@@ -1,10 +1,12 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.ebean.Finder;
 import io.ebean.Model;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by ghanem01 on 28/02/2017.
@@ -15,10 +17,18 @@ public class Matiere extends Model {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String matiere;
-    private Float  coef;
+    private Double  coef;
+
+
 
 
     public Matiere() {
+    }
+
+
+    public Matiere(String matiere, Double coef) {
+        this.matiere = matiere;
+        this.coef = coef;
     }
 
     public Long getId() {
@@ -37,11 +47,13 @@ public class Matiere extends Model {
         this.matiere = matiere;
     }
 
-    public Float getCoef() {
+    public Double getCoef() {
         return coef;
     }
 
-    public void setCoef(Float coef) {
+    public void setCoef(Double coef) {
         this.coef = coef;
     }
+
+    public static Finder<Long, Matiere> find = new Finder<Long,Matiere>(Matiere.class);
 }

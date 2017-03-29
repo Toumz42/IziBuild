@@ -1,10 +1,10 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.ebean.Finder;
 import io.ebean.Model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by ghanem01 on 28/02/2017.
@@ -22,7 +22,7 @@ public class Note extends Model {
     @JsonBackReference
     private Matiere matiere;
 
-    private int note;
+    private Integer note;
 
     public Note() {
     }
@@ -49,11 +49,13 @@ public class Note extends Model {
         this.matiere = matiere;
     }
 
-    public int getNote() {
+    public Integer getNote() {
         return note;
     }
 
-    public void setNote(int note) {
+    public void setNote(Integer note) {
         this.note = note;
     }
+
+    public static Finder<Long, Note> find = new Finder<Long,Note>(Note.class);
 }
