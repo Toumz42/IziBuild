@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Model;
 import io.ebean.Finder;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -126,7 +127,10 @@ public class User extends Model {
     public static void makeAdmin() {
         User u = User.find.query().where().eq("login", "admin").findUnique();
         if (u == null) {
-            User adm = new User("Admin","Admin","admin@admin.ad","admin",0,null);
+
+            String pass = "admin";
+            pass = DigestUtils.sha1Hex(pass);
+            User adm = new User("Admin","Admin","admin@admin.ad",pass,0,null);
             adm.setLogin("admin");
             adm.save();
         }
