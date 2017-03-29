@@ -278,9 +278,6 @@ $(function()
 
     $('#mainTabs').click(function (e) {
         initTab(e.target.id);
-        var height =  $('.section').height() + 50;
-        // $('.section').css("margin-top",(- (height / 2 ))+"px");
-        // $('.section').css("margin-bottom",(- (height / 2 ))+"px");
     });
     $(document).ajaxStop(function(event,request,settings){
         $(".delete").click(function () {
