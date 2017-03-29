@@ -3,9 +3,9 @@
  */
 var groupids = [];
 var arrayData = [];
-var classes = {};
-var groupes = {};
-var users = {};
+var classes = [];
+var groupes = [];
+var users = [];
 var autocomplete;
 $(function()
 {
