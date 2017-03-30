@@ -19,6 +19,14 @@ $(function()
         }
     });
 
+
+    $("#password1").change(function () {
+        checkPass();
+    });
+    $("#password2").change(function () {
+        checkPass();
+    });
+
     $(".addButton").click(function () {
         turn($(this));
         switch (this.id) {
@@ -53,7 +61,7 @@ $(function()
                 "droit" : $("#droit").val(),
                 "classe" : $("#classeUser").val(),
                 "password" :  $("#password").val()};
-            
+
             $.ajax ({
                 url: url,
                 type: "POST",
@@ -199,7 +207,7 @@ $(function()
                                     if ($(el).val() == $(element).find(".idGroupe").val()) {
                                         $(el).parents("ul.stage").remove();
                                         $("#projetContent").append(element);
-                                    } 
+                                    }
                                 });
                             });
                         } else {
@@ -290,6 +298,7 @@ $(function()
                 "type" : type,
                 "id" : id
             };
+            if (confirm("Voulez-vous supprimer ?")){
             $.ajax ({
                 url: "/delete",
                 type: "POST",
@@ -306,7 +315,7 @@ $(function()
                         myToast("La suppression a bien été effectuée");
                     }
                 }
-            });
+            });}
         });
 
         $(".edit").click(function () {
@@ -332,7 +341,7 @@ $(function()
             }
         });
     });
-    
+
     $('#userTab').click();
 });
 
@@ -350,7 +359,7 @@ function check() {
     } else
     {
         $("#email").addClass("valid");
-        if ($("#password").val() == "") {
+        if (checkPass()) {
             myToast("Merci d'ajouter un Mot de passe");
             return false;
         }
@@ -375,19 +384,45 @@ function check() {
 }
 function checkGroupe() {
 
-        if ($("#theme").val() == "") {
-            myToast("Merci d'ajouter un Theme au Groupe");
-            return false;
-        }
-        else if ($("#date").val() == "") {
-            myToast("Merci d'ajouter une date d'oral");
-            return false;
-        }
-        else if (groupids == [] ) {
-            myToast("Merci d'ajouter des élèves");
-            return false;
-        }
+    if ($("#theme").val() == "") {
+        myToast("Merci d'ajouter un Theme au Groupe");
+        return false;
+    }
+    else if ($("#date").val() == "") {
+        myToast("Merci d'ajouter une date d'oral");
+        return false;
+    }
+    else if (groupids == [] ) {
+        myToast("Merci d'ajouter des élèves");
+        return false;
+    }
     return true
+}
+function checkPass()
+{
+    if ($("#password1").val() != "") {
+        if (password1.length >= 6){
+            if ($("#password1").val() == $("#password2").val()) {
+                $("#password2").addClass("valid")
+                $("#password2").removeClass("invalid")
+                return true;
+            }
+            else {
+                $("#password2").removeClass("valid")
+                $("#password2").addClass("invalid")
+            }
+        }
+        else {
+            myToast("Minimum 6 caractères!")
+            $("#password1").removeClass("valid")
+            $("#password2").removeClass("valid")
+            $("#password1").addClass("invalid")
+            $("#password2").addClass("invalid")
+        }
+    }
+
+return false;
+
 }
 
 function initAutoComplete(json) {
@@ -556,7 +591,7 @@ function initTabGroup(classeId) {
                 groupes = jsonToGlobalArray(groupes, json);
                 res = groupeToTab(json);
                 if ($("#projetContent").find("#noData").length
-                    /*|| $("#projetContent").find(".idGroupe").val()*/) {
+                /*|| $("#projetContent").find(".idGroupe").val()*/) {
                     $("#projetContent").empty();
                 }
                 var ids = $("#projetContent").find(".idGroupe");
