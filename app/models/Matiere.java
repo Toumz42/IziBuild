@@ -20,12 +20,8 @@ public class Matiere extends Model {
     private Double  coef;
 
 
-
-
     public Matiere() {
     }
-
-
     public Matiere(String matiere, Double coef) {
         this.matiere = matiere;
         this.coef = coef;

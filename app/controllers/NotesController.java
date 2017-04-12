@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by ttomc on 28/03/2017.
  */
-public class NotesController extends Controller{
+public class NotesController extends Controller {
 
 
     public Result addNote() {
@@ -27,12 +27,13 @@ public class NotesController extends Controller{
         if (note != null && user != null && matiere != null) {
             Note newNote = new Note(note, eleve, matiere);
             newNote.save();
-            JsonNode retour = Json.toJson(newNote);
+            JsonNode retour = Json.toJson(eleve);
             return ok().sendJson(retour);
         }
         return badRequest();
 
     }
+
     public Result addMatiere() {
         JsonNode json = request().body().asJson();
         String matiere = json.get("matiere").asText();
@@ -42,13 +43,16 @@ public class NotesController extends Controller{
 
         if (matiere != null && coef != null && classe != null) {
             Matiere newMatiere = new Matiere(matiere, coef);
+            classe.addMatiereList(newMatiere);
             newMatiere.save();
+            classe.save();
             JsonNode retour = Json.toJson(newMatiere);
             return ok().sendJson(retour);
         }
         return badRequest();
 
     }
+
     public Result updateNote() {
         JsonNode json = request().body().asJson();
         Long id = json.get("idNote").asLong();
@@ -60,8 +64,8 @@ public class NotesController extends Controller{
 
         if (note != null && user != null && matiere != null) {
 
-            Note newNote  = Note.find.byId(id);
-            if (newNote != null){
+            Note newNote = Note.find.byId(id);
+            if (newNote != null) {
                 newNote.setNote(note);
                 newNote.save();
                 JsonNode retour = Json.toJson(newNote);
@@ -71,6 +75,7 @@ public class NotesController extends Controller{
         return badRequest();
 
     }
+
     public Result updateMatiere() {
         JsonNode json = request().body().asJson();
         Long id = json.get("idMatiere").asLong();
@@ -81,11 +86,12 @@ public class NotesController extends Controller{
 
         if (matiere != null && coef != null && classe != null) {
             Matiere newMatiere = Matiere.find.byId(id);
-            if (newMatiere != null){
+            if (newMatiere != null) {
                 newMatiere.setMatiere(matiere);
                 newMatiere.setCoef(coef);
-                classe.addMatiereList(newMatiere);
                 newMatiere.save();
+                classe.addMatiereList(newMatiere);
+                classe.save();
                 JsonNode retour = Json.toJson(newMatiere);
                 return ok().sendJson(retour);
             }
@@ -96,22 +102,36 @@ public class NotesController extends Controller{
 
     public Result getMatiere() {
         JsonNode json = request().body().asJson();
-        JsonNode jsonNode = json.get("classeId");
-        Long classeId =null;
-        if (jsonNode != null) {
-          classeId = jsonNode.asLong();
+        JsonNode classeNode = json.get("classeId");
+        JsonNode userNode = json.get("userId");
+        Long classeId = null;
+        Long userId = null;
+        if (classeNode != null) {
+            classeId = classeNode.asLong();
+        }
+        if (userNode != null) {
+            userId = userNode.asLong();
         }
         User u = Application.getCurrentUserObj();
         if (u != null) {
             ObjectMapper mapper = new ObjectMapper();
-            List<Matiere> matiereList = Matiere.find.all();
-            if (classeId != null) {
-                if (classeId > 0 ) {
-                    Classe classe = Classe.find.byId(classeId);
+            List<Matiere> matiereList = null;
+            if (userId != null || classeId != null) {
+                    Classe classe = null;
+                    if (userId != null) {
+                        User user = User.find.byId(userId);
+                        if (user != null) {
+                            classe = user.getClasse();
+                        }
+                    } else {
+                        classe = Classe.find.byId(classeId);
+                    }
                     if (classe != null) {
                         matiereList = classe.getMatiereList();
                     }
-                }
+
+            } else {
+                matiereList = Matiere.find.all();
             }
             if (matiereList != null) {
                 ArrayNode listResult = mapper.valueToTree(matiereList);
@@ -121,4 +141,14 @@ public class NotesController extends Controller{
         return ok().sendJson(Json.toJson(false));
     }
 
+    public Result getMyNotes() {
+        User u = Application.getCurrentUserObj();
+        if (u != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode result = mapper.valueToTree(u);
+            return ok().sendJson(result);
+
+        }
+        return ok().sendJson(Json.toJson(false));
+    }
 }

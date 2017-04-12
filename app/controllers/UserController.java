@@ -156,7 +156,7 @@ public class UserController extends Controller {
             if (classeId != null) {
                 userList = User.find.query().where().eq("classe_id",classeId).findList();
             } else {
-                userList = User.find.all();
+                userList = User.find.query().where().not().eq("droit",0).findList();
             }
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
@@ -199,15 +199,30 @@ public class UserController extends Controller {
             Integer id = Integer.parseInt(idUser);
             u = User.find.query().where().eq("id",id).findUnique();
         }
-        if (u != null) {
-            List<Classe> classeList= Classe.find.all();
-            ObjectMapper mapper = new ObjectMapper();
-            ArrayNode listResult = mapper.createArrayNode();
-            for (Classe classe : classeList) {
-                ObjectNode classeNode = mapper.valueToTree(classe);
-                listResult.add(classeNode);
+        JsonNode json = request().body().asJson();
+        Long classeId = null;
+        if (json != null) {
+            if (json.get("classeId") != null) {
+                classeId = json.get("classeId").asLong();
             }
-            return ok().sendJson(listResult);
+        }
+        if (u != null) {
+            ArrayNode listResult;
+            ObjectMapper mapper = new ObjectMapper();
+            List<Classe> classeList = null;
+            Classe classe = null;
+            if (classeId != null) {
+                classe = Classe.find.byId(classeId);
+                return ok().sendJson(mapper.valueToTree(classe));
+            } else {
+                classeList = Classe.find.all();
+                listResult = mapper.createArrayNode();
+                for (Classe c : classeList) {
+                    ObjectNode classeNode = mapper.valueToTree(c);
+                    listResult.add(classeNode);
+                }
+                return ok().sendJson(listResult);
+            }
         }
         return notFound();
     }

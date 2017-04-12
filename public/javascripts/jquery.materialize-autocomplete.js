@@ -10,6 +10,8 @@
 
 }(this, function ($) {
 
+    var noop = function () {};
+
     var template = function (text) {
         var matcher = new RegExp('<%=([\\s\\S]+?)%>|<%([\\s\\S]+?)%>|$', 'g');
 
@@ -140,6 +142,8 @@
         getData: function (value, callback) {
             callback(value, []);
         },
+        onSelect: noop,
+        onDelete: noop,
         ignoreCase: true,
         throttling: true
     };
@@ -255,19 +259,27 @@
                 var keyCode = e.keyCode;
                 var $items, $hover;
                 // BACKSPACE KEY
-                if (keyCode == '8' && !$t.val()) {
-
-                    if (!self.options.multiple.enable) {
-                        return true;
-                    }
-
-                    if (!self.value.length) {
-                        return true;
-                    }
-
+                if (keyCode == '8')
+                {
                     var lastItem = self.value[self.value.length - 1];
-                    self.remove(lastItem);
-                    return false;
+                    if (!self.options.multiple.enable) {
+                        $t.val("");
+                        if ('function' === typeof self.options.onDelete) {
+                            self.options.onDelete.call(self, lastItem);
+                        }
+                    }
+                    if (!$t.val()) {
+                        if (!self.options.multiple.enable) {
+                            return true;
+                        }
+
+                        if (!self.value.length) {
+                            return true;
+                        }
+
+                        self.remove(lastItem);
+                        return false;
+                    }
                 }
                 // UP DOWN ARROW KEY
                 if (keyCode == '38' || keyCode == '40') {
@@ -307,19 +319,20 @@
 
                     self.setValue({
                         id: $hover.data('id'),
-                        text: $hover.data('text')
+                        text: $hover.data('text'),
+                        classe: $hover.data('classe')
                     });
 
                     return false;
                 }
-
             });
 
             self.$dropdown.on('click', '[data-id]', function (e) {
                 var $t = $(this);
                 var item = {
                     id: $t.data('id'),
-                    text: $t.data('text')
+                    text: $t.data('text'),
+                    classe: $t.data('classe')
                 };
 
                 self.setValue(item);
@@ -330,7 +343,8 @@
                 var $li = $t.closest('[data-id');
                 var item = {
                     id: $li.data('id'),
-                    text: $li.data('text')
+                    text: $li.data('text'),
+                    classe: $li.data('classe')
                 };
 
                 self.remove(item);
@@ -454,7 +468,6 @@
             if ('function' === typeof self.options.multiple.onRemove) {
                 self.options.multiple.onRemove.call(self, item);
             }
-
         },
         select: function (item) {
             var self = this;
@@ -466,6 +479,9 @@
 
             if (self.options.hidden.enable) {
                 self.$hidden.val(item.id);
+            }
+            if ('function' === typeof self.options.onSelect) {
+                self.options.onSelect.call(self, item);
             }
         }
     };

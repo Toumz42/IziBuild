@@ -2,33 +2,9 @@
  * Created by ttomc on 26/02/2017.
  */
 
-var classeFields =["#classeName"];
-var userFields =["#last_name", "#first_name", "#email", "#droit", "#classeUser", "#password"];
-var grpFields =["#groupeName", "#theme", "#date"];
-
-var imgEmptyDiv = "<div id='noData' class='valign-wrapper'>" +
-    "<img class='center-align responsive-img noData imgHome' src='/assets/images/empty.png'/>" +
-    "</div>"+
-    "<div>" +
-    "<div class='center-align blue-text'> Désolé nous n'avons rien trouvé </div>" +
-    "</div>";
-var cardStart = "<ul class='stage'><div class='row'>"+
-    "<div class='col push-s1 push-l1 push-m1 m12 s12 l12'>"+ "<li>"+
-    "<div class='card card-1'><div class='card-content'>"+
-    "<div class='row'>";
-var cardEnd = "</div></div></div></li></div></div></ul>";
-var deleteIcon = "<i class='material-icons'>delete</i>";
-var editIcon = "<i class='material-icons'>edit</i>";
-var cardCollapseStart = '<ul class="stage">'+
-    '<div class="row">'+
-    '<div class="col m12 s12 l12 push-s1 push-l1 push-m1">'+
-    '<li>'+
-    '<ul class="card-2 collapsible" data-collapsible="accordion">'+
-    '<li>'+
-    '<div class="card-1 card card-content wrapped collapsible-header">'+
-    '<div class="row">';
-var cardCollapseMiddle = "</div></div>";
-var cardCollapseEnd2 = "</li></ul></li></div></div></ul>";
+var classeFields =["#idClasse","#classeName"];
+var userFields =["#idUser","#last_name", "#first_name", "#email", "#droit", "#classeUser", "#password1","#password3"];
+var grpFields =["#idGroup","#groupeName", "#theme", "#date"];
 
 function userToTab(json) {
     var table;
@@ -198,6 +174,7 @@ function fillEditFormUser(val,id) {
     $("#droit").val(user.droit);
     $("#classeUser").val(user.classeId);
     $('select').material_select();
+    $("#password").val(user.password);
     $("#password").val(user.password);
     activeFields(userFields);
 }

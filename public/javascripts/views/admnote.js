@@ -3,6 +3,7 @@
  */
 var arrayData = [];
 var users = {};
+var currenTabNote;
 $(function()
 {
     $(".page-title").empty().append("Administration Notes");
@@ -20,11 +21,11 @@ $(function()
                 break;
         }
     });
-    
+
     $.ajax ({
         url: "/getAllClasse",
-        type: "GET",
-        // data: JSON.stringify(data),
+        type: "POST",
+        data: JSON.stringify({}),
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
@@ -33,6 +34,7 @@ $(function()
                 json = [json];
             }
             initSelectClasse(json);
+
             $.each(json, function (index, element) {
                 $('#matieresTabs').append("<li class='tab col s3'><a class='TabUser' id="+  element.id + ">"+ element.name+  "</a></li>");
                 $('#notesTabs').append("<li class='tab col s3'><a class='TabUser' id="+  element.id + ">"+ element.name+  "</a></li>");
@@ -43,6 +45,8 @@ $(function()
     });
 
     initTabMatiere('allUser');
+    initTabNote('allUser');
+    initAutoComplete();
 
 
     $("#subNote").click(function(){
@@ -55,7 +59,7 @@ $(function()
             }
             var data = {
                 "idNote" : $("#idNote").val(),
-                "note" : $("#note").val(),
+                "note" : $("#noteVal").val(),
                 "user" : autocomplete.$el.data("value"),
                 "matiere" : $("#matiereNote").val()
             };
@@ -68,33 +72,17 @@ $(function()
                 contentType: "application/json; charset=utf-8",
                 success: function(ret, textStatus, jqXHR){
                     var json = $.parseJSON(ret);
-                    var res = classeToTab(json);
-                    classes = jsonToGlobalArray(classes, json);
+                    noteToRow(json);
+                    // classes = jsonToGlobalArray(classes, json);
                     if ($("#noteContent").find("#noData").length) {
                         $("#noteContent").empty();
+                        initTabNote(currenTabNote);
                     }
                     emptyFields(classeFields);
-                    if (update) {
-                        var ids = $("#noteContent").find(".idClasse");
-                        if (ids.length) {
-                            $.each(ids, function (index, el) {
-                                $.each(res, function (index, element) {
-                                    if ($(el).val() == $(element).find(".idClasse").val()) {
-                                        $(el).parents("ul.stage").remove();
-                                        $("#noteContent").append(element);
-                                    }
-                                });
-                            });
-                        }else {
-                            $("#noteContent").append(res);
-                        }
-                        myToast("La classe a bien été mise à jour");
-                    } else{
-                        $("#noteContent").append(res);
-                        turn($("#addNote"));
-                        $("#noteAdderDiv").toggle("slide");
-                        myToast("La classe a bien été ajouté");
-                    }
+                    $("#noteAdderDiv").toggle("slide");
+                    turn($("#addNote"));
+                    myToast("La classe a bien été ajouté");
+
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout de la classe");
@@ -103,10 +91,67 @@ $(function()
         }
     });
 
+    $("#subMatiere").click(function(){
+        if ( ($("#matiere").size()!=0))
+        {
+            var url = "/addMatiere";
+            var update = $("#idMatiere").val() != "";
+            if (update) {
+                url  = "/updateMatiere"
+            }
+            var data = {
+                "idMatiere" : $("#idMatiere").val(),
+                "matiere" : $("#matiereName").val(),
+                "coef" : $("#coef").val(),
+                "classe" : $("#classeMatiere").val()
+            };
+            data = JSON.stringify(data);
+            $.ajax ({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function(ret, textStatus, jqXHR){
+                    var json = $.parseJSON(ret);
+                    var res = matiereToTab(json);
+                    // classes = jsonToGlobalArray(classes, json);
+                    if ($("#matiereContent").find("#noData").length) {
+                        $("#matiereContent").empty();
+                    }
+                    emptyFields(classeFields);
+                    if (update) {
+                        var ids = $("#matiereContent").find(".idMatiere");
+                        if (ids.length) {
+                            $.each(ids, function (index, el) {
+                                $.each(res, function (index, element) {
+                                    if ($(el).val() == $(element).find(".idMatiere").val()) {
+                                        $(el).parents("ul.stage").remove();
+                                        $("#matiereContent").append(element);
+                                    }
+                                });
+                            });
+                        } else {
+                            $("#matiereContent").append(res);
+                        }
+                        myToast("La matiere a bien été mise à jour");
+                    } else{
+                        $("#matiereContent").append(res);
+                        turn($("#addNote"));
+                        myToast("La matiere a bien été ajouté");
+                    }
+                },
+                error : function (xhr, ajaxOptions, thrownError) {
+                    myToast("Erreur dans l'ajout de la matiere");
+                }
+            });
+        }
+    });
+
     $('#mainTabs').click(function (e) {
         initTab(e.target.id);
     });
-    $("#notesTabs").show();
+    $("#matieresTabs").show();
     $("select").material_select();
 
 });
@@ -118,9 +163,10 @@ function initTab(tabName) {
         $("#notesTabs").show();
         $("#matieresTabs").hide();
         $("#notesTabs").children().removeAttr("style");
-        $("#notesTabs").children().tabs({
+        $("#notesTabs").tabs({
             onShow: function () {
-                initTabUser(this.id);
+                currenTabNote = this.id;
+                initTabNote(this.id);
             }
         });
     }
@@ -128,53 +174,57 @@ function initTab(tabName) {
         $("#matieresTabs").show();
         $("#notesTabs").hide();
         $("#matieresTabs").children().removeAttr("style");
-        $("#matieresTabs").children().tabs({
+        $("#matieresTabs").tabs({
             onShow: function () {
-                initTabGroup(this.id);
+                initTabMatiere(this.id);
             }
         });
     }
 }
 
-function initTabNote(classeId , matieres) {
-    var dataGroup = { 'classeId' : classeId };
+function initTabNote(classeId) {
+    var data = { 'classeId' : classeId };
     if (classeId == 'allUser') {
-        dataGroup={};
+        data={};
         $('#noteContent').empty();
     }
-    dataGroup = JSON.stringify(dataGroup);
+
     $.ajax ({
-        url: "/getAllUser",
+        url: "/getAllClasse",
         type: "POST",
-        data: dataGroup,
+        data: JSON.stringify(data),
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var res;
             var json = $.parseJSON(ret);
+            if (!Array.isArray(json)) {
+                json = [json];
+                reset = false;
+            }
             if ( json.length != 0 ) {
-                users = jsonToGlobalArray(users, json);
-                res = noteToTab(json,matieres);
-                initAutoComplete(json);
-                if ($("#noteContent").find("#noData").length
-                /*|| $("#projetContent").find(".idGroupe").val()*/) {
-                    $("#noteContent").empty();
-                }
-                var ids = $("#noteContent").find(".idNote");
-                if (ids.length) {
-                    $.each(ids, function (index, el) {
-                        $.each(res, function (index, element) {
-                            if ($(el).val() == $(element).find(".idNote").val()) {
-                                $(el).parents("ul.stage").remove();
-                                $("#noteContent").append(element);
-                            } else {
-                                $(el).parents("ul.stage").remove();
-                            }
+                $("#noteContent").empty();
+                $.each(json,function (index,element) {
+                    res = noteToTab(element);
+                    // if ($("#noteContent").find("#noData").length
+                    // || $("#projetContent").find(".idGroupe").val()*/) {
+                    // }
+                    // var ids = $("#noteContent").find(".idNote");
+                    // if (ids.length) {
+                    //     $.each(ids, function (index, el) {
+                            $.each(res, function (index, element) {
+                                // if ($(el).val() == $(element).find(".idNote").val()) {
+                                //     $(el).parents("ul.stage").remove();
+                                    $("#noteContent").append(element);
+                                // } else {
+                                //     $(el).parents("ul.stage").remove();
+                                // }
+                            // });
                         });
-                    });
-                } else {
-                    $("#noteContent").append(res);
-                }
+                    // } else {
+                    //     $("#noteContent").append(res);
+                    // }
+                });
             } else
             {
                 $('#noteContent').empty();
@@ -203,25 +253,24 @@ function initTabMatiere(classeId) {
             if ( json.length != 0 ) {
                 var res = matiereToTab(json);
                 // initTab('userTab');
-                initTabNote('allUser', json);
-                if ($("#matiereContent").find("#noData").length) {
+                // if ($("#matiereContent").find("#noData").length) {
                     $("#matiereContent").empty();
-                }
-                var ids = $("#matiereContent").find(".idMatiere");
-                if (ids.length) {
-                    $.each(ids, function (index, el) {
+                // }
+                // var ids = $("#matiereContent").find(".idMatiere");
+                // if (ids.length) {
+                //     $.each(ids, function (index, el) {
                         $.each(res, function (index, element) {
-                            if ($(el).val() == $(element).find(".idMatiere").val()) {
-                                $(el).parents("ul.stage").remove();
+                            // if ($(el).val() == $(element).find(".idMatiere").val()) {
+                            //     $(el).parents("ul.stage").remove();
                                 $("#matiereContent").append(element);
-                            } else {
-                                $(el).parents("ul.stage").remove();
-                            }
-                        });
+                            // } else {
+                            //     $(el).parents("ul.stage").remove();
+                            // }
+                        // });
                     });
-                } else {
-                    $("#matiereContent").append(res);
-                }
+                // } else {
+                //     $("#matiereContent").append(res);
+                // }
             } else {
                 initTabNote('allUser');
                 $("#matiereContent").empty();
@@ -232,84 +281,163 @@ function initTabMatiere(classeId) {
     });
 }
 
-function initAutoComplete(json) {
-    var reset = true;
-    if (!Array.isArray(json)) {
-        json = [json];
-        reset = false;
-    }
-    if (reset) {
-        arrayData = [];
-    }
-    for (var i = 0; i < json.length; i++) {
-        var objDataComplete = {
-            "id" : json[i].id,
-            "text": json[i].name + " " + json[i].surname
-        };
-        if (arrayData.indexOf(objDataComplete) == -1) {
-            arrayData.push(objDataComplete);
-        }
-    }
-    autocomplete = $('#multipleInput').materialize_autocomplete({
-        // data: objDataComplete,
-        multiple: {
-            enable: true,
-            onAppend: function (item) {
-                pushToGroup(item.id);
-            },
-            onRemove: function (item) {
-                removeFromGroup(item.id);
+function initAutoComplete() {
+    var json;
+    var dataGroup = JSON.stringify({});
+    $.ajax({
+        url: "/getAllUser",
+        type: "POST",
+        data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function (ret, textStatus, jqXHR) {
+            json = $.parseJSON(ret);
+            users = jsonToGlobalArray(users, json);
+
+            var reset = true;
+            if (!Array.isArray(json)) {
+                json = [json];
+                reset = false;
             }
-        },
-        appender: {
-            el: '.ac-users'
-        },
-        dropdown: {
-            el: '#multipleDropdown',
-            itemTemplate: '<li class="ac-item autocomplete-content" data-id="<%= item.id %>" data-text=\'<%= item.text %>\'><a href="javascript:void(0)"><%= item.text %></a></li>'
-        },
-        getData: function (value, callback) {
-            callback(value, arrayData);
+            if (reset) {
+                arrayData = [];
+            }
+            for (var i = 0; i < json.length; i++) {
+                var objDataComplete = {
+                    "id" : json[i].id,
+                    "text": json[i].name + " " + json[i].surname,
+                    "classe":json[i].classeId
+                };
+                if (arrayData.indexOf(objDataComplete) == -1) {
+                    arrayData.push(objDataComplete);
+                }
+            }
+            autocomplete = $('#multipleInput').materialize_autocomplete({
+                // data: objDataComplete,
+                multiple: {
+                    enable: false,
+                },
+                appender: {
+                    el: '.ac-users'
+                },
+                onSelect : function(item) {
+                    initSelectMatiere(item.id);
+                },
+                onDelete : function() {
+                    $('#matiereNote :not(.remain)').remove();
+                    $('select').material_select();
+                },
+                dropdown: {
+                    el: '#multipleDropdown',
+                    itemTemplate: '<li class="ac-item autocomplete-content" data-id="<%= item.id %>" data-classe="<%= item.classe %>" data-text=\'<%= item.text %>\'><a href="javascript:void(0)"><%= item.text %></a></li>'
+                },
+                getData: function (value, callback) {
+                    callback(value, arrayData);
+                }
+            });
         }
     });
 }
-function noteToTab(json, matieres) {
+function noteToTab(json) {
     var table;
     var tr;
     var res = [];
-    if (!Array.isArray(json)) {
-        json = [json];
-    }
-    table = $("<table class='responsive-table highlight'></table>");
-    th = $('<tr id="headerTabNotes"/>');
-    th.append("<th>Eleve</th>");
-    if (matieres) {
-        for (var k = 0; k < matieres.length; k++) {
-            th.append("<th>"+matieres[k].matiere+"</th>");
-        }
-    }
-    $(table).append(th);
-    for (var i = 0; i < json.length; i++) {
-        tr = $('<tr/>');
-        tr.append("<td>" + json[i].id +
-            "<input type='hidden' class='idUser' value='" + json[i].id +"'>" +
-            json[i].name +" "+ json[i].surname + "</td>");
-        if (json[i].noteList) {
-            for (var j = 0; j < json[i].noteList.length; i++) {
-                if (json[i].noteList[j].matiere.id) {
-                tr.append("<td>" + json[i].id +
-                    "<input type='hidden' class='idUser' value='" + json[i].id +"'>" +
-                    json[i].name +" "+ json[i].surname + "</td>");
-                }
+    var matieres = json.matiereList;
+    // if (!Array.isArray(json)) {
+    //     json = [json];
+    // }
+    var users = json.userList;
+    if (users.length ) {
+        table = $("<table class='responsive-table highlight' id='classeTable" + json.id + "'></table>");
+        th = $('<tr id="headerTabNotes"/>');
+        th.append("<th>Eleve</th>");
+        if (matieres) {
+            for (var k = 0; k < matieres.length; k++) {
+                th.append("<th id='" + matieres[k].id + "' >" + matieres[k].matiere + "</th>");
             }
         }
-        tr.append("<td><div class='buttonIcon edit' type='user' id='"+json[i].id+"'>" + editIcon + "</div></td>");
-        tr.append("<td><div class='buttonIcon delete' type='user' id='"+json[i].id+"'>" + deleteIcon + "</div></td>");
-        $(table).append(tr);
+        $(table).append(th);
+        for (var i = 0; i < users.length; i++) {
+            tr = $("<tr class='idUserNote' value='" + users[i].id + "' />");
+            tr.append("<td>" + users[i].id +
+                "<input type='hidden' class='idUser' value='" + users[i].id + "'>" +
+                users[i].name + " " + users[i].surname + "</td>");
+            var append = false;
+            for (var l = 0; l < matieres.length; l++) {
+                if (users[i].noteList.length) {
+                    for (var j = 0; j < users[i].noteList.length; j++) {
+                        if (users[i].noteList[j].matiere.id == matieres[l].id) {
+                            tr.append("<td>" +
+                                "<input type='hidden' class='idUser' value='" + users[i].noteList[j].matiere.id + "'>" +
+                                users[i].noteList[j].note + "</td>");
+                            append = false;
+                            break;
+                        } else {
+                            append = true;
+                        }
+                    }
+                } else {
+                    append = true;
+                }
+                if (append) {
+                    tr.append("<td></td>");
+                    append = false;
+                }
+            }
+            tr.append("<td><div class='buttonIcon edit' type='user' id='" + users[i].id + "'>" + editIcon + "</div></td>");
+            tr.append("<td><div class='buttonIcon delete' type='user' id='" + users[i].id + "'>" + deleteIcon + "</div></td>");
+            $(table).append(tr);
+        }
+        res.push(cardStart + table.prop('outerHTML') + cardEnd);
     }
-    res.push(cardStart + table.prop('outerHTML') + cardEnd);
     return res;
 }
+
+function noteToRow(user) {
+    var table;
+    var tr;
+
+    table = $("#classeTable"+user.classeId);
+    var cols = th.find("*");
+    th = $('#headerTabNotes');
+    tr = $("<tr class='idUserNote' value='" + user.id +"' />");
+    oldTr = $("tr.idUserNote[value='"+user.id+"']");
+    tr.append("<td>" +
+        "<input type='hidden' class='idUserNote' value='" + user.id +"'>" +
+        user.name +" "+ user.surname + "</td>");
+    var append = false;
+    var cols = th.find("*");
+    for (var l = 1; l < cols.length; l++) {
+        if (user.noteList.length) {
+            for (var j = 0; j < user.noteList.length; j++) {
+                if (user.noteList[j].matiere.id == cols[l].id) {
+                    tr.append("<td>"  +
+                        "<input type='hidden' class='idUser' value='" + user.noteList[j].matiere.id +"'>" +
+                        user.noteList[j].note + "</td>");
+                    append = false;
+                    break;
+                } else {
+                    append = true;
+                }
+            }
+        } else {
+            append = true;
+        }
+        if (append) {
+            tr.append("<td></td>");
+            append=false;
+        }
+    }
+    tr.append("<td><div class='buttonIcon edit' type='user' id='"+user.id+"'>" + editIcon + "</div></td>");
+    tr.append("<td><div class='buttonIcon delete' type='user' id='"+user.id+"'>" + deleteIcon + "</div></td>");
+    if (oldTr.length) {
+        oldTr.replaceWith(tr);
+    } else {
+        table.append(tr);
+    }
+    
+}
+
 function matiereToTab(json) {
     var table;
     var tr;
@@ -357,4 +485,30 @@ function initSelectClasse(json) {
         }
     });
     $('select').material_select();
+}
+function initSelectMatiere(id) {
+    var data = {};
+    if (id) {
+        data = {"userId": id};
+    }
+    $.ajax({
+        url: "/getAllMatiere",
+        type: "POST",
+        data: JSON.stringify(data),
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function (ret, textStatus, jqXHR) {
+            var json = $.parseJSON(ret);
+            $('#matiereNote :not(.remain)').remove();
+            $.each(json,function (index, elem) {
+                var opt = $("<option />");
+                opt.prop("value",elem.id);
+                opt.text(elem.matiere);
+                if (!$("#matiereNote option[value="+elem.id+"]").length ) {
+                    $("#matiereNote").append(opt);
+                }
+            });
+            $('select').material_select();
+        }
+    });
 }

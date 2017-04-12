@@ -20,11 +20,11 @@ $(function()
     });
 
 
-    $("#password1").change(function () {
+    $("#password1").focusout(function () {
         checkPass();
     });
-    $("#password2").change(function () {
-        checkPass();
+    $("#password2").focusout(function () {
+        checkPass2();
     });
 
     $(".addButton").click(function () {
@@ -60,7 +60,7 @@ $(function()
                 "email" : $("#email").val(),
                 "droit" : $("#droit").val(),
                 "classe" : $("#classeUser").val(),
-                "password" :  $("#password").val()};
+                "password" :  $("#password1").val()};
 
             $.ajax ({
                 url: url,
@@ -96,7 +96,7 @@ $(function()
                         initAutoComplete(json);
                         turn($("#addUser"));
                         $("#usersContent").append(res);
-                        $("#usersAdderDiv").toggle("slide");
+                        // $("#usersAdderDiv").toggle("slide");
                         myToast("L'utilisateur a bien été ajouté");
                     }
                 },
@@ -153,7 +153,7 @@ $(function()
                         $("#classeContent").append(res);
                         turn($("#addClasse"));
                         initSelectClasse(json);
-                        $("#classeAdderDiv").toggle("slide");
+                        // $("#classeAdderDiv").toggle("slide");
                         myToast("La classe a bien été ajouté");
                     }
                 },
@@ -217,7 +217,7 @@ $(function()
                     } else {
                         $("#projetContent").append(res);
                         turn($("#addGroupe"));
-                        $("#projetAdderDiv").toggle("slide");
+                        // $("#projetAdderDiv").toggle("slide");
                         myToast("Le groupe de projet a bien été ajouté");
                     }
                 },
@@ -277,6 +277,7 @@ $(function()
     });
     Materialize.showStaggeredList($("#stage1"));
 
+    fixedMailInput();
 
     var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
     Materialize.scrollFire(options);
@@ -398,31 +399,36 @@ function checkGroupe() {
     }
     return true
 }
+function checkPass2()
+{
+    if ($("#password2").val() != "") {
+        if ($("#password1").val() == $("#password2").val()) {
+            $("#password2").addClass("valid");
+            $("#password2").removeClass("invalid");
+            return true;
+        }
+        else {
+            $("#password2").removeClass("valid");
+            $("#password2").addClass("invalid");
+            $("#password2").focus();
+        }
+    } else {
+        $("#password2").removeClass("invalid");
+        $("#password2").focus();
+    }
+    return false;
+}
 function checkPass()
 {
     if ($("#password1").val() != "") {
-        if (password1.length >= 6){
-            if ($("#password1").val() == $("#password2").val()) {
-                $("#password2").addClass("valid")
-                $("#password2").removeClass("invalid")
-                return true;
-            }
-            else {
-                $("#password2").removeClass("valid")
-                $("#password2").addClass("invalid")
-            }
-        }
-        else {
-            myToast("Minimum 6 caractères!")
-            $("#password1").removeClass("valid")
-            $("#password2").removeClass("valid")
-            $("#password1").addClass("invalid")
-            $("#password2").addClass("invalid")
+        if ($("#password1").val().length < 6){
+            myToast("Minimum 6 caractères!");
+            $("#password1").removeClass("valid");
+            $("#password1").addClass("invalid");
+            $("#password1").focus();
         }
     }
-
-return false;
-
+    return false;
 }
 
 function initAutoComplete(json) {
@@ -475,9 +481,7 @@ function initSelectClasse(json) {
         reset = false;
     }
     if (reset) {
-        var $a = $($("#classeUser .remain")[0].outerHTML);
-        $("#classeUser").empty();
-        $("#classeUser").append($a);
+        $('#classeUser :not(.remain)').remove();
     }
     $.each(json,function (index, elem) {
         var opt = $("<option />");
@@ -534,8 +538,8 @@ function initTab(tabName) {
 function initTabClasse() {
     $.ajax ({
         url: "/getAllClasse",
-        type: "GET",
-        // data: dataGroup,
+        type: "POST",
+        data: JSON.stringify({}),
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
@@ -544,24 +548,24 @@ function initTabClasse() {
             if ( json.length != 0 ) {
                 classes = jsonToGlobalArray(classes, json);
                 var res = classeToTab(json);
-                if ($("#classeContent").find("#noData").length) {
+                // if ($("#classeContent").find("#noData").length) {
                     $("#classeContent").empty();
-                }
-                var ids = $("#classeContent").find(".idClasse");
-                if (ids.length) {
-                    $.each(ids, function (index, el) {
+                // }
+                // var ids = $("#classeContent").find(".idClasse");
+                // if (ids.length) {
+                //     $.each(ids, function (index, el) {
                         $.each(res, function (index, element) {
-                            if ($(el).val() == $(element).find(".idClasse").val()) {
-                                $(el).parents("ul.stage").remove();
+                            // if ($(el).val() == $(element).find(".idClasse").val()) {
+                            //     $(el).parents("ul.stage").remove();
                                 $("#classeContent").append(element);
-                            } else {
-                                $(el).parents("ul.stage").remove();
-                            }
-                        });
+                        //     } else {
+                        //         $(el).parents("ul.stage").remove();
+                        //     }
+                        // });
                     });
-                }else {
-                    $("#classeContent").append(res);
-                }
+                // }else {
+                //     $("#classeContent").append(res);
+                // }
             } else {
                 $("#classeContent").empty();
                 res = cardStart + imgEmptyDiv + cardEnd;
@@ -590,25 +594,25 @@ function initTabGroup(classeId) {
             if ( json.length != 0 ) {
                 groupes = jsonToGlobalArray(groupes, json);
                 res = groupeToTab(json);
-                if ($("#projetContent").find("#noData").length
-                /*|| $("#projetContent").find(".idGroupe").val()*/) {
+                // if ($("#projetContent").find("#noData").length
+                //|| $("#projetContent").find(".idGroupe").val()) {
                     $("#projetContent").empty();
-                }
-                var ids = $("#projetContent").find(".idGroupe");
-                if (ids.length) {
-                    $.each(ids, function (index, el) {
+                // }
+                // var ids = $("#projetContent").find(".idGroupe");
+                // if (ids.length) {
+                //     $.each(ids, function (index, el) {
                         $.each(res, function (index, element) {
-                            if ($(el).val() == $(element).find(".idGroupe").val()) {
-                                $(el).parents("ul.stage").remove();
+                            // if ($(el).val() == $(element).find(".idGroupe").val()) {
+                            //     $(el).parents("ul.stage").remove();
                                 $("#projetContent").append(element);
-                            } else {
-                                $(el).parents("ul.stage").remove();
-                            }
+                            // } else {
+                            //     $(el).parents("ul.stage").remove();
+                            // }
                         });
-                    });
-                } else {
-                    $("#projetContent").append(res);
-                }
+                    // });
+                // } else {
+                //     $("#projetContent").append(res);
+                // }
             } else
             {
                 $('#projetContent').empty();
@@ -639,24 +643,24 @@ function initTabUser(classeId) {
                 users = jsonToGlobalArray(users, json);
                 var res = userToTab(json);
                 // initTab('userTab');
-                if ($("#usersContent").find("#noData").length) {
+                // if ($("#usersContent").find("#noData").length) {
                     $("#usersContent").empty();
-                }
-                var ids = $("#usersContent").find(".idUser");
-                if (ids.length) {
-                    $.each(ids, function (index, el) {
+                // }
+                // var ids = $("#usersContent").find(".idUser");
+                // if (ids.length) {
+                //     $.each(ids, function (index, el) {
                         $.each(res, function (index, element) {
-                            if ($(el).val() == $(element).find(".idUser").val()) {
-                                $(el).parents("ul.stage").remove();
+                //             if ($(el).val() == $(element).find(".idUser").val()) {
+                //                 $(el).parents("ul.stage").remove();
                                 $("#usersContent").append(element);
-                            } else {
-                                $(el).parents("ul.stage").remove();
-                            }
+                //             } else {
+                //                 $(el).parents("ul.stage").remove();
+                //             }
                         });
-                    });
-                } else {
-                    $("#usersContent").append(res);
-                }
+                //     });
+                // } else {
+                //     $("#usersContent").append(res);
+                // }
             } else {
                 $("#usersContent").empty();
                 res = cardStart + imgEmptyDiv + cardEnd;

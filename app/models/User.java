@@ -37,6 +37,7 @@ public class User extends Model {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.login = email;
         this.droit = droit;
         this.password = password;
         this.classe = classe;
@@ -122,6 +123,14 @@ public class User extends Model {
 
     public void setGroupe(GroupeProjet groupe) {
         this.groupe = groupe;
+    }
+
+    public List<Note> getNoteList() {
+        return noteList;
+    }
+
+    public void setNoteList(List<Note> noteList) {
+        this.noteList = noteList;
     }
 
     public static void makeAdmin() {

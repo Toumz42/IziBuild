@@ -119,6 +119,11 @@ nav.top-nav a.page-title {
     box-shadow: 0 1px 0 0 #03a9f4 !important;
 }
 
+.input-field input.focused {
+    border-bottom: 1px solid #03a9f4 !important;
+    box-shadow: 0 1px 0 0 #03a9f4 !important;
+}
+
 textarea.materialize-textarea:focus:not([readonly]) {
     border-bottom: 1px solid #03a9f4 !important;
     box-shadow: 0 1px 0 0 #03a9f4 !important;

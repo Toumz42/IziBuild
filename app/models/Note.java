@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Finder;
 import io.ebean.Model;
 
@@ -19,7 +20,7 @@ public class Note extends Model {
     @JsonBackReference
     private User user;
     @ManyToOne
-    @JsonBackReference
+    @JsonManagedReference
     private Matiere matiere;
 
     private Integer note;

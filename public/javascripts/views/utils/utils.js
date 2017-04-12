@@ -1,6 +1,31 @@
 /**
  * Created by ttomc on 23/03/2017.
  */
+
+var imgEmptyDiv = "<div id='noData' class='valign-wrapper'>" +
+    "<img class='center-align responsive-img noData imgHome' src='/assets/images/empty.png'/>" +
+    "</div>"+
+    "<div>" +
+    "<div class='center-align blue-text'> Désolé nous n'avons rien trouvé </div>" +
+    "</div>";
+var cardStart = "<ul class='stage'><div class='row'>"+
+    "<div class='col push-s1 push-l1 push-m1 m12 s12 l12'>"+ "<li>"+
+    "<div class='card card-1'><div class='card-content'>"+
+    "<div class='row'>";
+var cardEnd = "</div></div></div></li></div></div></ul>";
+var deleteIcon = "<i class='material-icons'>delete</i>";
+var editIcon = "<i class='material-icons'>edit</i>";
+var cardCollapseStart = '<ul class="stage">'+
+    '<div class="row">'+
+    '<div class="col m12 s12 l12 push-s1 push-l1 push-m1">'+
+    '<li>'+
+    '<ul class="card-2 collapsible" data-collapsible="accordion">'+
+    '<li>'+
+    '<div class="card-1 card card-content wrapped collapsible-header">'+
+    '<div class="row">';
+var cardCollapseMiddle = "</div></div>";
+var cardCollapseEnd2 = "</li></ul></li></div></div></ul>";
+
 function turn(selector) {
     var turned = selector.hasClass("rotate45");
     if (turned) {
@@ -100,5 +125,38 @@ function modalize(el,parent,set) {
 function activeFields(array) {
     $.each(array,function () {
         $(""+this).parent().children("label").addClass("active");
+    });
+}
+function fixedMailInput() {
+    var requiredText = '@ecole-isitech.fr';
+    $('#email').val(requiredText);
+    var trig = false;
+    $('#email').on('click input keypress paste',function(e) {
+        $(this).attr('type','text');
+        var index = String($(this).val()).indexOf(requiredText);
+        if ( index == -1) {
+            var input = $(this).val().replace("ecole-isitech.fr","").replace("@ecole-isitech.f","");
+            $(this).val(input + requiredText);
+            index = String($(this).val()).indexOf(requiredText);
+        } else if ( index == 1) {
+            var input = $(this).val().replace("@ecole-isitech.fr","");
+            $(this).val(input + requiredText);
+            index = String($(this).val()).indexOf(requiredText);
+        }
+        var inp = this;
+        if (inp.selectionStart == $(inp).val().length ) {
+            if (inp.createTextRange) {
+                var part = inp.createTextRange();
+                part.move("character", 0);
+                part.select();
+            } else if (inp.setSelectionRange) {
+                inp.setSelectionRange(index, index);
+            }
+        }
+
+        inp.focus();
+    });
+    $('#email').on('change',function(e) {
+        $(this).attr('type','email');
     });
 }

@@ -26,6 +26,9 @@ public class Classe extends Model {
     @JsonManagedReference
     private List<User> userList;
     @ManyToMany
+    @JoinTable(name="classe_matiere",
+            joinColumns=@JoinColumn(name="classe_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="matiere_id", referencedColumnName="id"))
     @JsonManagedReference
     private List<Matiere> matiereList = new ArrayList<>();
 

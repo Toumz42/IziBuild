@@ -9,8 +9,9 @@ $(function () {
     }
     $(".page-title").empty().append("Connexion");
 
-    $('#login').val('');
+    $('#email').val('');
     $('#password').val('');
+    fixedMailInput();
 
     $('#btn_connexion').bind("click", function () {
         var id = $('#email').val();

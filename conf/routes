@@ -25,7 +25,7 @@ GET     /getAllProf                                 controllers.UserController.g
 GET     /checkAdmin                                 controllers.Application.checkAdminJson
 POST    /getCalendar                                controllers.CalendarController.getCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
-GET     /getAllClasse                               controllers.UserController.getAllClasse
+POST    /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /addUser                                    controllers.UserController.addUser()
 POST    /addMatiere                                 controllers.NotesController.addMatiere()
@@ -33,6 +33,7 @@ POST    /addNote                                    controllers.NotesController.
 POST    /updateNote                                 controllers.NotesController.updateMatiere()
 POST    /updateMatiere                              controllers.NotesController.updateNote()
 POST    /getAllMatiere                              controllers.NotesController.getMatiere
+POST    /getMyNotes                                 controllers.NotesController.getMyNotes
 POST    /addEvent                                   controllers.CalendarController.addEvent()
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
 POST    /addProject                                 controllers.ProjectController.addProject()
@@ -41,6 +42,8 @@ POST    /addClasse                                  controllers.UserController.a
 POST    /updateUser                                 controllers.UserController.updateUser()
 POST    /updateProjectGroup                         controllers.ProjectController.updateProjectGroup()
 POST    /updateClasse                               controllers.UserController.updateClasse()
+GET     /upload                                     controllers.FileController.doGet()
+POST    /upload                                     controllers.FileController.doPost()
 POST    /logout                                     controllers.Application.logout()
 
 # Map static resources from the /public folder to the /assets URL path
