@@ -26,6 +26,7 @@ $(function () {
             if (json){
                 $(".linkproj").prop("href","/admin");
                 $(".projText").text("Administration");
+                $(".admin").show();
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -49,7 +50,7 @@ $(function () {
         },
         error: function (xhr, ajaxOptions, thrownError) {
             if(xhr.status==403) {
-                $(".linkproj").prop("href","/note")
+                $(".linknote").prop("href","/note")
             }
         }
     });

@@ -344,6 +344,7 @@ $(function()
     });
 
     $('#userTab').click();
+    $('.collapsible').collapsible();
 });
 
 function validateEmail(email) {
@@ -619,6 +620,7 @@ function initTabGroup(classeId) {
                 res = cardStart + imgEmptyDiv + cardEnd;
                 $("#projetContent").append(res);
             }
+            $('.collapsible').collapsible();
         }
     });
 }

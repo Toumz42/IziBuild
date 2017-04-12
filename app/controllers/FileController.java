@@ -115,6 +115,26 @@ public class FileController extends Controller {
                                 return ok(thumbFile);
                             }
 
+                        } else if (mimetype.endsWith("docx") || file.getAbsolutePath().endsWith("docx")) {
+                            File f = new File(Play.current().path().getAbsolutePath() + "/public/images/docx-flat.png" );
+                            BufferedImage img = ImageIO.read(f);
+                            if (img != null) {
+                                BufferedImage thumb = resizeImage(img);
+                                File dir = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/");
+                                if (!dir.exists()) {
+                                    dir.mkdir();
+                                }
+                                File thumbFile = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/temp");
+
+                                thumbFile.createNewFile();
+
+                                ImageIO.write(thumb, "PNG", thumbFile);
+                                response().setHeader("Content-Type", "image/png");
+                                response().setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
+                                response().setHeader("Content-Length", "" + thumbFile.length());
+                                return ok(thumbFile);
+                            }
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
