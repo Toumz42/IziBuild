@@ -12,6 +12,11 @@ var cardStart = "<ul class='stage'><div class='row'>"+
     "<div class='col push-s1 push-l1 push-m1 m12 s12 l12'>"+ "<li>"+
     "<div class='card card-1'><div class='card-content'>"+
     "<div class='row'>";
+
+var cardStartcol = "<ul class='stage'><div class='row'>"+
+    "<div class='col m12 s12 l12'>"+ "<li>"+
+    "<div class='card card-1'><div class='card-content'>"+
+    "<div class='row'>";
 var cardEnd = "</div></div></div></li></div></div></ul>";
 var deleteIcon = "<i class='material-icons'>delete</i>";
 var editIcon = "<i class='material-icons'>edit</i>";

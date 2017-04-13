@@ -144,7 +144,7 @@ function getSuivis( id ) {
                     "   <input type='checkbox' id='"+json[i].id+"' type='checkbox' "+checked+">"+
                     "   <span class='lever'>" +
                     "</span></label></div> ";
-                res = res + cardStart + table.prop('outerHTML') + toggle + cardEnd;
+                res = res + cardStartcol + table.prop('outerHTML') + toggle + cardEnd;
             }
             $("#suiviProjDiv"+id).empty().append(res);
             $(".switch").find("input[type=checkbox]").on("change",function() {
