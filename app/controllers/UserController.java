@@ -28,7 +28,7 @@ import static play.libs.Json.toJson;
 
 public class UserController extends Controller {
 
-    public Result addUser(/*String name, String surname, String email, String password*/) {
+    public Result addUser() {
         JsonNode json = request().body().asJson();
         String name = json.get("name").asText();
         String surname = json.get("surname").asText();
@@ -39,7 +39,7 @@ public class UserController extends Controller {
         Classe classe = Classe.find.byId(classeId);
         String sha1pass = DigestUtils.sha1Hex(pass);
 
-        if (classe == null) {
+        if (classe == null && droit == 0) {
             if (classeId == 0) {
                 Classe c = Classe.find.query().where().eq("name","Professeur").findUnique();
                 if (c == null) {
@@ -85,10 +85,11 @@ public class UserController extends Controller {
         Classe c = Classe.find.byId(classe);
 
         if (c == null) {
-            if (classe == 0) {
+            if (classe == 0 && droit == 0) {
                 Classe cl = Classe.find.query().where().eq("name","Professeur").findUnique();
                 if (cl == null) {
                     cl = new Classe("Professeur");
+                    cl.save();
                 }
             }
         }
@@ -133,8 +134,6 @@ public class UserController extends Controller {
         }
         return badRequest("Erreur dans la suppression");
     }
-
-
 
     public Result getAllUser() {
         JsonNode json = request().body().asJson();

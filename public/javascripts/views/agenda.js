@@ -287,10 +287,11 @@ function fillEditFormAgenda(val) {
 }
 
 function initTabClasse() {
+    var dataGroup = JSON.stringify({});
     $.ajax ({
         url: "/getAllClasse",
-        type: "GET",
-        // data: dataGroup,
+        type: "POST",
+        data: dataGroup,
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){

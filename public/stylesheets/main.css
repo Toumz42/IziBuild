@@ -266,7 +266,10 @@ body
 }
 .autocomplete-content {
     margin-top: 0 !important;
-
+}
+.card.wrapped.collapsible-header {
+    line-height: normal !important;
+    padding: 1rem 3rem 1rem 3rem;
 }
 
 .chefP, .admin {

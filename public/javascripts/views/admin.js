@@ -9,7 +9,7 @@ var users = [];
 var autocomplete;
 $(function()
 {
-    $(".page-title").empty().append("Administration Projet");
+    $(".page-title").empty().append("Administration");
 
     $("#signInCheck").click(function(){
         if ( $("#signInCheck").is( ":checked" ) ){

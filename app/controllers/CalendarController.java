@@ -29,7 +29,11 @@ public class CalendarController extends Controller{
         User u = Application.getCurrentUserObj();
         if (u != null) {
             ObjectMapper mapper = new ObjectMapper();
-            Long id = u.getClasse().getId();
+            Classe classe = u.getClasse();
+            Long id = null;
+            if (classe != null) {
+                id = classe.getId();
+            }
             if (classeId != null) {
                 id = classeId;
             }
