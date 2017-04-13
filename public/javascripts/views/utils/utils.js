@@ -136,7 +136,7 @@ function fixedMailInput() {
     var requiredText = '@ecole-isitech.fr';
     $('#email').val(requiredText);
     var trig = false;
-    $('#email').on('click input keypress paste',function(e) {
+    $('#email').on('click keydown paste',function(e) {
         $(this).attr('type','text');
         var index = String($(this).val()).indexOf(requiredText);
         if ( index == -1) {
@@ -163,7 +163,7 @@ function fixedMailInput() {
                 part.move("character", 0);
                 part.select();
             } else if (inp.setSelectionRange) {
-                inp.setSelectionRange(0, 0);
+                inp.setSelectionRange(index, index);
             }
         }
 
