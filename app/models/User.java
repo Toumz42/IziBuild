@@ -139,7 +139,7 @@ public class User extends Model {
 
             String pass = "admin";
             pass = DigestUtils.sha1Hex(pass);
-            User adm = new User("Admin","Admin","admin@admin.ad",pass,0,null);
+            User adm = new User("Admin","Admin","admin@ecole-isitech.fr",pass,0,null);
             adm.setLogin("admin");
             adm.save();
         }
