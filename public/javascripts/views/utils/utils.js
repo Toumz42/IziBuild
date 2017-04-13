@@ -157,6 +157,14 @@ function fixedMailInput() {
             } else if (inp.setSelectionRange) {
                 inp.setSelectionRange(index, index);
             }
+        } else {
+            if (inp.createTextRange) {
+                var part = inp.createTextRange();
+                part.move("character", 0);
+                part.select();
+            } else if (inp.setSelectionRange) {
+                inp.setSelectionRange(0, 0);
+            }
         }
 
         inp.focus();
