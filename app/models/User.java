@@ -19,7 +19,7 @@ public class User extends Model {
     private String name;
     private String surname;
     private String email;
-    private String login = surname+"."+name;
+    private String login;
     private String password;
     private Integer droit;
     @ManyToOne
@@ -33,7 +33,8 @@ public class User extends Model {
     private List<Note> noteList;
 
 
-    public User(String name, String surname, String email, String password, Integer droit,Classe classe) {
+    public User(String name, String surname, String email,
+                String password, Integer droit,Classe classe) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -137,7 +138,7 @@ public class User extends Model {
         User u = User.find.query().where().eq("login", "admin").findUnique();
         if (u == null) {
 
-            String pass = "admin";
+            String pass = "1Sit3CH!";
             pass = DigestUtils.sha1Hex(pass);
             User adm = new User("Admin","Admin","admin@ecole-isitech.fr",pass,0,null);
             adm.setLogin("admin");

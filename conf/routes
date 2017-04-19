@@ -16,6 +16,7 @@ POST    /delete                                     controllers.Application.dele
 GET     /getProjects                                controllers.ProjectController.getProjects
 POST    /getProjects                                controllers.ProjectController.getProjects
 POST    /toggleStateSuivi                           controllers.ProjectController.toggleStateSuivi
+POST    /getAllClasse                               controllers.UserController.getAllClasse
 GET     /getGroupeProject                           controllers.ProjectController.getGroupeProject
 GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
@@ -25,7 +26,6 @@ GET     /getAllProf                                 controllers.UserController.g
 GET     /checkAdmin                                 controllers.Application.checkAdminJson
 POST    /getCalendar                                controllers.CalendarController.getCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
-POST    /getAllClasse                               controllers.UserController.getAllClasse
 POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /addUser                                    controllers.UserController.addUser()
 POST    /addMatiere                                 controllers.NotesController.addMatiere()

@@ -78,10 +78,7 @@ function groupeToTab(json) {
 }
 
 function classeToTab(json) {
-    var table;
-    var tr;
-    var res = [];
-    var reset = true;
+    var table, tr, res = [], reset = true;
     if (!Array.isArray(json)) {
         json = [json];
         reset = false;
@@ -93,14 +90,16 @@ function classeToTab(json) {
     for (var i = 0; i < json.length; i++) {
         table = $("<table class='responsive-table highlight'></table>");
         tr = $('<tr/>');
-        tr.append("<th>Id</th>");
+        // tr.append("<th>Id</th>");
         tr.append("<th>Nom</th>");
         $(table).append(tr);
         tr = $('<tr/>');
-        tr.append("<td>" + json[i].id + "<input type='hidden' class='idClasse' value='" + json[i].id +"'>"+ "</td>");
+        // tr.append("<td><input type='hidden' class='idClasse' value='" + json[i].id +"'>"+ "</td>");
         tr.append("<td>" + json[i].name + "</td>");
-        $('#classeTabGroup').children().append("<li class='tab col s3'><a class='TabGroup' id= " + json[i].id + ">" + json[i].name + "</a></li>");
-        $('#classeTabUser').children().append("<li class='tab col s3'><a class='TabUser' id=" + json[i].id + ">" + json[i].name + "</a></li>");
+        $('#classeTabGroup').children()
+            .append("<li class='tab col s3'><a class='TabGroup' id= " + json[i].id + ">" + json[i].name + "</a></li>");
+        $('#classeTabUser').children()
+            .append("<li class='tab col s3'><a class='TabUser' id=" + json[i].id + ">" + json[i].name + "</a></li>");
         $(table).append(tr);
         div = $('<div class="right-align suppDiv"/>');
         div.append("<div class='buttonIcon edit' type='classe' id='"+json[i].id+"'>" + editIcon + "</div>");

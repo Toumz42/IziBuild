@@ -28,6 +28,27 @@ import static play.libs.Json.toJson;
 
 public class UserController extends Controller {
 
+    public Result getAllProf() {
+        List<User> userList= null;
+
+        userList = User.find.query().where().eq("droit",0).findList();
+
+        if (userList != null) {
+
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode listResult = mapper.createArrayNode();
+
+            for (User user : userList) {
+                ObjectNode userNode = mapper.valueToTree(user);
+                listResult.add(userNode);
+            }
+            return ok().sendJson(listResult);
+        }
+
+        return notFound();
+    }
+
+
     public Result addUser() {
         JsonNode json = request().body().asJson();
         String name = json.get("name").asText();
@@ -171,25 +192,6 @@ public class UserController extends Controller {
         return notFound();
     }
 
-    public Result getAllProf() {
-        List<User> userList= null;
-
-        userList = User.find.query().where().eq("droit",0).findList();
-
-        if (userList != null) {
-
-              ObjectMapper mapper = new ObjectMapper();
-              ArrayNode listResult = mapper.createArrayNode();
-
-              for (User user : userList) {
-                  ObjectNode userNode = mapper.valueToTree(user);
-                  listResult.add(userNode);
-              }
-              return ok().sendJson(listResult);
-        }
-
-        return notFound();
-    }
 
     public Result getAllClasse() {
         String idUser = Application.getCurrentUser();

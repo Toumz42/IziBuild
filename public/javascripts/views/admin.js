@@ -300,23 +300,23 @@ $(function()
                 "id" : id
             };
             if (confirm("Voulez-vous supprimer ?")){
-            $.ajax ({
-                url: "/delete",
-                type: "POST",
-                data: JSON.stringify(data),
-                dataType: "text",
-                contentType: "application/json; charset=utf-8",
-                success: function(ret, textStatus, jqXHR){
-                    var json = $.parseJSON(ret);
-                    initTabClasse();
-                    initTabGroup('allGroup');
-                    initTabUser('allUser');
-                    if ( json ) {
-                        self.closest("ul").remove();
-                        myToast("La suppression a bien été effectuée");
+                $.ajax ({
+                    url: "/delete",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(ret, textStatus, jqXHR){
+                        var json = $.parseJSON(ret);
+                        initTabClasse();
+                        initTabGroup('allGroup');
+                        initTabUser('allUser');
+                        if ( json ) {
+                            self.closest("ul").remove();
+                            myToast("La suppression a bien été effectuée");
+                        }
                     }
-                }
-            });}
+                });}
         });
 
         $(".edit").click(function () {
@@ -549,24 +549,10 @@ function initTabClasse() {
             if ( json.length != 0 ) {
                 classes = jsonToGlobalArray(classes, json);
                 var res = classeToTab(json);
-                // if ($("#classeContent").find("#noData").length) {
-                    $("#classeContent").empty();
-                // }
-                // var ids = $("#classeContent").find(".idClasse");
-                // if (ids.length) {
-                //     $.each(ids, function (index, el) {
-                        $.each(res, function (index, element) {
-                            // if ($(el).val() == $(element).find(".idClasse").val()) {
-                            //     $(el).parents("ul.stage").remove();
-                                $("#classeContent").append(element);
-                        //     } else {
-                        //         $(el).parents("ul.stage").remove();
-                        //     }
-                        // });
-                    });
-                // }else {
-                //     $("#classeContent").append(res);
-                // }
+                $("#classeContent").empty();
+                $.each(res, function (index, element) {
+                    $("#classeContent").append(element);
+                });
             } else {
                 $("#classeContent").empty();
                 res = cardStart + imgEmptyDiv + cardEnd;
@@ -595,25 +581,10 @@ function initTabGroup(classeId) {
             if ( json.length != 0 ) {
                 groupes = jsonToGlobalArray(groupes, json);
                 res = groupeToTab(json);
-                // if ($("#projetContent").find("#noData").length
-                //|| $("#projetContent").find(".idGroupe").val()) {
-                    $("#projetContent").empty();
-                // }
-                // var ids = $("#projetContent").find(".idGroupe");
-                // if (ids.length) {
-                //     $.each(ids, function (index, el) {
-                        $.each(res, function (index, element) {
-                            // if ($(el).val() == $(element).find(".idGroupe").val()) {
-                            //     $(el).parents("ul.stage").remove();
-                                $("#projetContent").append(element);
-                            // } else {
-                            //     $(el).parents("ul.stage").remove();
-                            // }
-                        });
-                    // });
-                // } else {
-                //     $("#projetContent").append(res);
-                // }
+                $("#projetContent").empty();
+                $.each(res, function (index, element) {
+                    $("#projetContent").append(element);
+                });
             } else
             {
                 $('#projetContent').empty();
@@ -644,25 +615,10 @@ function initTabUser(classeId) {
             if ( json.length != 0 ) {
                 users = jsonToGlobalArray(users, json);
                 var res = userToTab(json);
-                // initTab('userTab');
-                // if ($("#usersContent").find("#noData").length) {
-                    $("#usersContent").empty();
-                // }
-                // var ids = $("#usersContent").find(".idUser");
-                // if (ids.length) {
-                //     $.each(ids, function (index, el) {
-                        $.each(res, function (index, element) {
-                //             if ($(el).val() == $(element).find(".idUser").val()) {
-                //                 $(el).parents("ul.stage").remove();
-                                $("#usersContent").append(element);
-                //             } else {
-                //                 $(el).parents("ul.stage").remove();
-                //             }
-                        });
-                //     });
-                // } else {
-                //     $("#usersContent").append(res);
-                // }
+                $("#usersContent").empty();
+                $.each(res, function (index, element) {
+                    $("#usersContent").append(element);
+                });
             } else {
                 $("#usersContent").empty();
                 res = cardStart + imgEmptyDiv + cardEnd;

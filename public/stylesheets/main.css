@@ -140,7 +140,6 @@ textarea.materialize-textarea:focus:not([readonly])+label {
     box-shadow: none;
 }
 
-
 .card-2 {
     margin: 10px;
 }
@@ -149,16 +148,6 @@ textarea.materialize-textarea:focus:not([readonly])+label {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
-/*header {*/
-    /*position: fixed;*/
-    /*background: #03a9f4;*/
-    /*top: 0px;*/
-    /*width: 100%;*/
-    /*left: 0px;*/
-    /*padding: 1%;*/
-    /*box-shadow: grey 0px 0px 30px 5px;*/
-    /*z-index: 1000;*/
-/*}*/
 .headerImg {
     display: inline-block;
     height: 100%;
@@ -194,7 +183,6 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 .mainCard {
     position: absolute;
     width: auto;
-    /*white-space: nowrap;*/
     height: auto;
     top: 10rem;
     margin-bottom: 5%;
