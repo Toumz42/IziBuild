@@ -175,13 +175,13 @@
             </td>
             <td>
                 {% if (file.deleteUrl) { %}
-                    <button class="btn light-blue btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <button class="btn light-blue admin btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                         <i class="material-icons">delete</i>
                         <span>Delete</span>
                     </button>
                     <input type="checkbox" name="delete" value="1" class="toggle">
                 {% } else { %}
-                    <button class="btn admin light-blue btn-warning cancel">
+                    <button class="btn light-blue btn-warning cancel">
                         <div class="valign-wrapper">
                             <div class="valign">
                                 <i class="valign material-icons">delete</i>
