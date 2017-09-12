@@ -45,7 +45,7 @@ $(function()
             $.each(val,function (index, element) {
                 var $el = $(element);
                 var val = $el.html().split("|");
-                var res = "<div style='text-align: left; padding-left:2em'><div>"+ val[0]  +"</div><div style='font-size: 2em'>"+ val[1] +"</div></div>"
+                var res = "<div style='text-align: left; padding-left:2em'><div>"+ val[0]  +"</div><div style='font-size: 2em'>"+ val[1] +"</div></div>";
                 $el.html(res);
             });
         },

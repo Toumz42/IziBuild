@@ -12,9 +12,7 @@ import models.utils.DateUtils;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import scala.util.parsing.json.JSON;
-import scala.util.parsing.json.JSONObject;
-import scala.util.parsing.json.JSONObject$;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -349,11 +347,7 @@ public class ProjectController extends Controller {
     {
         Long user = Long.parseLong(session("userId"));
         int droit = User.find.query().select("droit").where().eq("id",user).findUnique().getDroit();
-        if( droit == 1 ) {
-            return true;
-        } else {
-            return false;
-        }
+        return droit == 1;
     }
 
     public Result checkCfProjetJson() {

@@ -27,7 +27,6 @@ import play.api.mvc.MultipartFormData;
 import play.mvc.Controller;
 import play.mvc.*;
 import play.mvc.Result;
-import scala.util.parsing.json.JSONArray;
 
 import javax.imageio.ImageIO;
 

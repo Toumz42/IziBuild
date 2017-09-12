@@ -32,6 +32,7 @@ public class User extends Model {
     @JsonManagedReference
     private List<Note> noteList;
 
+    //TODO : date Entrée/Sortie
 
     public User(String name, String surname, String email,
                 String password, Integer droit,Classe classe) {

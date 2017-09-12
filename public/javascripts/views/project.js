@@ -46,8 +46,8 @@ $(function()
                 table2 = $("<table class='responsive-table highlight'></table>");
                 tr = $('<tr/>');
                 tr.append("<th>Id</th>");
-                tr.append("<th> Theme </th>");
                 tr.append("<th>Date de soutenance</th>");
+                tr.append("<th> Theme </th>");
                 table.append(tr);
                 tr = $('<tr/>');
                 tr.append("<td>" + json[i].id + "</td>");

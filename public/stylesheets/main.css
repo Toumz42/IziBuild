@@ -139,7 +139,10 @@ textarea.materialize-textarea:focus:not([readonly])+label {
     border: none;
     box-shadow: none;
 }
-
+table {
+    white-space: normal;
+    word-break: break-word;
+}
 .card-2 {
     margin: 10px;
 }

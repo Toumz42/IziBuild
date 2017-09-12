@@ -13,7 +13,7 @@ packageSummary in Linux := "Isile Package"
 
 packageDescription := "My longer package description"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.2"
 //test in assembly := {}
 
 libraryDependencies += javaJpa
@@ -34,3 +34,5 @@ libraryDependencies += "org.hibernate" % "hibernate-core" % "5.2.3.Final" exclud
 
 libraryDependencies += "io.ebean" % "ebean-elastic" % "2.1.1"
 playEnhancerEnabled := false
+
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")

@@ -116,8 +116,7 @@ public class Application extends Controller {
         User p = null;
         try
         {
-            p = User.find.query().where().eq("login", login)
-                    .and(Expr.eq("login", login),Expr.eq("password", sha1pswd))
+            p = User.find.query().where().eq("login", login).eq("password", sha1pswd)
                     .findUnique();
 
             if (p != null) {
@@ -168,10 +167,7 @@ public class Application extends Controller {
             Long id = Long.parseLong(user);
             u = User.find.byId(id);
         }
-        if(u != null) {
-            return true;
-        }
-        return false;
+        return u != null;
     }
 
     public Boolean checkAdmin() {
