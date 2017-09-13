@@ -4,6 +4,15 @@
 $(function () {
     var pathname = window.location.pathname;
 
+
+    $("#signInCheck").click(function(){
+        if ( $("#signInCheck").is( ":checked" ) ){
+            $("#signInNameDiv").toggleClass("hide",false);
+        } else {
+            $("#signInNameDiv").toggleClass("hide",true);
+        }
+    });
+
     if (pathname == "/login") {
         $('.logout').hide();
     }
