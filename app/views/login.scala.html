@@ -4,15 +4,43 @@
     @*<script type='text/javascript' src='@routes.Assets.at("javascripts/views/admin.js")'></script>*@
     <script src='/assets/javascripts/views/login.js' type='text/javascript'></script>
 
+    <div class="container">
     <div class="row">
         <div class="col s12 m12 l12 push-s1 push-m1 push-l1">
             <ul id="stage">
                 <li>
-                    <div class="card card-1">
+                    <div class="col s12 m12 l6 card card-1">
                         <div class="card-content ">
-                            <span class="card-title blue-text">Bienvenue sur l'ENT Isitech</span>
+                            <span class="card-title red-text accent-4">Bienvenue sur EasyBuild</span>
+                            <div class="row" id="formParentUp">
+                                <form id="formSignUp" class="col s12 red-text accent-4">
+                                    <div class="row">
+                                        <div class="col s12 grey-text">
+                                            <span>Vous n'avez pas encore de compte Easybuild ? </span>
+                                        </div>
+                                        <div class="col s12 grey-text">
+                                            <span>Créez votre compte en quelques clics et simplifiez vous la vie !</span>
+                                        </div>
+                                    </div>
+                                    <div class="row center-align">
+                                        <div class="col s12">
+                                            <a id="btn_artisan" class="waves-effect waves-light red accent-4 btn">Je suis un professionel</a>
+                                        </div>
+                                    </div>
+                                    <div class="row center-align">
+                                        <div class="col s12">
+                                            <a id="btn_client" class="waves-effect waves-light red accent-4 btn">Je suis un particulier</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m12 l6 card card-1 push-l1">
+                        <div class="card-content ">
+                            <span class="card-title red-text accent-4">Se Connecter</span>
                             <div class="row" id="formParent">
-                                <form id="formSign" class="col s12 light-blue-text">
+                                <form id="formSign" class="col s12 red-text accent-4">
                                     <div class="row">
                                         <div class="col s12 grey-text">
                                             <span>Veuillez saisir vos identifiants</span>
@@ -20,13 +48,13 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <input id="email" type="email" class="light-blue-text validate">
+                                            <input id="email" type="email" class="red-text validate">
                                             <label for="email">Email</label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <input id="password" type="password" class="light-blue-text validate">
+                                            <input id="password" type="password" class="red-text validate">
                                             <label for="password">Password</label>
                                         </div>
                                     </div>
@@ -46,13 +74,15 @@
                                             <label for="first_name">First Name</label>
                                         </div>
                                     </div>
-                                    <a id="btn_connexion" class="waves-effect waves-light light-blue btn" style="float: right;">Valider</a>
+                                    <a id="btn_connexion" class="waves-effect waves-light red accent-4 btn" style="float: right;">Valider</a>
                                 </form>
                             </div>
                         </div>
                     </div>
-                </li></ul>
+                </li>
+            </ul>
         </div>
+    </div>
     </div>
 
 }

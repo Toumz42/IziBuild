@@ -1,33 +1,34 @@
 @()
 
 @main("Administration") {
-    </div>
-    <script type='text/javascript' src='/assets/javascripts/views/utils/adminUtils.js'></script>
-    <script type='text/javascript' src='/assets/javascripts/views/admin.js'></script>
-    <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
-    <script type='text/javascript' src='/assets/javascripts/view/utils/jquery.complexify.js'></script>
     <div class="header-panel white-text">
-        <ul class="tabs light-blue white-text" id="mainTabs">
+        <ul class="tabs red accent-4 white-text" id="mainTabs">
             <li class="tab col s3"><a class="active" id="userTab" href="#users">Utilisateurs</a></li>
-            <li class="tab col s3"><a id="classeTab" href="#classe">Classe</a></li>
+            <li class="tab col s3"><a id="classeTab" href="#classe">Type</a></li>
             <li class="tab col s3"><a id="projTab" href="#projet">Projet</a></li>
         </ul>
     </div>
     <div class="header-panel white-text" id="classeTabUser" style="display:none">
-        <ul class="tabs light-blue white-text">
+        <ul class="tabs red accent-4 white-text">
             <li class="tab col s3"><a class="active" id="allUser" >Tout</a></li>
         </ul>
     </div>
     <div class="header-panel white-text" id="classeTabGroup" style="display:none">
-        <ul class="tabs light-blue white-text">
+        <ul class="tabs red accent-4 white-text">
             <li class="tab col s3"><a class="active" id="allGroup" >Tout</a></li>
         </ul>
     </div>
+    <div class="container">
+    <script type='text/javascript' src='/assets/javascripts/views/utils/adminUtils.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/admin.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/view/utils/jquery.complexify.js'></script>
+
     <div id="datepicker-container"></div>
     <div class="container push-down-50">
         <div class="row">
             <div id="users">
-                <a id="addUser" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light yellow"><i class="material-icons of_btn">add</i></a>
+                <a id="addUser" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light indigo darken-3"><i class="material-icons of_btn">add</i></a>
                 <div id="usersAdderDiv" style="display: none">
                     <ul class="stage">
                         <div class="row">
@@ -198,5 +199,5 @@
             </div>
         </div>
     </div>
-    <div>
+    </div>
 }

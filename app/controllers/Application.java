@@ -25,7 +25,7 @@ public class Application extends Controller {
         if(checkConnected()) {
             return redirect("/home");
         } else {
-            return redirect("/login");
+            return ok(views.html.index.render());
         }
     }
 
@@ -117,7 +117,7 @@ public class Application extends Controller {
         try
         {
             p = User.find.query().where().eq("login", login).eq("password", sha1pswd)
-                    .findUnique();
+                    .findOne();
 
             if (p != null) {
                 session("userId",p.getId().toString());
@@ -167,7 +167,8 @@ public class Application extends Controller {
             Long id = Long.parseLong(user);
             u = User.find.byId(id);
         }
-        return u != null;
+        //return u!=null;
+        return true;
     }
 
     public Boolean checkAdmin() {
@@ -177,7 +178,8 @@ public class Application extends Controller {
                 return true;
             }
         }
-        return false;
+        //return false;
+        return true;
     }
 
     public Result checkAdminJson() {

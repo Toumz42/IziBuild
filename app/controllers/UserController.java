@@ -62,7 +62,7 @@ public class UserController extends Controller {
 
         if (classe == null && droit == 0) {
             if (classeId == 0) {
-                Classe c = Classe.find.query().where().eq("name","Professeur").findUnique();
+                Classe c = Classe.find.query().where().eq("name","Professeur").findOne();
                 if (c == null) {
                     c = new Classe("Professeur");
                 }
@@ -72,7 +72,7 @@ public class UserController extends Controller {
         User u = User.find.query()
                 .where()
                 .ilike("email","%"+email+"%")
-                .findUnique();
+                .findOne();
 
         if (u == null) {
             if (email != null) {
@@ -107,7 +107,7 @@ public class UserController extends Controller {
 
         if (c == null) {
             if (classe == 0 && droit == 0) {
-                Classe cl = Classe.find.query().where().eq("name","Professeur").findUnique();
+                Classe cl = Classe.find.query().where().eq("name","Professeur").findOne();
                 if (cl == null) {
                     cl = new Classe("Professeur");
                     cl.save();
@@ -168,7 +168,7 @@ public class UserController extends Controller {
         User u = null;
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
-            u = User.find.query().where().eq("id",id).findUnique();
+            u = User.find.query().where().eq("id",id).findOne();
 
         }
         if (u != null) {
@@ -198,7 +198,7 @@ public class UserController extends Controller {
         User u = null;
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
-            u = User.find.query().where().eq("id",id).findUnique();
+            u = User.find.query().where().eq("id",id).findOne();
         }
         JsonNode json = request().body().asJson();
         Long classeId = null;
@@ -234,7 +234,7 @@ public class UserController extends Controller {
         Classe u = Classe.find.query()
                 .where()
                 .ilike("name","%"+name+"%")
-                .findUnique();
+                .findOne();
 
         if (u == null) {
             if (name != null) {

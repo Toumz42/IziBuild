@@ -36,7 +36,7 @@ public class ProjectController extends Controller {
             if (u != null) {
                 GroupeProjet grp = GroupeProjet.find.query().where()
                         .eq("id",u.getGroupe().getId())
-                        .findUnique();
+                        .findOne();
                 List<User> userList = null;
                 userList = grp.getUserList();
 //                List<User> userList = User.find.query().fetch("groupe").where().eq("groupe.id",grp.getId()).findList();
@@ -94,7 +94,7 @@ public class ProjectController extends Controller {
         User u = null;
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
-            u = User.find.query().where().eq("id",id).findUnique();
+            u = User.find.query().where().eq("id",id).findOne();
 
         }
         if (u != null) {
@@ -143,7 +143,7 @@ public class ProjectController extends Controller {
         String idUser = Application.getCurrentUser();
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
-            User u = User.find.query().where().eq("id",id).findUnique();
+            User u = User.find.query().where().eq("id",id).findOne();
 
             if (u != null) {
 
@@ -197,7 +197,7 @@ public class ProjectController extends Controller {
         GroupeProjet u = GroupeProjet.find.query()
                 .where()
                 .ilike("theme","%"+theme+"%")
-                .findUnique();
+                .findOne();
 
         if (u == null) {
             if (theme != null) {
@@ -311,7 +311,7 @@ public class ProjectController extends Controller {
         Integer idGroupe=null;
         if (idUser != null && !idUser.equals("")) {
             Integer id = Integer.parseInt(idUser);
-            u = User.find.query().where().eq("id", id).findUnique();
+            u = User.find.query().where().eq("id", id).findOne();
             if (u != null) {
                 grp = u.getGroupe();
             }
@@ -319,7 +319,7 @@ public class ProjectController extends Controller {
         SuiviProjet s = SuiviProjet.find.query()
                 .where()
                 .ilike("date_suivi","%"+date+"%")
-                .findUnique();
+                .findOne();
 
         if (s == null) {
             if (contenu != null) {
@@ -346,7 +346,7 @@ public class ProjectController extends Controller {
     public Boolean checkCfProjet()
     {
         Long user = Long.parseLong(session("userId"));
-        int droit = User.find.query().select("droit").where().eq("id",user).findUnique().getDroit();
+        int droit = User.find.query().select("droit").where().eq("id",user).findOne().getDroit();
         return droit == 1;
     }
 

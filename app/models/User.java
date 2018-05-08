@@ -136,7 +136,7 @@ public class User extends Model {
     }
 
     public static void makeAdmin() {
-        User u = User.find.query().where().eq("login", "admin").findUnique();
+        User u = User.find.query().where().eq("login", "admin@ecole-isitech.fr").findOne();
         if (u == null) {
             String pass = "1Sit3CH!";
             pass = DigestUtils.sha1Hex(pass);

@@ -70,32 +70,32 @@ create table user (
   constraint pk_user primary key (id)
 );
 
-alter table calendar_event add constraint fk_calendar_event_classe_id foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 create index ix_calendar_event_classe_id on calendar_event (classe_id);
+alter table calendar_event add constraint fk_calendar_event_classe_id foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 
-alter table calendar_event add constraint fk_calendar_event_prof_id foreign key (prof_id) references user (id) on delete restrict on update restrict;
 create index ix_calendar_event_prof_id on calendar_event (prof_id);
+alter table calendar_event add constraint fk_calendar_event_prof_id foreign key (prof_id) references user (id) on delete restrict on update restrict;
 
-alter table classe_matiere add constraint fk_classe_matiere_classe foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 create index ix_classe_matiere_classe on classe_matiere (classe_id);
+alter table classe_matiere add constraint fk_classe_matiere_classe foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 
-alter table classe_matiere add constraint fk_classe_matiere_matiere foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
 create index ix_classe_matiere_matiere on classe_matiere (matiere_id);
+alter table classe_matiere add constraint fk_classe_matiere_matiere foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
 
-alter table note add constraint fk_note_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_note_user_id on note (user_id);
+alter table note add constraint fk_note_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 
-alter table note add constraint fk_note_matiere_id foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
 create index ix_note_matiere_id on note (matiere_id);
+alter table note add constraint fk_note_matiere_id foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
 
-alter table suivi_projet add constraint fk_suivi_projet_groupe_id foreign key (groupe_id) references groupe_projet (id) on delete restrict on update restrict;
 create index ix_suivi_projet_groupe_id on suivi_projet (groupe_id);
+alter table suivi_projet add constraint fk_suivi_projet_groupe_id foreign key (groupe_id) references groupe_projet (id) on delete restrict on update restrict;
 
-alter table user add constraint fk_user_classe_id foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 create index ix_user_classe_id on user (classe_id);
+alter table user add constraint fk_user_classe_id foreign key (classe_id) references classe (id) on delete restrict on update restrict;
 
-alter table user add constraint fk_user_groupe_id foreign key (groupe_id) references groupe_projet (id) on delete restrict on update restrict;
 create index ix_user_groupe_id on user (groupe_id);
+alter table user add constraint fk_user_groupe_id foreign key (groupe_id) references groupe_projet (id) on delete restrict on update restrict;
 
 
 # --- !Downs

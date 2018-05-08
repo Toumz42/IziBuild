@@ -136,7 +136,7 @@ function fixedMailInput() {
     var requiredText = '@ecole-isitech.fr';
     $('#email').val(requiredText);
     var trig = false;
-    $('#email').on('click keydown paste',function(e) {
+    $('#email').on('click keyup paste',function(e) {
         $(this).attr('type','text');
         var index = String($(this).val()).indexOf(requiredText);
         if ( index == -1) {
@@ -145,6 +145,7 @@ function fixedMailInput() {
             index = String($(this).val()).indexOf(requiredText);
         } else if ( index == 1) {
             var input = $(this).val().replace("@ecole-isitech.fr","");
+            input = input.replace("@","")
             $(this).val(input + requiredText);
             index = String($(this).val()).indexOf(requiredText);
         }

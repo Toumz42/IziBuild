@@ -38,26 +38,26 @@ $(function()
 
 
     var ajaxDone = false;
-    $(document).ajaxStop(function (event, request, settings) {
-        $.ajax ({
-            url: "/checkAdmin",
-            type: "GET",
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: function(ret, textStatus, jqXHR){
-                var json = $.parseJSON(ret);
-                if (json){
-                    $(".admin").show();
-                }
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                if(xhr.status==403) {
-                    $(".admin").hide();
-                }
-            }
-        });
-        ajaxDone = true;
-    });
+    // $(document).ajaxStop(function (event, request, settings) {
+    //     $.ajax ({
+    //         url: "/checkAdmin",
+    //         type: "GET",
+    //         dataType: "text",
+    //         contentType: "application/json; charset=utf-8",
+    //         success: function(ret, textStatus, jqXHR){
+    //             var json = $.parseJSON(ret);
+    //             if (json){
+    //                 $(".admin").show();
+    //             }
+    //         },
+    //         error: function (xhr, ajaxOptions, thrownError) {
+    //             if(xhr.status==403) {
+    //                 $(".admin").hide();
+    //             }
+    //         }
+    //     });
+    //     ajaxDone = true;
+    // });
         // Enable iframe cross-domain access via redirect option:
         // $('#fileupload').fileupload(
         //     'option',
