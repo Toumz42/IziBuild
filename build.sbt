@@ -1,7 +1,7 @@
 
 
 
-name := """IsiLE"""
+name := """Easy-Build"""
 
 version := "1.0-SNAPSHOT"
 
@@ -9,7 +9,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean, Debian
 
 maintainer in Linux := "TOMCZAK Thomas <tooms42@gmail.com>"
 
-packageSummary in Linux := "Isile Package"
+packageSummary in Linux := "Easy-Build Package"
 
 packageDescription := "My longer package description"
 

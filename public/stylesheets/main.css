@@ -142,6 +142,7 @@ table {
 .imgHome {
     display:block;
     margin:auto;
+    width: 110px;
 }
 
 .imgMenu {

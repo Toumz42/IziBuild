@@ -138,7 +138,7 @@ $(function()
     initTabClasse();
 
     $("#calendar button").each(function () {
-        $(this).addClass("waves-effect waves-light btn light-blue")
+        $(this).addClass("waves-effect waves-light btn red accent-4")
     });
 
     $("#addEvent").click(function () {

@@ -6,7 +6,7 @@ var imgEmptyDiv = "<div id='noData' class='valign-wrapper'>" +
     "<img class='center-align responsive-img noData imgHome' src='/assets/images/empty.png'/>" +
     "</div>"+
     "<div>" +
-    "<div class='center-align blue-text'> Désolé nous n'avons rien trouvé </div>" +
+    "<div class='center-align red-text'> Désolé nous n'avons rien trouvé </div>" +
     "</div>";
 var cardStart = "<ul class='stage'><div class='row'>"+
     "<div class='col push-s1 push-l1 push-m1 m12 s12 l12'>"+ "<li>"+

@@ -21,7 +21,7 @@
     <script src="/assets/javascripts/fileupload/jquery.fileupload-image.js"></script>
 
     <div class="container">
-    <a id="addFile" class="btn-floating btn-large waves-effect waves-light yellow admin"><i class="material-icons">add</i></a>
+    <a id="addFile" class="btn-floating btn-large waves-effect waves-light red accent-4 admin"><i class="material-icons">add</i></a>
     <div class="row" id="projectMainDiv">
 
         <div class="row" style="padding: 0 1.5rem">
@@ -47,9 +47,9 @@
                                         <div class="span7">
                                                 <!-- The fileinput-button span is used to style the file input field as button -->
                                             <div class="file-field input-field">
-                                                <div class="btn light-blue" style="display: none">
+                                                <div class="btn " style="display: none">
                                                     <span>File</span>
-                                                    <input id="addInput" class="light-blue" type="file" name="files[]" multiple>
+                                                    <input id="addInput" class="red accent-4" type="file" name="files[]" multiple>
                                                 </div>
                                             </div>
                                             <input type="checkbox" class="toggle">
@@ -57,8 +57,8 @@
                                             <!-- The global progress information -->
                                         <div class="span5 fileupload-progress hide">
                                                 <!-- The global progress bar -->
-                                            <div class="progress light-blue lighten-4 progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="bar light-blue determinate" style="width:0%;"></div>
+                                            <div class="progress red accent-4 lighten-4 progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="bar red accent-4 determinate" style="width:0%;"></div>
                                             </div>
                                                 <!-- The extended global progress information -->
                                             <div class="progress-extended">&nbsp;</div>
@@ -124,7 +124,7 @@
             </td>
             <td>
                 {% if (!i && !o.options.autoUpload) { %}
-                    <button class="btn light-blue btn-primary start" disabled>
+                    <button class="btn red accent-4 btn-primary start" disabled>
                         <div class="valign-wrapper">
                             <div class="valign">
                                 <i class="material-icons">cloud_upload</i>
@@ -134,7 +134,7 @@
                     </button>
                 {% } %}
                 {% if (!i) { %}
-                    <button class="btn light-blue btn-warning cancel">
+                    <button class="btn red accent-4 btn-warning cancel">
                         <div class="valign-wrapper">
                             <div class="valign">
                                 <i class="material-icons">cancel</i>
@@ -175,13 +175,13 @@
             </td>
             <td>
                 {% if (file.deleteUrl) { %}
-                    <button class="btn light-blue admin btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <button class="btn red accent-4 admin btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                         <i class="material-icons">delete</i>
                         <span>Delete</span>
                     </button>
                     <input type="checkbox" name="delete" value="1" class="toggle">
                 {% } else { %}
-                    <button class="btn light-blue btn-warning cancel">
+                    <button class="btn red accent-4 btn-warning cancel">
                         <div class="valign-wrapper">
                             <div class="valign">
                                 <i class="valign material-icons">delete</i>
