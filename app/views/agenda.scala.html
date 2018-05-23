@@ -1,6 +1,10 @@
 @()
 
 @main("Agenda") {
+    <div class="header-panel white-text">
+        <ul class="tabs red accent-4 white-text" id="mainTabs">
+        </ul>
+    </div>
     <div class="container">
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/fullcalendar.css'  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialFullCalendar.css'  media="screen,projection"/>
@@ -13,14 +17,9 @@
     <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
     <script type='text/javascript' src='/assets/javascripts/materialize.clockpicker.js'></script>
 
-    <div class="header-panel white-text">
-        <ul class="tabs red accent-4 white-text" id="mainTabs">
-        </ul>
-    </div>
-
     <input type="hidden" value="-1" id="classeId"/>
 
-    <a id="addEvent" class="btn-floating btn-large waves-effect red accent-4"><i class="material-icons">add</i></a>
+    <a id="addEvent" class="btn-floating btn-large waves-effect waves-light indigo"><i class="material-icons">add</i></a>
     <div id="datepicker-container"></div>
     <div class="container" >
         <div class="row" style="padding: 0 1.5rem">

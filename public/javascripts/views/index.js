@@ -20,13 +20,14 @@ $(function () {
         $('.arrowCarousel').hide();
     }
     $('.carousel.carousel-slider').carousel({fullWidth: true});
-    $('.carousel').css("height", $(window).height() - 90 );
-    $('.parallax-carousel').css("height", $(window).height() - 90);
+    $('.carousel.carousel-slider').removeAttr("style");
+  //  $('.carousel').css("height", $(window).height() );
+  //  $('.parallax-carousel').css("height", $(window).height());
 
-    $(window).resize(function() {
-        $('.carousel').css("height", $(window).height() - 90 );
-        $('.parallax-carousel').css("height", $(window).height() - 90);
-    });
+    // $(window).resize(function() {
+    //     $('.carousel').css("height", $(window).height() );
+    //     $('.parallax-carousel').css("height", $(window).height() );
+    // });
 
     $('.prev').on('click touchstart',function() {
         $('.carousel').carousel('prev');
@@ -40,20 +41,32 @@ $(function () {
     $('footer').css("padding-left", 0);
     $('.slider').slider();
 
+
     //setInterval(function(){ $('.carousel').carousel('next'); }, 5000);
     lastScrollTop = 0;
     $(window).on('scroll', function() {
         var st = $(this).scrollTop();
-        if (st > lastScrollTop){
-            $('#headerHolder').hide();
+        if (st > lastScrollTop && st > $(window).height()){
             $('nav').addClass('headerHidden');
         } else {
             $('nav').removeClass('headerHidden');
-            $('#headerHolder').show();
+        }
+        var pc = ((st) / $(window).height());
+        if (st < $(window).height()) {
+            $('nav').removeClass('red accent-4').addClass('transparent');
+            $(".carousel .active img").css('opacity', 1 - pc);
+        } else {
+            $('nav').addClass('red accent-4').removeClass('transparent');
+            $(".carousel .active img").css('opacity', 1);
         }
         lastScrollTop = st;
     });
-
+    var st = $(this).scrollTop();
+    if (st < $(window).height()) {
+        $('nav').addClass('transparent').removeClass('red accent-4');
+    } else {
+        $('nav').addClass('red accent-4').removeClass('transparent');
+    }
 });
 
 function is_touch_device() {

@@ -13,14 +13,14 @@ $(function () {
         }
     });
 
-    if (pathname == "/login") {
+    if (pathname === "/login") {
         $('.logout').hide();
     }
     $(".page-title").empty().append("Connexion");
 
     $('#email').val('');
     $('#password').val('');
-    fixedMailInput();
+    //fixedMailInput();
 
     $('#btn_connexion').bind("click", function () {
         var id = $('#email').val();

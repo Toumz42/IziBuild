@@ -3,7 +3,7 @@
  */
 $(function()
 {
-    $(".page-title").empty().append("Documents Isitech");
+    $(".page-title").empty().append("Documents");
     //    $('a.embed').gdocsViewer();
     /*
      * jQuery File Upload Plugin JS Example 6.7

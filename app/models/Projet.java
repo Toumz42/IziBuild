@@ -5,7 +5,6 @@ import io.ebean.Model;
 import models.utils.DateUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,25 +12,31 @@ import java.util.List;
  * Created by ttomc on 04/01/2017.
  */
 @Entity
-public class GroupeProjet extends Model {
+public class Projet extends Model {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String theme;
-    private Date dateSoutenance;
-    @OneToMany(mappedBy="groupe")
+    private Date dateCreation;
+
+    @ManyToMany
     @JsonManagedReference
     private List<User> userList;
-    @OneToMany(mappedBy="groupe")
-    @JsonManagedReference
-    private List<SuiviProjet> suiviList;
 
-    public GroupeProjet() {
+    @OneToMany(mappedBy="projet")
+    @JsonManagedReference
+    private List<Anomalie> anomalieList;
+
+    @OneToMany(mappedBy="projet")
+    @JsonManagedReference
+    private List<CalendarEvent> eventList;
+
+    public Projet() {
     }
 
-    public GroupeProjet(String theme, Date dateSoutenance) {
+    public Projet(String theme, Date dateCreation) {
         this.theme = theme;
-        this.dateSoutenance = dateSoutenance;
+        this.dateCreation = dateCreation;
     }
 
     public Long getId() {
@@ -50,17 +55,17 @@ public class GroupeProjet extends Model {
         this.theme = theme;
     }
 
-    public Date getDateSoutenance() {
-        return dateSoutenance;
+    public Date getDateCreation() {
+        return dateCreation;
     }
 
     public String getDateSoutenanceString() {
         DateUtils dU = new DateUtils();
-        return dU.toFrenchDateString(dateSoutenance);
+        return dU.toFrenchDateString(dateCreation);
     }
 
-    public void setDateSoutenance(Date dateSoutenance) {
-        this.dateSoutenance = dateSoutenance;
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
     }
 
     public List<User> getUserList() {
@@ -71,14 +76,22 @@ public class GroupeProjet extends Model {
         this.userList = userList;
     }
 
-    public List<SuiviProjet> getSuiviList() {
-        return suiviList;
+    public List<Anomalie> getAnomalieList() {
+        return anomalieList;
     }
 
-    public void setSuiviList(List<SuiviProjet> suiviList) {
-        this.suiviList = suiviList;
+    public void setAnomalieList(List<Anomalie> anomalieList) {
+        this.anomalieList = anomalieList;
     }
 
-    public static Finder<Long, GroupeProjet> find = new Finder<Long,GroupeProjet>(GroupeProjet.class);
+    public List<CalendarEvent> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<CalendarEvent> eventList) {
+        this.eventList = eventList;
+    }
+
+    public static Finder<Long, Projet> find = new Finder<Long, Projet>(Projet.class);
 
 }

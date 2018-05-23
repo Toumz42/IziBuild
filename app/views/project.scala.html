@@ -4,37 +4,62 @@
 
     <script type='text/javascript' src='/assets/javascripts/views/project.js'></script>
     <div class="container">
-    <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light yellow chefP"><i class="material-icons">add</i></a>
+    <div id="datepicker-container"></div>
+    <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
     <div class="row" id="projectMainDiv">
-        <div class="row" style="padding: 0 1.5rem">
-            <span style="font-size: 25px;color: #00abff"></span><br>
-        </div>
         <ul class='stage'>
-            <div class="row" style="display: none" id="addCard">
-                <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
-                    <div class="card card-1">
-                        <div class="card-content ">
-                            <div class="row">
-                                <form id='formSign' class='col s12 red-text'>
-                                    <span class='card-title red-text'>Nouveau Suivi Projet</span>
-                                    <div class="row">
-                                        <div class="input-field col s12">
-                                            <input id="dateSuivi" type="text" class="datepicker">
-                                            <label for="Nom">Date</label>
+            <div id="projetAdderDiv" style="display: none">
+                <ul class="stage">
+                    <div class="row">
+                        <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                            <li>
+                                <div class="card card-1">
+                                    <div class="card-content ">
+                                        <div class="row" id="formParent">
+                                            <form id="formGroupe" class="red-text ">
+                                                <div class="modal-content">
+                                                    <h4 class="@*card-title*@ red-text ">Editer projet</h4>
+                                                    <input type="hidden" id="idGroupe" value="">
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="theme" type="text" class="">
+                                                            <label for="theme">Theme</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input id="date" type="text" class="datepicker">
+                                                            <label for="date">Date</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <div class="autocomplete" id="multiple">
+                                                                <div class="ac-users"></div>
+                                                                <div class="ac-input">
+                                                                    <div class="valign-wrapper">
+                                                                        <i class="valign material-icons prefix">account_circle</i>
+                                                                        <input type="text" id="multipleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez les membres du projet" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                                <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
+                                                                <input type="hidden" name="multipleHidden" />
+                                                            </div>
+                                                            <label class="active" style="padding-bottom: 10px" for="multipleInput">Membres du projet : </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="#!" id="subGroupe" class="modal-action modal-close waves-effect waves-light btn red accent-4 right-align">Valider</a>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
-                                    <div class='row'>
-                                        <div class='input-field col s12'>
-                                            <textarea id='contenuSuivi' class='materialize-textarea' length='120'></textarea>
-                                            <label for='contenu'>Commentaire suivi</label>
-                                        </div>
-                                    </div>
-                                    <a id='subSuivi' class='waves-effect waves-light btn' style='float: right;background: #00abff'>Valider</a>
-                                </form>
-                            </div>
+                                </div>
+                            </li>
                         </div>
                     </div>
-                </div>
+                </ul>
             </div>
         </ul>
         <ul class='stage'>
@@ -50,6 +75,8 @@
                 </div>
             </div>
         </ul>
+
+
     </div>
     </div>
 }

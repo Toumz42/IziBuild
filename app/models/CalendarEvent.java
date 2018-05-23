@@ -35,20 +35,17 @@ public class CalendarEvent extends Model {
     private String color;
     @ManyToOne
     @JsonBackReference
-    private Classe classe;
-    @ManyToOne
-    private User prof;
+    private Projet projet;
 
 
     public CalendarEvent() {
     }
 
-    public CalendarEvent(String title, Date start, Date end, User prof, Classe classe) {
+    public CalendarEvent(String title, Date start, Date end, Projet projet) {
         this.title = title;
         this.start = start;
         this.end = end;
-        this.prof = prof;
-        this.classe = classe;
+        this.projet = projet;
     }
 
     public Long getId() {
@@ -92,24 +89,17 @@ public class CalendarEvent extends Model {
         this.color = color;
     }
 
-    public User getProf() {
-        return this.prof;
+
+    public Projet getProjet() {
+        return projet;
     }
 
-    public void setProf(User prof) {
-        this.prof = prof;
-    }
-
-    public Classe getClasse() {
-        return classe;
-    }
-
-    public void setClasse(Classe classe) {
-        this.classe = classe;
+    public void setProjet(Projet projet) {
+        this.projet = projet;
     }
 
     public Long getClasseId() {
-        return classe.getId();
+        return projet.getId();
     }
 
     public String generateColor() {

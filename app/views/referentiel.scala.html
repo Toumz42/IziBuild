@@ -1,0 +1,104 @@
+@()
+
+@main("Administration") {
+    <div class="container">
+        <script type='text/javascript' src='/assets/javascripts/views/utils/adminUtils.js'></script>
+        <script type='text/javascript' src='/assets/javascripts/views/referentiels.js'></script>
+        <script type='text/javascript' src='/assets/javascripts/jquery-ui.min.js'></script>
+
+        <div id="datepicker-container"></div>
+        <div class="container push-down-50">
+            <div class="row">
+                <div id="users">
+                    <a id="btn_addRecord" class="addButton btn-floating btn-large waves-effect waves-light indigo darken-3"><i class="material-icons of_btn">add</i></a>
+                    <div id="inputReferentiel" >
+                        <div class="row">
+                            <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                                <li>
+                                    <div class="card card-1">
+                                        <div class="card-content ">
+                                            <div class="inModale" id="inputReferentiel">
+                                                <input hidden="hidden" id="idReferentiel"/>
+                                                <div align="center" class="card-title" >Ajouter / Modifier un référentiel</div>
+                                                <div id="detailReferentielCode" class="blocInput">
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input type="text" id="code">
+                                                            <label for="code" >Code</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="detailReferentiel" class="modal-content">
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input type="text" id="libelle">
+                                                            <label for="libelle" >Libelle</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <textarea class="materialize-textarea" id="commentaireLong"></textarea>
+                                                            <label for="commentaireLong">Commentaire Long</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input type="text" id="position">
+                                                            <label for="position" >Position</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <input class="field" id="isActif" type="checkbox" value="">
+                                                            <label for="isActif" >Actif</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer right-align">
+                                                    <input type="button" class="modal-action modal-close waves-light right-align btn red" id="btnReferentielSupprime" value="Supprimer"/>
+                                                    <input type="button" class="modal-action modal-close waves-light right-align btn green" id="btnReferentielRetour" value="Fermer"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="stage">
+                        <div class="row">
+                            <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                                <li>
+                                    <div class="card card-1">
+                                        <div class="card-content ">
+                                            <div class="row" id="formParent">
+                                                <div class="row">
+                                                    <div class="input-field col s12">
+                                                        <select id="cbx_referentiel"></select>
+                                                        <label for="cbx_referentiel">Categorie</label>
+                                                    </div>
+                                                </div>
+                                                <div id="tableReferentielDiv" class="shortlist">
+                                                    <table id="tableReferentiel">
+                                                        <thead>
+                                                            <th>Code</th>
+                                                            <th>Libelle</th>
+                                                            <th>Commentaire</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}

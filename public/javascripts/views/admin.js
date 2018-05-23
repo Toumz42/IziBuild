@@ -277,7 +277,7 @@ $(function()
     });
     Materialize.showStaggeredList($("#stage1"));
 
-    fixedMailInput();
+    //fixedMailInput();
 
     var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
     Materialize.scrollFire(options);

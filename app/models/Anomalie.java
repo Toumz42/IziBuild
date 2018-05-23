@@ -2,7 +2,6 @@ package models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.ebean.Finder;
 import io.ebean.Model;
-import scala.reflect.internal.Trees;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,25 +12,25 @@ import java.util.Date;
  */
 
 @Entity
-public class SuiviProjet extends Model {
+public class Anomalie extends Model {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     public Long id;
-    public Date dateSuivi;
+    public Date dateAnomalie;
     public String contenu;
     public Integer etat;
     @ManyToOne
     @JsonBackReference
-    public GroupeProjet groupe;
+    public Projet projet;
 
-    public SuiviProjet() {
+    public Anomalie() {
     }
 
-    public SuiviProjet(Date dateSuivi, String contenu, Integer etat, GroupeProjet groupe) {
-        this.dateSuivi = dateSuivi;
+    public Anomalie(Date dateAnomalie, String contenu, Integer etat, Projet projet) {
+        this.dateAnomalie = dateAnomalie;
         this.contenu = contenu;
         this.etat = etat;
-        this.groupe = groupe;
+        this.projet = projet;
     }
 
     public Long getId() {
@@ -42,12 +41,12 @@ public class SuiviProjet extends Model {
         this.id = id;
     }
 
-    public Date getDateSuivi() {
-        return dateSuivi;
+    public Date getDateAnomalie() {
+        return dateAnomalie;
     }
 
-    public void setDateSuivi(Date dateSuivi) {
-        this.dateSuivi = dateSuivi;
+    public void setDateAnomalie(Date dateAnomalie) {
+        this.dateAnomalie = dateAnomalie;
     }
 
     public String getContenu() {
@@ -74,14 +73,14 @@ public class SuiviProjet extends Model {
         this.etat = etat ? 1 : 0;
     }
 
-    public GroupeProjet getGroupe() {
-        return groupe;
+    public Projet getProjet() {
+        return projet;
     }
 
-    public void setGroupe(GroupeProjet groupe) {
-        this.groupe = groupe;
+    public void setProjet(Projet projet) {
+        this.projet = projet;
     }
 
-    public static Finder<Long, SuiviProjet> find = new Finder<Long,SuiviProjet>(SuiviProjet.class);
+    public static Finder<Long, Anomalie> find = new Finder<Long, Anomalie>(Anomalie.class);
 
 }

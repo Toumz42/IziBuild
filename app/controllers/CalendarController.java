@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import models.CalendarEvent;
-import models.Classe;
+import models.Projet;
 import models.User;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -25,24 +25,12 @@ public class CalendarController extends Controller{
 
     public Result getCalendar() {
         JsonNode json = request().body().asJson();
-        Long classeId = json.get("classeId").asLong();
         User u = Application.getCurrentUserObj();
         if (u != null) {
             ObjectMapper mapper = new ObjectMapper();
-            Classe classe = u.getClasse();
             Long id = null;
-            if (classe != null) {
-                id = classe.getId();
-            }
-            if (classeId != null) {
-                id = classeId;
-            }
-            List<CalendarEvent> eventList = CalendarEvent.find.all();
 
-            if (classeId > 0 ) {
-                eventList = CalendarEvent.find.query().where()
-                    .eq("classe_id",id).findList();
-            }
+            List<CalendarEvent> eventList = CalendarEvent.find.all();
 
             if (eventList != null) {
                 ArrayNode listResult = mapper.valueToTree(eventList);
@@ -55,13 +43,11 @@ public class CalendarController extends Controller{
     public Result addEvent() {
         JsonNode json = request().body().asJson();
         String titre = json.get("titre").asText();
-        Long prof = json.get("prof").asLong();
+        Long proj = json.get("proj").asLong();
         String dateEvent = json.get("dateEvent").asText();
         String hourStart = json.get("hourStart").asText();
         String hourEnd = json.get("hourEnd").asText();
-        Long classeId = json.get("classe").asLong();
-        Classe classe = Classe.find.byId(classeId);
-        User professeur = User.find.byId(prof);
+        Projet projet = Projet.find.byId(proj);
         Date dateStart = null;
         Date dateEnd = null;
         SimpleDateFormat parser = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.FRENCH);
@@ -72,7 +58,7 @@ public class CalendarController extends Controller{
             e.printStackTrace();
         }
 
-        CalendarEvent person = new CalendarEvent(titre, dateStart, dateEnd, professeur, classe);
+        CalendarEvent person = new CalendarEvent(titre, dateStart, dateEnd, projet);
         person.save();
         JsonNode retour = Json.toJson(person);
         return ok().sendJson(retour);
@@ -82,13 +68,11 @@ public class CalendarController extends Controller{
         JsonNode json = request().body().asJson();
         Long id = json.get("idEvent").asLong();
         String titre = json.get("titre").asText();
-        Long prof = json.get("prof").asLong();
+        Long proj = json.get("proj").asLong();
         String dateEvent = json.get("dateEvent").asText();
         String hourStart = json.get("hourStart").asText();
         String hourEnd = json.get("hourEnd").asText();
-        Long classeId = json.get("classe").asLong();
-        Classe classe = Classe.find.byId(classeId);
-        User professeur = User.find.byId(prof);
+        Projet projet = Projet.find.byId(proj);
         Date dateStart = null;
         Date dateEnd = null;
         SimpleDateFormat parser = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.FRENCH);
@@ -101,8 +85,7 @@ public class CalendarController extends Controller{
 
         CalendarEvent calendarEvent = CalendarEvent.find.byId(id);
         calendarEvent.setTitle(titre);
-        calendarEvent.setProf(professeur);
-        calendarEvent.setClasse(classe);
+        calendarEvent.setProjet(projet);
         calendarEvent.setStart(dateStart);
         calendarEvent.setEnd(dateEnd);
         calendarEvent.save();

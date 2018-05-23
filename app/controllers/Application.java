@@ -2,7 +2,6 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.ebean.Expr;
 import models.User;
 import models.utils.ErrorUtils;
 import play.libs.Json;
@@ -22,21 +21,26 @@ public class Application extends Controller {
 
     public Result index()
     {
-        if(checkConnected()) {
-            return redirect("/home");
-        } else {
-            return ok(views.html.index.render());
-        }
+
+        return ok(views.html.index.render());
+
     }
 
 
     public Result home()
     {
+        User u = Application.getCurrentUserObj();
         if(checkConnected()) {
-            return ok(views.html.home.render());
-        } else {
-            return redirect("/login");
+            switch (u.getDroit()) {
+                case 0 :
+                return ok(views.html.home.render());
+                case 1 :
+                return ok(views.html.homePro.render());
+                case 2 :
+                return ok(views.html.homePart.render());
+            }
         }
+        return redirect("/login");
     }
 
     public Result login()
@@ -91,6 +95,15 @@ public class Application extends Controller {
             return redirect("/login");
         }
     }
+
+    public Result createPart()
+    {
+        return ok(views.html.createPart.render());
+    }
+    public Result createPro()
+    {
+        return ok(views.html.createPro.render());
+    }
     public Result admNote()
     {
         if(checkAdmin() && checkConnected()) {
@@ -100,6 +113,13 @@ public class Application extends Controller {
         }
     }
 
+    public Result referentiel() {
+        if(checkConnected()) {
+            return ok(views.html.referentiel.render());
+        } else {
+            return redirect("/login");
+        }
+    }
 
     public Result identifyUser()
     {
@@ -146,14 +166,11 @@ public class Application extends Controller {
             case "user":
                 r = UserController.deleteUser(id);
                 break;
-            case "groupe":
+            case "projet":
                 r = ProjectController.deleteGroupe(id);
                 break;
             case "suivi":
-                r = ProjectController.deleteSuivi(id);
-                break;
-            case "classe":
-                r = UserController.deleteClasse(id);
+                r = ProjectController.deleteAnomalies(id);
                 break;
         }
         return r;
@@ -178,8 +195,19 @@ public class Application extends Controller {
                 return true;
             }
         }
-        //return false;
-        return true;
+        return false;
+        //return true;
+    }
+
+    public Boolean checkPro() {
+        User u = Application.getCurrentUserObj();
+        if (u!=null) {
+            if (u.getDroit() == 1) {
+                return true;
+            }
+        }
+        return false;
+        //return true;
     }
 
     public Result checkAdminJson() {

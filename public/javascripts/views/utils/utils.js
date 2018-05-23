@@ -132,6 +132,7 @@ function activeFields(array) {
         $(""+this).parent().children("label").addClass("active");
     });
 }
+
 function fixedMailInput() {
     var requiredText = '@ecole-isitech.fr';
     $('#email').val(requiredText);

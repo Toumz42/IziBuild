@@ -6,6 +6,7 @@ import io.ebean.Model;
 import io.ebean.Finder;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.List;
 
@@ -22,27 +23,36 @@ public class User extends Model {
     private String login;
     private String password;
     private Integer droit;
-    @ManyToOne
+    @ManyToMany
     @JsonBackReference
-    private Classe classe;
-    @ManyToOne
+    private List<Projet> projetList;
+
+    @ManyToMany
     @JsonBackReference
-    private GroupeProjet groupe;
-    @OneToMany(mappedBy="user")
-    @JsonManagedReference
-    private List<Note> noteList;
+    Referentiel categorie;
+
 
     //TODO : date Entrée/Sortie
 
     public User(String name, String surname, String email,
-                String password, Integer droit,Classe classe) {
+                String password, Integer droit) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.login = email;
         this.droit = droit;
         this.password = password;
-        this.classe = classe;
+    }
+
+    public User(String name, String surname, String email,
+                String password, Integer droit, @Nullable Referentiel categorie) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.login = email;
+        this.droit = droit;
+        this.password = password;
+        this.categorie = categorie;
     }
 
     public User() {
@@ -104,35 +114,12 @@ public class User extends Model {
         this.droit = droit;
     }
 
-    public Classe getClasse() {
-        return classe;
+    public List<Projet> getProjetList() {
+        return projetList;
     }
 
-    public Long getClasseId() {
-        if (this.classe != null) {
-            return classe.getId();
-        }
-        return null;
-    }
-
-    public void setClasse(Classe classe) {
-        this.classe = classe;
-    }
-
-    public GroupeProjet getGroupe() {
-        return groupe;
-    }
-
-    public void setGroupe(GroupeProjet groupe) {
-        this.groupe = groupe;
-    }
-
-    public List<Note> getNoteList() {
-        return noteList;
-    }
-
-    public void setNoteList(List<Note> noteList) {
-        this.noteList = noteList;
+    public void setProjetList(List<Projet> projetList) {
+        this.projetList = projetList;
     }
 
     public static void makeAdmin() {
@@ -140,7 +127,7 @@ public class User extends Model {
         if (u == null) {
             String pass = "1Sit3CH!";
             pass = DigestUtils.sha1Hex(pass);
-            User adm = new User("Admin","Admin","admin@ecole-isitech.fr",pass,0,null);
+            User adm = new User("Admin","Admin","admin@ecole-isitech.fr",pass,0);
             adm.save();
         }
     }

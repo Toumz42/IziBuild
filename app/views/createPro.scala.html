@@ -1,35 +1,18 @@
 @()
 
-@main("Administration") {
-    <div class="header-panel white-text">
-        <ul class="tabs red accent-4 white-text" id="mainTabs">
-            <li class="tab col s3"><a class="active" id="userTab" href="#users">Utilisateurs</a></li>
-            <li class="tab col s3"><a id="classeTab" href="#projet">Type</a></li>
-            <li class="tab col s3"><a id="projTab" href="#projet">Projet</a></li>
-        </ul>
-    </div>
-    <div class="header-panel white-text" id="classeTabUser" style="display:none">
-        <ul class="tabs red accent-4 white-text">
-            <li class="tab col s3"><a class="active" id="allUser" >Tout</a></li>
-        </ul>
-    </div>
-    <div class="header-panel white-text" id="classeTabGroup" style="display:none">
-        <ul class="tabs red accent-4 white-text">
-            <li class="tab col s3"><a class="active" id="allGroup" >Tout</a></li>
-        </ul>
-    </div>
+@main("Créez un compte") {
     <div class="container">
     <script type='text/javascript' src='/assets/javascripts/views/utils/adminUtils.js'></script>
-    <script type='text/javascript' src='/assets/javascripts/views/admin.js'></script>
     <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
-    <script type='text/javascript' src='/assets/javascripts/view/utils/jquery.complexify.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/utils/jquery.complexify.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/createPro.js'></script>
 
     <div id="datepicker-container"></div>
     <div class="container push-down-50">
         <div class="row">
             <div id="users">
-                <a id="addUser" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light indigo darken-3"><i class="material-icons of_btn">add</i></a>
-                <div id="usersAdderDiv" style="display: none">
+                @*<a id="addUser" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light indigo darken-3"><i class="material-icons of_btn">add</i></a>*@
+                <div id="usersAdderDiv">
                     <ul class="stage">
                         <div class="row">
                             <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
@@ -39,10 +22,10 @@
                                             <div class="row" id="formParent">
                                                 <form id="formSign">
                                                     <div class="modal-content">
-                                                        <h4 class="@*card-title*@ red-text">Editer Utilisateur</h4>
-                                                        <input type="hidden" id="idUser" value="">
+                                                        <h4 class="@*card-title*@ red-text">Créer un compte</h4>
                                                         <div class="row" style="color: grey; margin-left: 2px">
                                                             <span>Veuillez saisir ses identifiants</span>
+                                                            <input style="display: none" id="type" value="1" type="number">
                                                         </div>
                                                         <div class="row" id="signInNameDiv">
                                                             <div class="input-field col s6">
@@ -62,6 +45,13 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="input-field col s12">
+                                                                <select id="categorie" type="text" class="validate">
+                                                                </select>
+                                                                <label for="categorie">Categorie</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
                                                                 <input id="password1" type="password">
                                                                 <label for="password1">Mot de Passe</label>
                                                             </div>
@@ -70,29 +60,9 @@
                                                                 <label for="password2" data-success="Mot de passe OK!" data-error="Mot de passe différent">Confirmation du mot de Passe</label>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="input-field col s12">
-                                                                <select id="droit">
-                                                                    <option value="" disabled selected>Choisir une option</option>
-                                                                    <option value="0">Professeur</option>
-                                                                    <option value="1">Chef de projet</option>
-                                                                    <option value="2">Utilisateur</option>
-                                                                </select>
-                                                                <label>Profil</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="input-field col s12">
-                                                                <select id="classeUser">
-                                                                    <option value="" disabled selected>Choisir une option</option>
-                                                                    <option value="0" class="remain" disabled>Professeur</option>
-                                                                </select>
-                                                                <label>Classe</label>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <a href="#!" id="sub" class="modal-action modal-close waves-light red accent-4 right-align btn" style="float: right;">Valider</a>
+                                                        <a href="#!" id="sub" class="modal-action modal-close waves-light right-align btn red">Valider</a>
                                                     </div>
                                                 </form>
                                             </div>
@@ -103,7 +73,6 @@
                         </div>
                     </ul>
                 </div>
-                <div id="usersContent"></div>
             </div>
         </div>
     </div>

@@ -13,26 +13,7 @@ $(function()
 
 
     $.ajax ({
-        url: "/checkCfProjet",
-        type: "GET",
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-
-            if (json){
-                $(".chefP").show();
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            if(xhr.status==403) {
-                //handle error
-            }
-        }
-    });
-
-    $.ajax ({
-        url: "/getGroupeProject",
+        url: "/getProjects",
         type: "GET",
         // data: JSON.stringify(data),
         dataType: "text",
@@ -132,7 +113,7 @@ $(function()
             });
             turned = true;
         }
-        $("#addCard").toggle('slide');
+        $("#projetAdderDiv").toggle('slide');
     });
 
     $("#subSuivi").click(function(){
