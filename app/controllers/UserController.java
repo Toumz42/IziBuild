@@ -43,10 +43,13 @@ public class UserController extends Controller {
         Integer type = json.get("type").asInt();
         String email = json.get("email").asText();
         String pass = json.get("password").asText();
-        Long categorieId = json.get("categorie").asLong();
+        Long categorieId = json.get("categorie")!= null ? json.get("categorie").asLong() : null;
         String sha1pass = DigestUtils.sha1Hex(pass);
 
-        Referentiel categorie = Referentiel.find.byId(categorieId);
+        Referentiel categorie = null;
+        if (categorieId != null) {
+            categorie = Referentiel.find.byId(categorieId);
+        }
 
         User u = User.find.query()
                 .where()
@@ -130,6 +133,26 @@ public class UserController extends Controller {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
 
+            if (userList != null) {
+                for (User user : userList) {
+                    ObjectNode userNode = mapper.valueToTree(user);
+                    listResult.add(userNode);
+                }
+            }
+            return ok().sendJson(listResult);
+        }
+        return notFound();
+    }
+
+    public Result getAllArtisan() {
+
+        User u = null;
+        if (u != null) {
+            List<User> userList= null;
+
+            userList = User.find.query().where().not().eq("droit",1).findList();
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode listResult = mapper.createArrayNode();
             if (userList != null) {
                 for (User user : userList) {
                     ObjectNode userNode = mapper.valueToTree(user);

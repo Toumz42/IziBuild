@@ -386,3 +386,7 @@ nav.red.accent-4 {
     width: 100%;
     object-fit: cover;
 }
+
+.noProj {
+    height: 300px;
+}

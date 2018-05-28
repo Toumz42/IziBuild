@@ -34,6 +34,7 @@ POST    /addEvent                                   controllers.CalendarControll
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
 POST    /addProjectGroup                            controllers.ProjectController.addProjectGroup()
 POST    /updateUser                                 controllers.UserController.updateUser()
+POST    /getAllArtisan                                 controllers.UserController.getAllArtisan()
 POST    /updateProjectGroup                         controllers.ProjectController.updateProjectGroup()
 GET     /upload                                     controllers.FileController.doGet()
 POST    /upload                                     controllers.FileController.doPost()

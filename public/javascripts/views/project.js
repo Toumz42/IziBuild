@@ -179,3 +179,76 @@ $(function()
 
 
 });
+
+
+function initTabUser() {
+    if (classeId == 'allUser') {
+        dataGroup={};
+        $("#usersContent").empty();
+    }
+    dataGroup = JSON.stringify(dataGroup);
+    $.ajax ({
+        url: "/getAllArtisan",
+        type: "POST",
+        data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            initAutoComplete(json);
+            if ( json.length != 0 ) {
+                users = jsonToGlobalArray(users, json);
+                var res = userToTab(json);
+                $("#usersContent").empty();
+                $.each(res, function (index, element) {
+                    $("#usersContent").append(element);
+                });
+            } else {
+                $("#usersContent").empty();
+                res = cardStart + imgEmptyDiv + cardEnd;
+                $("#usersContent").append(res);
+            }
+        }
+    });
+}
+function initAutoComplete(json) {
+    var reset = true;
+    if (!Array.isArray(json)) {
+        json = [json];
+        reset = false;
+    }
+    if (reset) {
+        arrayData = [];
+    }
+    for (var i = 0; i < json.length; i++) {
+        var objDataComplete = {
+            "id": json[i].id,
+            "text": json[i].name + " " + json[i].surname
+        };
+        if (arrayData.indexOf(objDataComplete) == -1) {
+            arrayData.push(objDataComplete);
+        }
+    }
+    autocomplete = $('#multipleInput').materialize_autocomplete({
+        // data: objDataComplete,
+        multiple: {
+            enable: true,
+            onAppend: function (item) {
+                pushToGroup(item.id);
+            },
+            onRemove: function (item) {
+                removeFromGroup(item.id);
+            }
+        },
+        appender: {
+            el: '.ac-users'
+        },
+        dropdown: {
+            el: '#multipleDropdown',
+            itemTemplate: '<li class="ac-item autocomplete-content" data-id="<%= item.id %>" data-text=\'<%= item.text %>\'><a href="javascript:void(0)"><%= item.text %></a></li>'
+        },
+        getData: function (value, callback) {
+            callback(value, arrayData);
+        }
+    });
+}
