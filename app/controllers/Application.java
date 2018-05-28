@@ -31,13 +31,15 @@ public class Application extends Controller {
     {
         User u = Application.getCurrentUserObj();
         if(checkConnected()) {
-            switch (u.getDroit()) {
-                case 0 :
-                return ok(views.html.home.render());
-                case 1 :
-                return ok(views.html.homePro.render());
-                case 2 :
-                return ok(views.html.homePart.render());
+            if (u != null) {
+                switch (u.getDroit()) {
+                    case 0 :
+                    return ok(views.html.home.render());
+                    case 1 :
+                    return ok(views.html.homePro.render());
+                    case 2 :
+                    return ok(views.html.homePart.render());
+                }
             }
         }
         return redirect("/login");
