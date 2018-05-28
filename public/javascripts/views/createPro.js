@@ -200,9 +200,9 @@ function initAutoComplete(json) {
 
 
 function initCategorie() {
-    var dataGroup = JSON.stringify({});
+    var dataGroup = JSON.stringify({code : "TYPE_METIER"});
     $.ajax ({
-        url: "/getAllCategorieMetier",
+        url: "/getByCode",
         type: "POST",
         data: dataGroup,
         dataType: "text",
@@ -222,7 +222,7 @@ function initSelectCategorie(json) {
     $.each(json,function (index, elem) {
         var opt = $("<option />");
         opt.prop("value",elem.id);
-        opt.text(elem.name);
+        opt.text(elem.libelle);
         if (!$("#categorie option[value="+elem.id+"]").length ) {
             $("#categorie").append(opt);
         }

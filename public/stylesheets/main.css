@@ -197,12 +197,18 @@ table {
         width: 85%;
     }
 }
-
+.side-nav {
+    z-index: 1001;
+}
 @media only screen and (min-width: 993px){
     .side-nav {
         margin-top: 90px;
     }
 }
+.hideSoft {
+    display: none;
+}
+
 .wrapped {
  margin: 0 -10px 0 -10px ;
 }

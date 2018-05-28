@@ -26,7 +26,7 @@ public class TypesReferentiel {
         return hm;
     }
 
-    public Integer getAllTypes(String type) {
+    public Integer getTypeByCode(String type) {
         Field[] fs = this.getClass().getDeclaredFields();
         List<Field> fl = Arrays.asList(fs);
         for (Field f : fl) {

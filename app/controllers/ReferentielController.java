@@ -13,6 +13,7 @@ import java.util.List;
 
 public class ReferentielController extends Controller {
     ObjectMapper mapper = new ObjectMapper();
+    TypesReferentiel tp = new TypesReferentiel();
 
     public Result getReferentiel(){
         JsonNode json = request().body().asJson();
@@ -31,7 +32,6 @@ public class ReferentielController extends Controller {
     }
 
     public Result getAllTypes(){
-        TypesReferentiel tp = new TypesReferentiel();
         JsonNode result = mapper.valueToTree(tp.getAllTypes());
         return ok().sendJson(result);
     }
@@ -60,7 +60,7 @@ public class ReferentielController extends Controller {
         if (json.get("libelle") != null) {
             libelle = json.get("libelle").asText("");
         }
-        if (json.get("libelle") != null) {
+        if (json.get("commentaireLong") != null) {
             commentaire = json.get("commentaireLong").asText("");
         }
         try {
@@ -78,13 +78,14 @@ public class ReferentielController extends Controller {
         }
         return internalServerError();
     }
-    public Result getAllCategorieMetier() {
-            JsonNode json = request().body().asJson();
-            Integer type = json.get("id").asInt();
-            List<Referentiel> list = Referentiel.find.query().where()
-                    .eq("type", type).findList();
-            JsonNode result = mapper.valueToTree(list);
-            return ok().sendJson(result);
-        }
+    public Result getByCode() {
+        JsonNode json = request().body().asJson();
+        String type = json.get("code").asText("");
+        Integer typeId = tp.getTypeByCode(type);
+        List<Referentiel> list = Referentiel.find.query().where()
+                .eq("type", typeId).findList();
+        JsonNode result = mapper.valueToTree(list);
+        return ok().sendJson(result);
+    }
 
 }

@@ -11,6 +11,8 @@ $(function () {
         });
     }
 
+    $('#logoLI').show();
+    $('#nav-mobile').css({ 'margin-top': '0px'});
     $('#nav-mobile').removeClass('fixed');
     $('.button-collapse').removeClass('hide-on-large-only');
     $('.button-collapse').addClass('show-on-large');

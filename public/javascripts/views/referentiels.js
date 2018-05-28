@@ -13,7 +13,7 @@ $(function()
 
     $("#refRefresh").click(function(){refreshList()})
 
-    $("#btn_addRecord").show();
+//    $("#btn_addRecord").show();
     $("#btn_addRecord").unbind();
     $("#btn_addRecord").attr("title", "Ajouter un référentiel");
 
@@ -99,6 +99,11 @@ $(function()
 
     $("#cbx_referentiel").change(function()
     {
+        if ($("#cbx_referentiel").val() >= 0) {
+            $("#btn_addRecord").show();
+        } else {
+            $("#btn_addRecord").hide();
+        }
         refreshList();
     });
 

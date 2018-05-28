@@ -44,6 +44,7 @@ POST    /getReferentiel                             controllers.ReferentielContr
 POST    /addNewRef                                  controllers.ReferentielController.addNewRef()
 POST    /getAllTypes                                controllers.ReferentielController.getAllTypes()
 POST    /saveByChamps                               controllers.ReferentielController.saveByChamps()
+POST    /getByCode                                  controllers.ReferentielController.getByCode()
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(file)
