@@ -1,0 +1,74 @@
+@()
+
+@main("Créez un compte") {
+    <div class="container">
+    <script type='text/javascript' src='/assets/javascripts/views/utils/adminUtils.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/utils/jquery.complexify.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/editPart.js'></script>
+
+    <div id="datepicker-container"></div>
+    <div class="container push-down-50">
+        <div class="row">
+            <div id="users">
+                @*<a id="addUser" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light indigo darken-3"><i class="material-icons of_btn">add</i></a>*@
+                <div id="usersAdderDiv">
+                    <ul class="stage">
+                        <div class="row">
+                            <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                                <li>
+                                    <div class="card card-1">
+                                        <div class="card-content ">
+                                            <div class="row" id="formParent">
+                                                <form id="formSign">
+                                                    <div class="modal-content">
+                                                        <h4 class="@*card-title*@ red-text">Créer un compte</h4>
+                                                        <input type="hidden" id="idUser" value="">
+                                                        <div class="row" style="color: grey; margin-left: 2px">
+                                                            <span>Veuillez saisir vos identifiants</span>
+                                                            <input style="display: none" id="type" value="2" type="number">
+                                                        </div>
+                                                        <div class="row" id="signInNameDiv">
+                                                            <div class="input-field col s6">
+                                                                <input id="last_name" type="text" class="validate">
+                                                                <label for="last_name">Nom</label>
+                                                            </div>
+                                                            <div class="input-field col s6">
+                                                                <input id="first_name" type="text" class="validate">
+                                                                <label for="first_name">Prénom</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <input id="email" type="email" class="validate">
+                                                                <label for="email">Email</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="input-field col s12">
+                                                                <input id="password1" type="password">
+                                                                <label for="password1">Mot de Passe</label>
+                                                            </div>
+                                                            <div class="input-field col s12">
+                                                                <input id="password2" type="password">
+                                                                <label for="password2" data-success="Mot de passe OK!" data-error="Mot de passe différent">Confirmation du mot de Passe</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a href="#!" id="sub" class="modal-action modal-close waves-light right-align btn red">Valider</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+}
