@@ -26,6 +26,7 @@ create table projet (
   id                            bigint auto_increment not null,
   theme                         varchar(255),
   date_creation                 datetime(6),
+  user_id                       bigint,
   constraint pk_projet primary key (id)
 );
 
@@ -52,6 +53,7 @@ create table user (
   login                         varchar(255),
   password                      varchar(255),
   droit                         integer,
+  categorie_id                  bigint,
   constraint pk_user primary key (id)
 );
 
@@ -67,11 +69,17 @@ alter table anomalie add constraint fk_anomalie_projet_id foreign key (projet_id
 create index ix_calendar_event_projet_id on calendar_event (projet_id);
 alter table calendar_event add constraint fk_calendar_event_projet_id foreign key (projet_id) references projet (id) on delete restrict on update restrict;
 
+create index ix_projet_user_id on projet (user_id);
+alter table projet add constraint fk_projet_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+
 create index ix_projet_user_projet on projet_user (projet_id);
 alter table projet_user add constraint fk_projet_user_projet foreign key (projet_id) references projet (id) on delete restrict on update restrict;
 
 create index ix_projet_user_user on projet_user (user_id);
 alter table projet_user add constraint fk_projet_user_user foreign key (user_id) references user (id) on delete restrict on update restrict;
+
+create index ix_user_categorie_id on user (categorie_id);
+alter table user add constraint fk_user_categorie_id foreign key (categorie_id) references referentiel (id) on delete restrict on update restrict;
 
 create index ix_user_projet_user on user_projet (user_id);
 alter table user_projet add constraint fk_user_projet_user foreign key (user_id) references user (id) on delete restrict on update restrict;
@@ -88,11 +96,17 @@ drop index ix_anomalie_projet_id on anomalie;
 alter table calendar_event drop foreign key fk_calendar_event_projet_id;
 drop index ix_calendar_event_projet_id on calendar_event;
 
+alter table projet drop foreign key fk_projet_user_id;
+drop index ix_projet_user_id on projet;
+
 alter table projet_user drop foreign key fk_projet_user_projet;
 drop index ix_projet_user_projet on projet_user;
 
 alter table projet_user drop foreign key fk_projet_user_user;
 drop index ix_projet_user_user on projet_user;
+
+alter table user drop foreign key fk_user_categorie_id;
+drop index ix_user_categorie_id on user;
 
 alter table user_projet drop foreign key fk_user_projet_user;
 drop index ix_user_projet_user on user_projet;

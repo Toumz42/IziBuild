@@ -145,23 +145,19 @@ public class UserController extends Controller {
     }
 
     public Result getAllArtisan() {
+        List<User> userList= null;
 
-        User u = null;
-        if (u != null) {
-            List<User> userList= null;
-
-            userList = User.find.query().where().not().eq("droit",1).findList();
-            ObjectMapper mapper = new ObjectMapper();
-            ArrayNode listResult = mapper.createArrayNode();
-            if (userList != null) {
-                for (User user : userList) {
-                    ObjectNode userNode = mapper.valueToTree(user);
-                    listResult.add(userNode);
-                }
+        userList = User.find.query().where().eq("droit",1).findList();
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode listResult = mapper.createArrayNode();
+        if (userList != null) {
+            for (User user : userList) {
+                ObjectNode userNode = mapper.valueToTree(user);
+                listResult.add(userNode);
             }
-            return ok().sendJson(listResult);
         }
-        return notFound();
+        return ok().sendJson(listResult);
+
     }
 
 
