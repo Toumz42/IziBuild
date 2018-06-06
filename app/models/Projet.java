@@ -19,9 +19,13 @@ public class Projet extends Model {
     private String theme;
     private Date dateCreation;
 
+    @ManyToOne
+    @JsonManagedReference
+    private User user;
+
     @ManyToMany
     @JsonManagedReference
-    private List<User> userList;
+    private List<User> proList;
 
     @OneToMany(mappedBy="projet")
     @JsonManagedReference
@@ -68,12 +72,22 @@ public class Projet extends Model {
         this.dateCreation = dateCreation;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public List<User> getProList() {
+        return proList;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public void setProList(List<User> userList) {
+        this.proList = userList;
+    }
+
+    public void addToProList(User user) { this.proList.add(user); }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Anomalie> getAnomalieList() {

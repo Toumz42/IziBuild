@@ -23,11 +23,15 @@ public class User extends Model {
     private String login;
     private String password;
     private Integer droit;
-    @ManyToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonBackReference
-    private List<Projet> projetList;
+    private List<Projet> projetListUser;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonBackReference
+    private List<Projet> projetListPro;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     Referentiel categorie;
 
@@ -114,13 +118,25 @@ public class User extends Model {
         this.droit = droit;
     }
 
-    public List<Projet> getProjetList() {
-        return projetList;
+    public List<Projet> getProjetListPro() {
+        return projetListPro;
     }
 
-    public void setProjetList(List<Projet> projetList) {
-        this.projetList = projetList;
+    public void setProjetListPro(List<Projet> projetList) {
+        this.projetListPro = projetList;
     }
+
+    public void addToProjetListPro(Projet projet) { this.projetListPro.add(projet); }
+
+    public List<Projet> getProjetListUser() {
+        return projetListUser;
+    }
+
+    public void setProjetListUser(List<Projet> projetList) {
+        this.projetListUser = projetList;
+    }
+
+    public void addToProjetListUser(Projet projet) { this.projetListUser.add(projet); }
 
     public static void makeAdmin() {
         User u = User.find.query().where().eq("login", "admin@ecole-isitech.fr").findOne();

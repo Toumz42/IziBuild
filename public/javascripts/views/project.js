@@ -1,6 +1,7 @@
 /**
  * Created by ttomc on 06/01/2017.
  */
+var groupids = [];
 $(function()
 {
     $(".page-title").empty().append("Projet");
@@ -26,71 +27,34 @@ $(function()
                 table = $("<table class='responsive-table highlight'></table>");
                 table2 = $("<table class='responsive-table highlight'></table>");
                 tr = $('<tr/>');
-                tr.append("<th>Id</th>");
-                tr.append("<th>Date de soutenance</th>");
+                //tr.append("<th>Id</th>");
                 tr.append("<th> Theme </th>");
+                tr.append("<th>Date</th>");
                 table.append(tr);
                 tr = $('<tr/>');
-                tr.append("<td>" + json[i].id + "</td>");
+                // tr.append("<td>" + json[i].id + "</td>");
                 tr.append("<td>" + json[i].theme + "</td>");
                 tr.append("<td>" + json[i].date + "</td>");
                 table.append(tr);
                 tr = $('<tr/>');
-                tr.append("<th>Id</th>");
+                //tr.append("<th>Id</th>");
                 tr.append("<th> Nom </th>");
                 tr.append("<th>Prénom</th>");
+                tr.append("<th>Metier</th>");
                 table2.append(tr);
-                for (var j = 0; j < json[i].userList.length; j++) {
+                for (var j = 0; j < json[i].proList.length; j++) {
                     tr = $('<tr/>');
-                    tr.append("<td>" + json[i].userList[j].id + "</td>");
-                    tr.append("<td>" + json[i].userList[j].name+ "</td>");
-                    tr.append("<td>" + json[i].userList[j].surname + "</td>");
+                    //tr.append("<td>" + json[i].proList[j].id + "</td>");
+                    tr.append("<td>" + json[i].proList[j].name+ "</td>");
+                    tr.append("<td>" + json[i].proList[j].surname + "</td>");
+                    tr.append("<td>" + json[i].proList[j].surname + "</td>");
                     table2.append(tr);
                 }
-                res = table.prop('outerHTML');
-                res2 = table2.prop('outerHTML');
+                var res1 = cardStart + table.prop('outerHTML');
+                var res2 = table2.prop('outerHTML') + cardEnd;
             }
-            $("#tableGrpProjectDiv").append(res);
-            $("#tableGrpProjectDiv").append(res2);
-
-        }
-    });
-    var res = '';
-    $.ajax ({
-        url: "/getProjects",
-        type: "GET",
-        data: JSON.stringify(data),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            var table;
-            var tr;
-            for (var i = 0; i < json.length; i++) {
-                table = $("<table class='responsive-table highlight'></table>");
-                table2 = $("<table class='responsive-table highlight'></table>");
-                tr = $('<tr/>');
-                tr.append("<th style='display: none'>Id</th>");
-                tr.append("<th> Theme </th>");
-                tr.append("<th>Date de soutenance</th>");
-                table.append(tr);
-                tr = $('<tr/>');
-                tr.append("<td style='display: none'>" + json[i].id + "</td>");
-                tr.append("<td>" + json[i].dateSuivi + "</td>");
-                tr.append("<td>" + json[i].contenu + "</td>");
-                table.append(tr);
-                var checked = "";
-                if (json[i].etat == 1) {
-                    checked = "checked";
-                }
-                var toggle ="<div class='switch right-align'><label>"+
-                    "   Validation  " +
-                    "   <input disabled type='checkbox' "+checked+">"+
-                    "   <span class='lever'></span> "+
-                    "   </label></div> " ;
-                var res = cardStart + table.prop('outerHTML') + toggle + cardEnd;
-                $("#projectMainDiv").append(res);
-            }
+            var res = res1 + res2;
+            $("#projectMainDiv").append(res);
 
         }
     });
@@ -116,39 +80,57 @@ $(function()
         $("#projetAdderDiv").toggle('slide');
     });
 
-    $("#subSuivi").click(function(){
-        if ( $("#contenuSuivi").size()!="" && $("#dateSuivi").val()!="" )
-        {
-            var data = {"date" : $("#dateSuivi").val(),"contenu" : $("#contenuSuivi").val()};
+    $("#subProject").click(function(){
+        if ($("#theme").val() != "" && $("#date").val() != "") {
+            var data = {
+                "theme": $("#theme").val(),
+                "date": $("#date").val(),
+                "groupids": groupids
+            };
 
-            $.ajax ({
+            $.ajax({
                 url: "/addProject",
                 type: "POST",
                 data: JSON.stringify(data),
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
-                success: function(ret, textStatus, jqXHR){
+                success: function (ret, textStatus, jqXHR) {
                     $("#addCard").slideToggle();
 
                     var json = $.parseJSON(ret);
 
                     var table;
                     var tr;
-                    var res='';
+                    var res = '';
                     for (var i = 0; i < json.length; i++) {
                         table = $("<table class='responsive-table highlight'></table>");
                         tr = $('<tr/>');
-                        tr.append("<th>Id</th>");
-                        tr.append("<th>Date du suivi</th>");
+                        //tr.append("<th>Id</th>");
                         tr.append("<th> Theme </th>");
+                        tr.append("<th>Date</th>");
                         table.append(tr);
                         tr = $('<tr/>');
-                        tr.append("<td>" + json[i].id + "</td>");
+                        //tr.append("<td>" + json[i].id + "</td>");
                         tr.append("<td>" + json[i].theme + "</td>");
                         tr.append("<td>" + json[i].date + "</td>");
                         table.append(tr);
-                        res = res + cardStart + table.prop('outerHTML') + cardEnd;
+                        table.append(tr);
+                        tr = $('<tr/>');
+                        //tr.append("<th>Id</th>");
+                        tr.append("<th> Nom </th>");
+                        tr.append("<th>Prénom</th>");
+                        table2.append(tr);
+                        for (var j = 0; j < json[i].proList.length; j++) {
+                            tr = $('<tr/>');
+                            //tr.append("<td>" + json[i].proList[j].id + "</td>");
+                            tr.append("<td>" + json[i].proList[j].name+ "</td>");
+                            tr.append("<td>" + json[i].proList[j].surname + "</td>");
+                            table2.append(tr);
+                        }
+                        res1 = cardStart + table.prop('outerHTML');
+                        res2 = table2.prop('outerHTML') + cardEnd;
                     }
+                    var res = res1 + res2;
                     $("#projectMainDiv").append(res);
                 }
             });
@@ -176,16 +158,15 @@ $(function()
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 15 // Creates a dropdown of 15 years to control year
     });
-
+    initTabUser();
 
 });
 
 
 function initTabUser() {
-    if (classeId == 'allUser') {
-        dataGroup={};
-        $("#usersContent").empty();
-    }
+
+    dataGroup={};
+    $("#usersContent").empty();
     dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
         url: "/getAllArtisan",
@@ -196,18 +177,6 @@ function initTabUser() {
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
             initAutoComplete(json);
-            if ( json.length != 0 ) {
-                users = jsonToGlobalArray(users, json);
-                var res = userToTab(json);
-                $("#usersContent").empty();
-                $.each(res, function (index, element) {
-                    $("#usersContent").append(element);
-                });
-            } else {
-                $("#usersContent").empty();
-                res = cardStart + imgEmptyDiv + cardEnd;
-                $("#usersContent").append(res);
-            }
         }
     });
 }
@@ -251,4 +220,15 @@ function initAutoComplete(json) {
             callback(value, arrayData);
         }
     });
+}
+
+function pushToGroup(item) {
+    groupids.push(item)
+}
+
+function removeFromGroup(item){
+    var i = groupids.indexOf(item);
+    if (i > -1) {
+        groupids.splice(i, 1);
+    }
 }

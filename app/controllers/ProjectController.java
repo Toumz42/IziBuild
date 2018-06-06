@@ -35,12 +35,12 @@ public class ProjectController extends Controller {
             Projet grp = Projet.find.byId(id);
             if (grp != null) {
                 List<User> userList = null;
-                userList = grp.getUserList();
+                userList = grp.getProList();
 //                List<User> userList = User.find.query().fetch("projet").where().eq("projet.id",grp.getId()).findList();
                 if (userList !=null) {
                     ArrayNode array = mapper.valueToTree(userList);
                     ObjectNode userNode = mapper.valueToTree(grp);
-                    userNode.remove("dateCreation");
+                    userNode.remove("date");
                     String date = grp.getDateSoutenanceString();
                     userNode.put("date", date );
                     userNode.putArray("userList").addAll(array);
@@ -57,10 +57,10 @@ public class ProjectController extends Controller {
     public static Result deleteGroupe(Long id) {
         Projet grp = Projet.find.byId(id);
         if (grp != null) {
-            if (grp.getUserList()!=null) {
-                List<User> users =  grp.getUserList();
+            if (grp.getProList()!=null) {
+                List<User> users =  grp.getProList();
                 for (User u : users) {
-                    u.setProjetList(null);
+                    u.setProjetListPro(null);
                     u.update();
                 }
             }
@@ -116,7 +116,7 @@ public class ProjectController extends Controller {
             Long id = Long.parseLong(idUser);
             User u = User.find.byId(id);
             if (u != null) {
-                List<Projet> list = u.getProjetList();
+                List<Projet> list = u.getProjetListUser();
                 JsonNode result = Json.toJson(list);
                 if (result.isArray() && result.size() == list.size()) {
                     ArrayNode arrayNode = result.deepCopy();
@@ -126,7 +126,7 @@ public class ProjectController extends Controller {
                         o.remove("dateCreation");
                         DateUtils dU = new DateUtils();
                         String dateSuivi = dU.toFrenchDateString(list.get(i).getDateCreation());
-                        o.put("dateCreation", dateSuivi );
+                        o.put("date", dateSuivi );
                         arrayNode.remove(i);
                         j=o.deepCopy();
                         arrayNode.add(j);
@@ -140,7 +140,7 @@ public class ProjectController extends Controller {
 
     }
 
-    public Result addProjectGroup() {
+    public Result addProject() {
         JsonNode json = request().body().asJson();
         String theme = json.get("theme").asText();
         String dateString = json.get("date").asText();
@@ -153,15 +153,19 @@ public class ProjectController extends Controller {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Projet u = Projet.find.query()
+        User u = Application.getCurrentUserObj();
+        Projet p = Projet.find.query()
                 .where()
                 .ilike("theme","%"+theme+"%")
                 .findOne();
 
-        if (u == null) {
+        if (p == null) {
             if (theme != null) {
                 if (!theme.equals("")) {
                     Projet projet = new Projet(theme, date);
+                    u.addToProjetListUser(projet);
+                    u.save();
+                    projet.setUser(u);
                     projet.save();
                     ObjectMapper mapper = new ObjectMapper();
                     ObjectNode groupeNode = mapper.valueToTree(projet);
@@ -172,7 +176,9 @@ public class ProjectController extends Controller {
                         Long id = jsonNode.asLong();
                         User user = User.find.byId(id);
                         if (user != null) {
+                            user.addToProjetListPro(projet);
                             user.update();
+                            projet.addToProList(user);
                             userList.add(Json.toJson(user));
                         }
                     }
@@ -224,7 +230,7 @@ public class ProjectController extends Controller {
                     ObjectNode groupeNode = mapper.valueToTree(u);
                     groupeNode.remove("dateCreation");
                     groupeNode.put("date", u.getDateSoutenanceString());
-                    ArrayNode usersNode = mapper.valueToTree(u.getUserList());
+                    ArrayNode usersNode = mapper.valueToTree(u.getProList());
                     groupeNode.set("userList", usersNode );
                     return ok(groupeNode);
                 } else {
