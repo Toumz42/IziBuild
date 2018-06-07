@@ -23,11 +23,12 @@ public class User extends Model {
     private String login;
     private String password;
     private Integer droit;
-    @OneToMany(fetch = FetchType.EAGER)
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
     private List<Projet> projetListUser;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Projet> projetListPro;
 
@@ -35,6 +36,13 @@ public class User extends Model {
     @JsonBackReference
     Referentiel categorie;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "expediteur")
+    @JsonBackReference
+    List<Message> messagesEnvoyes;
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy="destinataire")
+    @JsonBackReference
+    List<Message> messagesRecus;
 
     //TODO : date Entrée/Sortie
 
@@ -146,6 +154,38 @@ public class User extends Model {
             User adm = new User("Admin","Admin","admin@ecole-isitech.fr",pass,0);
             adm.save();
         }
+    }
+
+    public List<Message> getMessagesEnvoyes() {
+        return messagesEnvoyes;
+    }
+
+    public void setMessagesEnvoyes(List<Message> messagesEnvoyes) {
+        this.messagesEnvoyes = messagesEnvoyes;
+    }
+
+    public void addToMessages(Message messagesEnvoye) {
+        this.messagesEnvoyes.add(messagesEnvoye);
+    }
+
+    public List<Message> getMessagesRecus() {
+        return messagesRecus;
+    }
+
+    public void setMessagesRecus(List<Message> messagesRecus) {
+        this.messagesRecus = messagesRecus;
+    }
+
+    public void addToMessagesRecus(Message message) {
+        this.messagesRecus.add(message);
+    }
+
+    public Referentiel getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Referentiel categorie) {
+        this.categorie = categorie;
     }
 
     public static Finder<Long, User> find = new Finder<Long, User>(User.class);

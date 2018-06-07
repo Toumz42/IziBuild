@@ -13,6 +13,7 @@ import play.mvc.Result;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -40,16 +41,39 @@ public class CalendarController extends Controller{
         }
         return ok();
     }
+
+    public Result getMyCalendar() {
+        JsonNode json = request().body().asJson();
+        User u = Application.getCurrentUserObj();
+        if (u != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            Long id = null;
+            List<Projet> listProj = UserController.getProjetList(u);
+            List<CalendarEvent> eventList = new ArrayList<>();
+            for (Projet p : listProj) {
+                eventList.addAll(p.getEventList());
+            }
+            if (eventList != null) {
+                ArrayNode listResult = mapper.valueToTree(eventList);
+              //      listResult = Json.toJson(eventList).deepCopy();
+                return ok().sendJson(listResult);
+            }
+        }
+        return ok();
+    }
+
     public Result addEvent() {
         JsonNode json = request().body().asJson();
         String titre = json.get("titre").asText();
         Long proj = json.get("proj").asLong();
+        Long guestId = json.get("guestId").asLong();
         String dateEvent = json.get("dateEvent").asText();
         String hourStart = json.get("hourStart").asText();
         String hourEnd = json.get("hourEnd").asText();
         Projet projet = Projet.find.byId(proj);
         Date dateStart = null;
         Date dateEnd = null;
+        User u = Application.getCurrentUserObj();
         SimpleDateFormat parser = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.FRENCH);
         try {
             dateStart = parser.parse(dateEvent+" "+hourStart);
@@ -57,8 +81,7 @@ public class CalendarController extends Controller{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        CalendarEvent person = new CalendarEvent(titre, dateStart, dateEnd, projet);
+        CalendarEvent person = new CalendarEvent(titre, dateStart, dateEnd, projet, u);
         person.save();
         JsonNode retour = Json.toJson(person);
         return ok().sendJson(retour);

@@ -25,6 +25,7 @@ import java.util.Locale;
  */
 public class ProjectController extends Controller {
 
+    ObjectMapper mapper = new ObjectMapper();
 
     public Result getProjectbyId() {
         JsonNode json = request().body().asJson();
@@ -137,7 +138,40 @@ public class ProjectController extends Controller {
             }
         }
         return notFound();
+    }
 
+    public Result getProjectsPro() {
+        JsonNode json = request().body().asJson();
+        User u  = Application.getCurrentUserObj();
+        if (u != null ) {
+            List<Projet> list = u.getProjetListPro();
+            JsonNode result = Json.toJson(list);
+            if (result.isArray() && result.size() == list.size()) {
+                ArrayNode arrayNode = result.deepCopy();
+                for ( int i = arrayNode.size() - 1; i >= 0; i--) {
+                    ObjectNode o = arrayNode.get(i).deepCopy();
+                    DateUtils dU = new DateUtils();
+                    List<User> pro = list.get(i).getProList();
+                    if (pro.contains(u)) {
+                        pro.remove(u);
+                    }
+                    JsonNode dateSuivi = mapper.valueToTree(
+                            dU.toFrenchDateString(
+                                list.get(i)
+                                .getDateCreation()
+                            ));
+                    JsonNode proNode = mapper.valueToTree(pro);
+                    o.remove("dateCreation");
+                    o.set("date", dateSuivi);
+                    o.set("proList", proNode);
+                    arrayNode.remove(i);
+                    arrayNode.add(o);
+                }
+                result = arrayNode.deepCopy();
+            }
+            return ok(result);
+        }
+        return notFound();
     }
 
     public Result addProject() {
@@ -250,8 +284,8 @@ public class ProjectController extends Controller {
         Boolean state = json.get("state").asBoolean();
         Anomalie anomalie = Anomalie.find.byId(id);
         if (anomalie != null) {
-          anomalie.setEtatBoolean(state);
-          anomalie.update();
+            anomalie.setEtatBoolean(state);
+            anomalie.update();
         }
         return ok();
     }

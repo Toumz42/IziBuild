@@ -33,6 +33,8 @@ public class CalendarEvent extends Model {
     private Date start;
     private Date end;
     private String color;
+    @OneToOne()
+    private User user;
     @ManyToOne
     @JsonBackReference
     private Projet projet;
@@ -41,11 +43,12 @@ public class CalendarEvent extends Model {
     public CalendarEvent() {
     }
 
-    public CalendarEvent(String title, Date start, Date end, Projet projet) {
+    public CalendarEvent(String title, Date start, Date end, Projet projet, User user) {
         this.title = title;
         this.start = start;
         this.end = end;
         this.projet = projet;
+        this.user = user;
     }
 
     public Long getId() {

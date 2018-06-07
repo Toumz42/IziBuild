@@ -1,12 +1,12 @@
 package controllers;
 
+import akka.stream.javadsl.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.User;
 import models.utils.ErrorUtils;
 import play.libs.Json;
-import play.mvc.Controller;
-import play.mvc.Result;
+import play.mvc.*;
 
 import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,49 +19,51 @@ public class Application extends Controller {
     public Application() {
     }
 
-    public Result index()
-    {
 
+    public Result index() {
         return ok(views.html.index.render());
-
     }
 
 
-    public Result home()
-    {
+    public Result home() {
         User u = Application.getCurrentUserObj();
         if(checkConnected()) {
             if (u != null) {
                 switch (u.getDroit()) {
                     case 0 :
-                    return ok(views.html.home.render());
+                        return ok(views.html.home.render());
                     case 1 :
-                    return ok(views.html.homePro.render());
+                        return ok(views.html.homePro.render());
                     case 2 :
-                    return ok(views.html.homePart.render());
+                        return ok(views.html.homePart.render());
                 }
             }
         }
         return redirect("/login");
     }
 
-    public Result login()
-    {
+    public Result login() {
         User.makeAdmin();
         return ok(views.html.login.render());
     }
 
-    public Result projet()
-    {
+    public Result projet() {
         if(checkConnected()) {
-            return ok(views.html.project.render());
-        } else {
-            return redirect("/login");
+            User u = Application.getCurrentUserObj();
+            if (u != null) {
+                switch (u.getDroit()) {
+                    case 0 :
+                    case 1:
+                        return ok(views.html.projectPro.render());
+                    case 2:
+                        return ok(views.html.project.render());
+                }
+            }
         }
+        return redirect("/login");
     }
 
-    public Result admin()
-    {
+    public Result admin() {
         if(checkConnected() && checkAdmin()) {
             return ok(views.html.admin.render());
         } else {
@@ -73,24 +75,21 @@ public class Application extends Controller {
         }
     }
 
-    public Result doc()
-    {
+    public Result doc() {
         if(checkConnected()) {
             return ok(views.html.doc.render());
         } else {
             return redirect("/login");
         }
     }
-    public Result agenda()
-    {
+    public Result agenda() {
         if(checkConnected()) {
             return ok(views.html.agenda.render());
         } else {
             return redirect("/login");
         }
     }
-    public Result note()
-    {
+    public Result note() {
         if(checkConnected()) {
             return ok(views.html.note.render());
         } else {
@@ -123,8 +122,7 @@ public class Application extends Controller {
         }
     }
 
-    public Result identifyUser()
-    {
+    public Result identifyUser() {
         String login, pswd;
         Map<String,String[]> param = request().body().asFormUrlEncoded();
         JsonNode json = request().body().asJson();
@@ -246,5 +244,13 @@ public class Application extends Controller {
     public Result logout() {
         session().clear();
         return ok("/login");
+    }
+
+    public Result messagerie() {
+        return ok(views.html.messagerie.render());
+    }
+
+    public Result conversation() {
+        return ok(views.html.conversation.render());
     }
 }

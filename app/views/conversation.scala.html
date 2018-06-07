@@ -1,0 +1,27 @@
+@()
+
+@main("Messagerie") {
+    <script type='text/javascript' src='/assets/javascripts/views/utils/utils.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/conversation.js'></script>
+    <div class="valign-wrapper red nameConversWrapper white-text accent-4">
+        <h5 id="nameConvers" style="padding: 10px;"></h5>
+    </div>
+    <div class="push-down-30">
+        <div id="conversation" class="conversDiv">
+        </div>
+    </div>
+
+    <div class="col m12 s12 l12 push-s1 push-m1 push-l1 sticky-bottom">
+        <div class="card">
+            <form id="formGroupe" class="red-text ">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea class="materialize-textarea" id="message"></textarea>
+                        <a href="#!" id="subMsg" class="red-text top-send right-align"><i class='material-icons'>send</i></a>
+                        <label for="message">Message</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}

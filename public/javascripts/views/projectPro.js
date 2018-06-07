@@ -14,7 +14,7 @@ $(function()
 
 
     $.ajax ({
-        url: "/getProjects",
+        url: "/getProjectsPro",
         type: "GET",
         // data: JSON.stringify(data),
         dataType: "text",
@@ -100,6 +100,7 @@ function makeProjectDiv(json) {
         var tr;
         for (var i = 0; i < json.length; i++) {
             table = $("<table class='responsive-table highlight'></table>");
+            table1 = $("<table class='responsive-table highlight'></table>");
             table2 = $("<table class='responsive-table highlight'></table>");
             tr = $('<tr/>');
             tr.append("<th style='width: 25%'>Projet : </th>");
@@ -112,20 +113,33 @@ function makeProjectDiv(json) {
             tr.append("<td>" + json[i].date + "</td>");
             table.append(tr);
             tr = $('<tr/>');
-            tr.append("<th style='width: 25%'>Artisans : </th>");
+            tr.append("<th style='width: 25%'>Utilisateur : </th>");
             tr.append("<th> Nom </th>");
             tr.append("<th>Prénom</th>");
-            tr.append("<th>Metier</th>");
             table2.append(tr);
-            for (var j = 0; j < json[i].proList.length; j++) {
-                tr = $('<tr/>');
-                tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
-                tr.append("<td>" + json[i].proList[j].name + "</td>");
-                tr.append("<td>" + json[i].proList[j].surname + "</td>");
-                tr.append("<td>" + json[i].proList[j].surname + "</td>");
+            tr = $('<tr/>');
+            tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
+            tr.append("<td>" + json[i].user.name + "</td>");
+            tr.append("<td>" + json[i].user.surname + "</td>");
+            table2.append(tr);
+            tr = $('<tr/>');
+            if (json[i].proList > 0) {
+                tr.append("<th style='width: 25%'> Arstisans : </th>");
+                tr.append("<th> Nom </th>");
+                tr.append("<th>Prénom</th>");
+                tr.append("<th>Metier</th>");
                 table2.append(tr);
+                for (var j = 0; j < json[i].proList.length; j++) {
+                    tr = $('<tr/>');
+                    tr.append("<td>&nbsp;<span style='display: none'>"+json[i].proList[j].id + "</span></td>");
+                    tr.append("<td>" + json[i].proList[j].name + "</td>");
+                    tr.append("<td>" + json[i].proList[j].surname + "</td>");
+                    tr.append("<td>" + json[i].proList[j].surname + "</td>");
+                    table2.append(tr);
+                }
             }
-            var res1 = cardStart + table.prop('outerHTML');
+
+            var res1 = cardStart + table.prop('outerHTML') + table1.prop('outerHTML');
             var res2 = table2.prop('outerHTML') + cardEnd;
         }
         var res = res1 + res2;

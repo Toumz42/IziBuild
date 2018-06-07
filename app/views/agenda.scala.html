@@ -1,14 +1,14 @@
 @()
 
 @main("Agenda") {
-    <div class="header-panel white-text">
-        <ul class="tabs red accent-4 white-text" id="mainTabs">
-        </ul>
-    </div>
+    @*<div class="header-panel white-text">*@
+        @*<ul class="tabs red accent-4 white-text" id="mainTabs">*@
+        @*</ul>*@
+    @*</div>*@
     <div class="container">
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/fullcalendar.css'  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialFullCalendar.css'  media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href='/assets/stylesheets/clockpicker.css'  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialize.clockpicker.css'  media="screen,projection"/>
 
     <script type='text/javascript' src='/assets/javascripts/fullcalendar/moment.min.js'></script>
     <script type='text/javascript' src='/assets/javascripts/fullcalendar/fullcalendar.js'></script>
@@ -48,7 +48,7 @@
                                                         <select id="classeEvent">
                                                             <option value="" disabled selected>Choisir une option</option>
                                                         </select>
-                                                        <label>Classe</label>
+                                                        <label>Projet</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -58,13 +58,13 @@
                                                             <div class="ac-input">
                                                                 <div class="valign-wrapper">
                                                                     <i class="valign material-icons prefix">account_circle</i>
-                                                                    <input type="text" id="multipleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez le professeur" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
+                                                                    <input type="text" id="multipleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Sélectionnez les collaborateurs" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
                                                                 </div>
                                                             </div>
                                                             <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
                                                             <input type="hidden" name="multipleHidden" />
                                                         </div>
-                                                        <label class="active" style="padding-bottom: 10px" for="multipleInput">Professeur : </label>
+                                                        <label class="active" style="padding-bottom: 10px" for="multipleInput">Collaborateurs : </label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -76,11 +76,11 @@
                                                 <div class="row">
                                                     <div class="input-field col s6">
                                                         <input id="hourStart" type="time" class="timepicker">
-                                                        <label for="hourStart">Date</label>
+                                                        <label for="hourStart">Heure de début</label>
                                                     </div>
                                                     <div class="input-field col s6">
                                                         <input id="hourEnd" type="time" class="timepicker">
-                                                        <label for="hourEnd">Date</label>
+                                                        <label for="hourEnd">Heure de fin</label>
                                                     </div>
                                                 </div>
                                             </div>

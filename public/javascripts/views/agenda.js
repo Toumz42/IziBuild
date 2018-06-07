@@ -68,7 +68,7 @@ $(function()
             // your event source
             {
                 id: 1,
-                url: '/getCalendar',
+                url: '/getMyCalendar',
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
@@ -125,7 +125,7 @@ $(function()
     });
 
     $.ajax({
-        url: "/getAllProf",
+        url: "/getAllPros",
         type: "GET",
         // data: dataGroup,
         dataType: "text",
@@ -157,7 +157,7 @@ $(function()
             var data = {
                 "idEvent" : $("#idEvent").val(),
                 "titre" : $("#titleEvent").val(),
-                "prof" : autocomplete.$el.data("value"),
+                "guest" : autocomplete.$el.data("value"),
                 "classe" : $("#classeEvent").val(),
                 "dateEvent" :  $("#dateEvent").val(),
                 "hourStart" :  $("#hourStart").val(),
@@ -237,7 +237,7 @@ function initSelectClasse(json) {
     $.each(json,function (index, elem) {
         var opt = $("<option />");
         opt.prop("value",elem.id);
-        opt.text(elem.name);
+        opt.text(elem.theme +" ("+ elem.date+")");
         $("#classeEvent").append(opt);
     });
     $('select').material_select();
@@ -289,7 +289,7 @@ function fillEditFormAgenda(val) {
 function initTabClasse() {
     var dataGroup = JSON.stringify({});
     $.ajax ({
-        url: "/getAllClasse",
+        url: "/getProjects",
         type: "POST",
         data: dataGroup,
         dataType: "text",

@@ -18,8 +18,19 @@ create table calendar_event (
   start                         datetime(6),
   end                           datetime(6),
   color                         varchar(255),
+  user_id                       bigint,
   projet_id                     bigint,
+  constraint uq_calendar_event_user_id unique (user_id),
   constraint pk_calendar_event primary key (id)
+);
+
+create table message (
+  id                            bigint auto_increment not null,
+  message                       varchar(255),
+  date                          datetime(6),
+  expediteur_id                 bigint,
+  destinataire_id               bigint,
+  constraint pk_message primary key (id)
 );
 
 create table projet (
@@ -66,8 +77,16 @@ create table user_projet (
 create index ix_anomalie_projet_id on anomalie (projet_id);
 alter table anomalie add constraint fk_anomalie_projet_id foreign key (projet_id) references projet (id) on delete restrict on update restrict;
 
+alter table calendar_event add constraint fk_calendar_event_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+
 create index ix_calendar_event_projet_id on calendar_event (projet_id);
 alter table calendar_event add constraint fk_calendar_event_projet_id foreign key (projet_id) references projet (id) on delete restrict on update restrict;
+
+create index ix_message_expediteur_id on message (expediteur_id);
+alter table message add constraint fk_message_expediteur_id foreign key (expediteur_id) references user (id) on delete restrict on update restrict;
+
+create index ix_message_destinataire_id on message (destinataire_id);
+alter table message add constraint fk_message_destinataire_id foreign key (destinataire_id) references user (id) on delete restrict on update restrict;
 
 create index ix_projet_user_id on projet (user_id);
 alter table projet add constraint fk_projet_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
@@ -93,8 +112,16 @@ alter table user_projet add constraint fk_user_projet_projet foreign key (projet
 alter table anomalie drop foreign key fk_anomalie_projet_id;
 drop index ix_anomalie_projet_id on anomalie;
 
+alter table calendar_event drop foreign key fk_calendar_event_user_id;
+
 alter table calendar_event drop foreign key fk_calendar_event_projet_id;
 drop index ix_calendar_event_projet_id on calendar_event;
+
+alter table message drop foreign key fk_message_expediteur_id;
+drop index ix_message_expediteur_id on message;
+
+alter table message drop foreign key fk_message_destinataire_id;
+drop index ix_message_destinataire_id on message;
 
 alter table projet drop foreign key fk_projet_user_id;
 drop index ix_projet_user_id on projet;
@@ -117,6 +144,8 @@ drop index ix_user_projet_projet on user_projet;
 drop table if exists anomalie;
 
 drop table if exists calendar_event;
+
+drop table if exists message;
 
 drop table if exists projet;
 

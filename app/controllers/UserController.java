@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.Projet;
 import models.Referentiel;
 import models.User;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,24 +15,13 @@ import play.mvc.Result;
 import java.util.List;
 
 public class UserController extends Controller {
-
+    ObjectMapper mapper = new ObjectMapper();
     public Result getAllPros() {
-        List<User> userList= null;
-
-        userList = User.find.query().where().eq("droit",1).findList();
-
+        List<User> userList = User.find.query().where().eq("droit",1).findList();
         if (userList != null) {
-
-            ObjectMapper mapper = new ObjectMapper();
-            ArrayNode listResult = mapper.createArrayNode();
-
-            for (User user : userList) {
-                ObjectNode userNode = mapper.valueToTree(user);
-                listResult.add(userNode);
-            }
-            return ok().sendJson(listResult);
+            JsonNode userNode = mapper.valueToTree(userList);
+            return ok().sendJson(userNode);
         }
-
         return notFound();
     }
 
@@ -61,7 +51,7 @@ public class UserController extends Controller {
                 if (!email.equals("")) {
                     User person = new User(name, surname, email, sha1pass, type, categorie);
                     person.save();
-                    JsonNode retour = Json.toJson(person);
+                    JsonNode retour = mapper.valueToTree(person);
                     return ok().sendJson(retour);
                 } else {
                     return badRequest("Erreur dans le mail");
@@ -94,7 +84,7 @@ public class UserController extends Controller {
                     u.setEmail(email);
                     u.setPassword(sha1pass);
                     u.save();
-                    JsonNode retour = Json.toJson(u);
+                    JsonNode retour = mapper.valueToTree(u);
                     return ok().sendJson(retour);
                 } else {
                     return badRequest("Erreur dans le mail");
@@ -117,28 +107,13 @@ public class UserController extends Controller {
     }
 
     public Result getAllUser() {
-        JsonNode json = request().body().asJson();
-        String idUser = Application.getCurrentUser();
-        User u = null;
-        if (idUser != null && !idUser.equals("")) {
-            Integer id = Integer.parseInt(idUser);
-            u = User.find.query().where().eq("id",id).findOne();
-
+        User u = Application.getCurrentUserObj();
+        List<User> userList = User.find.query().where().not().eq("droit", 0).findList();
+        if (userList.contains(u)) {
+            userList.remove(u);
         }
-        if (u != null) {
-            List<User> userList= null;
-
-            userList = User.find.query().where().not().eq("droit",0).findList();
-
-            ObjectMapper mapper = new ObjectMapper();
-            ArrayNode listResult = mapper.createArrayNode();
-
-            if (userList != null) {
-                for (User user : userList) {
-                    ObjectNode userNode = mapper.valueToTree(user);
-                    listResult.add(userNode);
-                }
-            }
+        if (userList.size() > 0) {
+            ArrayNode listResult = mapper.valueToTree(userList);
             return ok().sendJson(listResult);
         }
         return notFound();
@@ -146,19 +121,24 @@ public class UserController extends Controller {
 
     public Result getAllArtisan() {
         List<User> userList= null;
-
         userList = User.find.query().where().eq("droit",1).findList();
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode listResult = mapper.createArrayNode();
-        if (userList != null) {
-            for (User user : userList) {
-                ObjectNode userNode = mapper.valueToTree(user);
-                listResult.add(userNode);
-            }
-        }
+        ArrayNode listResult = mapper.valueToTree(userList);
         return ok().sendJson(listResult);
-
     }
+
+    public static List<Projet> getProjetList(User u) {
+        switch (u.getDroit()) {
+            case 0 :
+                return null;
+            case 1 :
+                return u.getProjetListPro();
+            case 2 :
+                return u.getProjetListUser();
+            default:
+                return null;
+        }
+    }
+
 
 
 

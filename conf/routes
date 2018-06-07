@@ -5,6 +5,8 @@
 # Home page
 GET     /                                           controllers.Application.index()
 GET     /login                                      controllers.Application.login()
+GET     /messagerie                                 controllers.Application.messagerie()
+GET     /conversation                               controllers.Application.conversation()
 GET     /projet                                     controllers.Application.projet()
 GET     /home                                       controllers.Application.home()
 GET     /agenda                                     controllers.Application.agenda()
@@ -15,8 +17,11 @@ GET     /createPart                                 controllers.Application.crea
 GET     /admnote                                    controllers.Application.admNote()
 GET     /admin                                      controllers.Application.admin()
 POST    /delete                                     controllers.Application.deleteDispatcher()
+POST    /identifyUser                               controllers.Application.identifyUser()
 GET     /getProjects                                controllers.ProjectController.getProjects
 POST    /getProjects                                controllers.ProjectController.getProjects
+POST    /getProjectsPro                             controllers.ProjectController.getProjectsPro
+GET     /getProjectsPro                             controllers.ProjectController.getProjectsPro
 POST    /toggleStateSuivi                           controllers.ProjectController.toggleStateSuivi
 GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
@@ -25,8 +30,8 @@ POST    /getAllUser                                 controllers.UserController.g
 GET     /getAllPros                                 controllers.UserController.getAllPros
 GET     /checkAdmin                                 controllers.Application.checkAdminJson
 POST    /getCalendar                                controllers.CalendarController.getCalendar
+GET     /getMyCalendar                              controllers.CalendarController.getMyCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
-POST    /identifyUser                               controllers.Application.identifyUser()
 POST    /addUser                                    controllers.UserController.addUser()
 POST    /getAnomaliesbyProjectId                    controllers.AnomaliesController.addAnomalie()
 POST    /getAnomaliesbyProjectId                    controllers.AnomaliesController.getAnomaliesbyProjectId()
@@ -46,6 +51,11 @@ POST    /addNewRef                                  controllers.ReferentielContr
 POST    /getAllTypes                                controllers.ReferentielController.getAllTypes()
 POST    /saveByChamps                               controllers.ReferentielController.saveByChamps()
 POST    /getByCode                                  controllers.ReferentielController.getByCode()
+POST    /sendMessage                                controllers.MessagerieController.sendMessage
+POST    /getAllConversations                        controllers.MessagerieController.getAllConversations
+POST    /getAllMessageFromUserAndDestinataire       controllers.MessagerieController.getAllMessageFromUserAndDestinataire
+POST    /getLastMessageFromUserAndDestinataire      controllers.MessagerieController.getLastMessageFromUserAndDestinataire
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(file)

@@ -26,37 +26,36 @@ div.nav-wrapper {
 
 .picker__close, .picker__today,
 .picker__day.picker__day--today {
-    color: darkred;
+    color: #D50000;
 }
 .picker--focused, .picker__day--selected,
 .picker__date-display, .picker__weekday-display{
-    background-color: darkred !important;
+    background-color: #D50000 !important;
 }
-.picker__day:hover{
+.picker__day:hover {
     border-radius: 50%;
-    background-color: rgba(3,169,244,0.25) !important;
+    background-color: rgba(213, 0, 0, 0.25) !important;
 }
 .clockpicker-tick:hover {
-    background-color: rgba(3,169,244,0.25) !important;
+    background-color: rgba(213, 0, 0, 0.25) !important;
 }
 .clockpicker-canvas-bg, .clockpicker-canvas-bg-trans {
-    fill: rgba(3,169,244,0.25) !important;
+    fill: rgba(213, 0, 0, 0.25) !important;
 }
 .clockpicker-canvas-fg {
-    fill: rgba(1,87,155,0.5) !important;
+    fill: rgba(213,0,0,0.5) !important;
 }
 .clockpicker-canvas line {
-    stroke: rgba(3,169,244,0.25) !important;
+    stroke: rgba(213, 0, 0, 0.25) !important;
 }
 .clockpicker-canvas-bearing {
-    fill: rgba(1,87,155,0.75) !important;
+    fill: rgba(213, 0, 0, 0.75) !important;
 }
 .clockpicker-tick.active, .clockpicker-tick:hover {
-    fill: rgba(3,169,244,0.25) !important;
+    fill: rgba(213, 0, 0 , 0.25) !important;
 }
 /*.tabs .tab a {*/
     /*color: #03a9f4;*/
-
 /*}*/
 /*.tabs .tab a:hover, .tabs .tab a.active {*/
     /*background-color: transparent;*/
@@ -145,7 +144,13 @@ table {
 .imgHome {
     display:block;
     margin:auto;
-    width: 110px;
+    width: 200px !important;
+    padding: 30px;
+}
+
+.open-conversation {
+    top: inherit !important;
+    bottom: 5px;
 }
 
 .imgMenu {
@@ -183,13 +188,18 @@ table {
     width: inherit;
 }
 @media (max-width: 993px) {
-
+    .sticky-bottom {
+        left: 0 !important;
+    }
     .btn-floating,.btn-floating.hasTab,.btn-floating.hasTab.twoTabLines {
         bottom:100px;
         position: fixed;
         right:10vw;
         top:auto;
         z-index: 998;
+    }
+    .conversDiv {
+        width: 100% !important;
     }
 }
 @media only screen and (min-width: 993px){
@@ -392,4 +402,64 @@ nav.red.accent-4 {
 }
 .ac-appender {
     line-height: 70px;
+}
+
+.sticky-bottom .input-field{
+    margin-top: 25px;
+}
+.sticky-bottom {
+    position: absolute;
+    right: 0;
+    left: 300px;
+    bottom: -20px;
+    padding-top: 10px;
+}
+.top-send {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+.msgCard {
+    padding: 10px !important;
+    display: inline-flex;
+    width: fit-content;
+}
+
+#conversation {
+    padding: 10px;
+    width: calc(100% - 300px);
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 130px;
+}
+.msgLeft {
+    align-self: flex-start;
+}
+.msgRight {
+    align-self: flex-end;
+}
+
+.msgDate {
+    position: absolute;
+    font-size: 10px;
+    bottom: 5px;
+    right: 5px;
+}
+
+.nameConversWrapper {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+}
+.clockpicker-display {
+    color: #FFACAC !important;
+}
+
+.picker__footer .clockpicker-button {
+    bottom: 10px;
+    position: absolute;
+    right: 0;
 }
