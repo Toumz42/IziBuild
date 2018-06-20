@@ -19,23 +19,21 @@ public class Application extends Controller {
     public Application() {
     }
 
-
     public Result index() {
-        return ok(views.html.index.render());
+        return ok(views.html.index.render(checkConnected()));
     }
-
 
     public Result home() {
         User u = Application.getCurrentUserObj();
-        if(checkConnected()) {
+        if (checkConnected()) {
             if (u != null) {
                 switch (u.getDroit()) {
-                    case 0 :
-                        return ok(views.html.home.render());
-                    case 1 :
-                        return ok(views.html.homePro.render());
-                    case 2 :
-                        return ok(views.html.homePart.render());
+                    case 0:
+                        return ok(views.html.home.render(checkConnected()));
+                    case 1:
+                        return ok(views.html.homePro.render(checkConnected()));
+                    case 2:
+                        return ok(views.html.homePart.render(checkConnected()));
                 }
             }
         }
@@ -44,19 +42,20 @@ public class Application extends Controller {
 
     public Result login() {
         User.makeAdmin();
-        return ok(views.html.login.render());
+        User u = getCurrentUserObj();
+        return ok(views.html.login.render(checkConnected()));
     }
 
     public Result projet() {
-        if(checkConnected()) {
+        if (checkConnected()) {
             User u = Application.getCurrentUserObj();
             if (u != null) {
                 switch (u.getDroit()) {
-                    case 0 :
+                    case 0:
                     case 1:
-                        return ok(views.html.projectPro.render());
+                        return ok(views.html.projectPro.render(checkConnected()));
                     case 2:
-                        return ok(views.html.project.render());
+                        return ok(views.html.project.render(checkConnected()));
                 }
             }
         }
@@ -64,11 +63,12 @@ public class Application extends Controller {
     }
 
     public Result admin() {
-        if(checkConnected() && checkAdmin()) {
-            return ok(views.html.admin.render());
+        User u = getCurrentUserObj();
+        if (checkConnected() && checkAdmin()) {
+            return ok(views.html.admin.render(checkConnected()));
         } else {
-            if(checkConnected()) {
-                return ok(views.html.home.render());
+            if (checkConnected()) {
+                return ok(views.html.home.render(checkConnected()));
             } else {
                 return redirect("/login");
             }
@@ -76,47 +76,56 @@ public class Application extends Controller {
     }
 
     public Result doc() {
-        if(checkConnected()) {
-            return ok(views.html.doc.render());
-        } else {
-            return redirect("/login");
-        }
-    }
-    public Result agenda() {
-        if(checkConnected()) {
-            return ok(views.html.agenda.render());
-        } else {
-            return redirect("/login");
-        }
-    }
-    public Result note() {
-        if(checkConnected()) {
-            return ok(views.html.note.render());
+        if (checkConnected()) {
+            return ok(views.html.doc.render(checkConnected()));
         } else {
             return redirect("/login");
         }
     }
 
-    public Result createPart()
-    {
-        return ok(views.html.createPart.render());
+    public Result agenda() {
+        if (checkConnected()) {
+            return ok(views.html.agenda.render(checkConnected()));
+        } else {
+            return redirect("/login");
+        }
     }
-    public Result createPro()
-    {
-        return ok(views.html.createPro.render());
+
+    public Result repertoire() {
+        if (checkConnected()) {
+            return ok(views.html.repertoire.render(checkConnected()));
+        } else {
+            return redirect("/login");
+        }
     }
-    public Result admNote()
-    {
-        if(checkAdmin() && checkConnected()) {
-            return ok(views.html.admnote.render());
+
+    public Result note() {
+        if (checkConnected()) {
+            return ok(views.html.note.render(checkConnected()));
+        } else {
+            return redirect("/login");
+        }
+    }
+
+    public Result createPart() {
+        return ok(views.html.createPart.render(checkConnected()));
+    }
+
+    public Result createPro() {
+        return ok(views.html.createPro.render(checkConnected()));
+    }
+
+    public Result admNote() {
+        if (checkAdmin() && checkConnected()) {
+            return ok(views.html.admnote.render(checkConnected()));
         } else {
             return redirect("/login");
         }
     }
 
     public Result referentiel() {
-        if(checkConnected()) {
-            return ok(views.html.referentiel.render());
+        if (checkConnected()) {
+            return ok(views.html.referentiel.render(checkConnected()));
         } else {
             return redirect("/login");
         }
@@ -124,32 +133,29 @@ public class Application extends Controller {
 
     public Result identifyUser() {
         String login, pswd;
-        Map<String,String[]> param = request().body().asFormUrlEncoded();
+        Map<String, String[]> param = request().body().asFormUrlEncoded();
         JsonNode json = request().body().asJson();
 //        login = json.get("login").asText();
 //        pswd =  json.get("pswd").asText();
         login = param.get("login")[0];
-        pswd =  param.get("pswd")[0];
+        pswd = param.get("pswd")[0];
         String sha1pswd = DigestUtils.sha1Hex(pswd);
 
         ErrorUtils retour = null;
         User p = null;
-        try
-        {
+        try {
             p = User.find.query().where().eq("login", login).eq("password", sha1pswd)
                     .findOne();
 
             if (p != null) {
-                session("userId",p.getId().toString());
+                session("userId", p.getId().toString());
                 return ok("/home");
             } else {
-                retour = ErrorUtils.createError( true, "Pas de Compte", "erreur" );
+                retour = ErrorUtils.createError(true, "Pas de Compte", "erreur");
             }
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            retour = ErrorUtils.createError( true, e.getMessage(), "erreur" );
+            retour = ErrorUtils.createError(true, e.getMessage(), "erreur");
         }
         ObjectMapper mapper = new ObjectMapper();
         JsonNode retourJson = mapper.convertValue(retour, JsonNode.class);
@@ -176,32 +182,31 @@ public class Application extends Controller {
         return r;
     }
 
-    public Boolean checkConnected()
-    {
+    public Boolean checkConnected() {
         String user = session("userId");
         User u = null;
         if (user != null) {
             Long id = Long.parseLong(user);
             u = User.find.byId(id);
         }
-        //return u!=null;
-        return true;
+        return u!=null;
+        //return true;
     }
 
     public Boolean checkAdmin() {
         User u = Application.getCurrentUserObj();
-        if (u!=null) {
+        if (u != null) {
             if (u.getDroit() == 0) {
                 return true;
             }
         }
-        return false;
-        //return true;
+        //return false;
+        return true;
     }
 
     public Boolean checkPro() {
         User u = Application.getCurrentUserObj();
-        if (u!=null) {
+        if (u != null) {
             if (u.getDroit() == 1) {
                 return true;
             }
@@ -211,8 +216,7 @@ public class Application extends Controller {
     }
 
     public Result checkAdminJson() {
-        if (checkAdmin())
-        {
+        if (checkAdmin()) {
             JsonNode jsonNode = Json.toJson(true);
             return ok(jsonNode);
         } else {
@@ -220,18 +224,16 @@ public class Application extends Controller {
         }
     }
 
-    public static String getCurrentUser()
-    {
+    public static String getCurrentUser() {
         String user = session("userId");
-        if(user != null) {
+        if (user != null) {
             return user;
         } else {
             return null;
         }
     }
 
-    public static User getCurrentUserObj()
-    {
+    public static User getCurrentUserObj() {
         User u = null;
         String user = session("userId");
         if (user != null) {
@@ -247,10 +249,15 @@ public class Application extends Controller {
     }
 
     public Result messagerie() {
-        return ok(views.html.messagerie.render());
+        return ok(views.html.messagerie.render(checkConnected()));
     }
 
     public Result conversation() {
-        return ok(views.html.conversation.render());
+        return ok(views.html.conversation.render(checkConnected()));
     }
+
+    public Result faq() {
+        return ok(views.html.faq.render(checkConnected()));
+    }
+
 }

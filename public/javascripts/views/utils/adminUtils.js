@@ -16,12 +16,18 @@ function userToTab(json) {
     for (var i = 0; i < json.length; i++) {
         table = $("<table class='responsive-table highlight'></table>");
         tr = $('<tr/>');
-        tr.append("<th>Id</th>");
+        tr.append("<th>&nbsp;</th>");
         tr.append("<th>Nom</th>");
         tr.append("<th>Prenom</th>");
         $(table).append(tr);
         tr = $('<tr/>');
-        tr.append("<td>" + json[i].id + "<input type='hidden' class='idUser' value='" + json[i].id +"'>"+ "</td>");
+        var img = json[i].droit === 1 ? 'worker' : 'user';
+        tr.append("<td>" +
+            "<div style='width:20px'>&nbsp;" +
+            "   <img src='/assets/images/avatar/"+img+".png' alt='' class='img-out-card circle'>" +
+            "</div>" +
+            "<input type='hidden' class='idUser' value='" + json[i].id +"'>" +
+            "</td>");
         tr.append("<td>" + json[i].name + "</td>");
         tr.append("<td>" + json[i].surname + "</td>");
         div = $('<div class="right-align suppDiv"/>');

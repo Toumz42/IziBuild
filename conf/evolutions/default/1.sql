@@ -63,6 +63,7 @@ create table user (
   email                         varchar(255),
   login                         varchar(255),
   password                      varchar(255),
+  folder                        varchar(255),
   droit                         integer,
   categorie_id                  bigint,
   constraint pk_user primary key (id)

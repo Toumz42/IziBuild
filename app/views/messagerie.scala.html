@@ -1,4 +1,4 @@
-@()
+@(connected : Boolean)
 
 @main("Messagerie") {
     <script type='text/javascript' src='/assets/javascripts/views/utils/utils.js'></script>
@@ -46,10 +46,8 @@
             <div class="row" id="messagerie" style="display: none">
                 <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
                     <div class="card card-1">
-                        <div >
-                            <ul class="collection">
-                            </ul>
-                        </div>
+                        <ul class="collection">
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -70,4 +68,4 @@
             </div>
         </div>
     </div>
-}
+}(connected)

@@ -10,13 +10,11 @@ var imgEmptyDiv = "<div id='noData' class='valign-wrapper'>" +
     "</div>";
 var cardStart = "<ul class='stage'><div class='row'>"+
     "<div class='col push-s1 push-l1 push-m1 m12 s12 l12'>"+ "<li>"+
-    "<div class='card card-1'><div class='card-content'>"+
-    "<div class='row'>";
+    "<div class='card card-1'><div class='card-content'>";
 
-var cardStartcol = "<ul class='stage'><div class='row'>"+
-    "<div class='col m12 s12 l12'>"+ "<li>"+
-    "<div class='card card-1'><div class='card-content'>"+
-    "<div class='row'>";
+var cardStartcol = "<ul class='stage'><div class='row'>" +
+    "<div class='col m12 s12 l12'>" + "<li>" +
+    "<div class='card card-1'><div class='card-content'>";
 var cardEnd = "</div></div></div></li></div></div></ul>";
 var deleteIcon = "<i class='material-icons'>delete</i>";
 var editIcon = "<i class='material-icons'>edit</i>";
@@ -67,16 +65,15 @@ function jsonToGlobalArray(array, json) {
 }
 
 function modalize(el,parent,set) {
-    var childs = parent.find('*');
     if (set) {
-        el.addClass("modal col l7");
+        el.addClass("modal");
         $(".modal").modal(
             {
                 startingTop: '25%',
-                endingTop: '25%',
+                endingTop: '5%',
                 complete: function() {
                     parent.hide();
-                    var id = this[0].id;
+                    var id = this.id;
                     switch (id) {
                         case "formGroupe":
                             emptyFields(grpFields);
@@ -92,38 +89,13 @@ function modalize(el,parent,set) {
                             emptyFields(agendaFields);
                             break;
                     }
-                    alert('Closed');
                 } // Callback for Modal close
             }
         );
-
-        $.each(childs,function () {
-            self = $(this);
-            if (self.is("form")) {
-                return false;
-            } else if (self.is(".card-content")) {
-                self.removeClass("card-content");
-                self.addClass("card-content-bak");
-            } else {
-                self.css("height", "0");
-            }
-        });
         el.modal('open');
         parent.show();
     } else {
-        el.removeClass("modal col l7");
-        el.removeAttr('style');
-        $.each(childs,function () {
-            self = $(this);
-            if (self.is("form")) {
-                return false;
-            } else if (self.is(".card-content-bak")) {
-                self.removeClass("card-content-bak");
-                self.addClass("card-content");
-            } else {
-                self.css("height", "");
-            }
-        });
+        el.modal('close');
         el.show();
     }
 }
@@ -183,4 +155,79 @@ function extractUrlParams(){
         f[x[0]]=x[1];
     }
     return f;
+}
+
+function makePagination(json, func) {
+    $(".pagination li:not(:first)").remove();
+    maxPage = json;
+    for (var j = 1 ; j <= json ; j++){
+        if (j === 1) {
+            li = $("<li class=\"pageli indigo active\"><a id='" + j + "'>" + j + "</a></li>");
+        } else {
+            li = $("<li class=\"pageli waves-effect\"><a  id='" + j + "'>" + j + "</a></li>");
+        }
+        $(".pagination").append(li);
+        $("a#"+j).click(function () {
+            jumpToPage(this, func);
+        });
+    }
+    if (maxPage !== 1) {
+        li = $("<li id=\"lastArrow\" class=\"waves-effect\"><a onclick='pageNext()'><i class=\"material-icons\">chevron_right</i></a></li>")
+    }
+    $(".pagination").append(li)
+}
+
+function pageNext() {
+    jumpToPage(currentPage + 1)
+}
+
+function initPagination(url , type) {
+    $.ajax ({
+        url: url,
+        type: "GET",
+        //data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            if ( json.length != 0 ) {
+                makePagination(json, type);
+            } else {
+                $("#usersContent").empty();
+            }
+        }
+    });
+}
+
+function jumpToPage(page, func) {
+    currentPage = page;
+    var pageNb = Number(page.id);
+    switch (func) {
+        case 'proRep':
+            getPros(pageNb);
+            break;
+        case 'proAdmin':
+            initTabUser('pro', pageNb);
+            break;
+        case 'partAdmin':
+            initTabUser('part', pageNb);
+            //getPartAdmin(pageNb);
+            break;
+        case 'allUserAdmin':
+            initTabUser('allUser', pageNb);
+            //getPartAdmin(pageNb);
+            break;
+    }
+    $(".pageli.active").removeClass("indigo active").addClass("waves-effect");
+    if (pageNb === 1) {
+        $("#firstArrow").addClass("disabled");
+        $("#lastArrow").removeClass("disabled");
+    } else if (pageNb === maxPage) {
+        $("#firstArrow").removeClass("disabled");
+        $("#lastArrow").addClass("disabled");
+    } else {
+        $("#lastArrow").removeClass("disabled");
+        $("#firstArrow").removeClass("disabled");
+    }
+    $(page).parent().addClass("indigo active").removeClass("waves-effect");
 }

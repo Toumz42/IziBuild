@@ -1,4 +1,4 @@
-@()
+@(connected : Boolean)
 
 @main("Administration") {
     <div class="container">
@@ -56,7 +56,7 @@
                                                 </div>
                                                 <div class="modal-footer right-align">
                                                     <input type="button" class="modal-action modal-close waves-light right-align btn red" id="btnReferentielSupprime" value="Supprimer"/>
-                                                    <input type="button" class="modal-action modal-close waves-light right-align btn green" id="btnReferentielRetour" value="Fermer"/>
+                                                    <input type="button" class="modal-action modal-close waves-light right-align btn green" id="btnReferentielRetour" value="Valider"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -65,7 +65,6 @@
                             </div>
                         </div>
                     </div>
-
                     <ul class="stage">
                         <div class="row">
                             <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
@@ -101,4 +100,4 @@
             </div>
         </div>
     </div>
-}
+}(connected)

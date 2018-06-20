@@ -69,6 +69,7 @@ $(function () {
     } else {
         $('nav').addClass('red accent-4').removeClass('transparent');
     }
+
 });
 
 function is_touch_device() {

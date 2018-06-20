@@ -19,8 +19,8 @@ $(function()
     /*jslint nomen: true, unparam: true, regexp: true */
     /*global $, window, document */
 
-        'use strict';
-        var host = 'localhost:9000';
+    'use strict';
+    //var host = 'localhost:9000';
         // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
                 url: '/upload',
@@ -118,6 +118,14 @@ $(function()
             .call(this, $.Event('done'), {result: result});
     })
         // }
+    $(document).ajaxStart(function () {
+        $(".waitOnDiv").show();
+        $("body").addClass("noScroll");
+    });
+    $(document).ajaxStop(function () {
+        $(".waitOnDiv").hide();
+        $("body").removeClass("noScroll");
+    });
 
 });
 window.locale = {

@@ -113,7 +113,8 @@ function usersToCollections(json) {
     $.each(json,function (index, element) {
         tr = $('<li class="collection-item avatar" />');
         tr.append("<input type='hidden' class='idUser' value='" + element.id + "'>");
-        tr.append("<img src='/assets/images/avatar/user.png' alt='' class='circle'>");
+        var img = element.droit === 1 ? 'worker' : 'user';
+        tr.append("<img src='/assets/images/avatar/"+img+".png' alt='' class='circle'>");
         tr.append("<span style='font-weight: bold' class='title'>" + element.name +" "+ element.surname + "</span>");
         tr.append("<p style='font-weight: 400' id='info"+element.id+"'><span class='lastMsg'> </span><br><span class='lastMsgDate'> </span> </p>");
         var dataGroup={ id : element.id};

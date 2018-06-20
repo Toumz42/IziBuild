@@ -9,7 +9,7 @@ import java.util.List;
 public class TypesReferentiel {
 
     public static final int TYPE_METIER = 0 ;
-    public static final int TYPE_PIECE = 1;
+    public static final int TYPE_FAQ = 1;
 
     public HashMap<String,Integer> getAllTypes() {
         HashMap<String, Integer> hm = new HashMap<>();

@@ -145,7 +145,7 @@ table {
     display:block;
     margin:auto;
     width: 200px !important;
-    padding: 30px;
+    padding: 20%;
 }
 
 .open-conversation {
@@ -462,4 +462,32 @@ nav.red.accent-4 {
     bottom: 10px;
     position: absolute;
     right: 0;
+}
+
+.waitOnDiv {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.6);
+    z-index: 9999;
+    padding-top: 20%;
+    padding-left: 50%;
+}
+.noScroll {
+    overflow: hidden;
+}
+.collection {
+    border: none;
+}
+
+.img-out-card {
+    width: 105px;
+    position: absolute;
+    bottom: 130px;
+    left: 7%;
+}
+#usersContent tbody {
+    display: table-row-group;
 }

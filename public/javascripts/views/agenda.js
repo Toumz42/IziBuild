@@ -46,7 +46,7 @@ $(function()
                 var $el = $(element);
                 var val = $el.html().split("|");
                 var res = "<div style='text-align: left; padding-left:2em'><div>"+ val[0]  +"</div><div style='font-size: 2em'>"+ val[1] +"</div></div>";
-                $el.html(res);
+                // $el.html(res);
             });
         },
         views: {
@@ -58,7 +58,7 @@ $(function()
             },
             week: {
                 // options apply to basicWeek and agendaWeek views
-                columnFormat: '  ddd | D'
+                columnFormat: 'DD'
             },
             day: {
                 // options apply to basicDay and agendaDay views
@@ -138,7 +138,10 @@ $(function()
     initTabClasse();
 
     $("#calendar button").each(function () {
-        $(this).addClass("waves-effect waves-light btn red accent-4")
+        $(this).addClass("waves-effect waves-light");
+        if (!$(this).hasClass("fc-prev-button") && !$(this).hasClass("fc-next-button")) {
+            $(this).addClass("red accent-4 btn");
+        }
     });
 
     $("#addEvent").click(function () {

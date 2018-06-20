@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import models.User;
 import org.apache.commons.lang3.StringUtils;
 import play.api.Play;
 import play.api.mvc.MultipartFormData;
@@ -33,11 +34,16 @@ import javax.imageio.ImageIO;
 
 public class FileController extends Controller {
 
+    ObjectMapper mapper = new ObjectMapper();
+
     public Result doGet()  {
-        ObjectMapper mapper = new ObjectMapper();
+        User u = Application.getCurrentUserObj();
         if (request().queryString().containsKey("getfile")) {
             if (request().queryString().get("getfile") != null) {
-                File file = new File(Play.current().path().getAbsolutePath()+"/public/uploaded/"+request().queryString().get("getfile"));
+                File file = new File(Play.current().path().getAbsolutePath()
+                        + "/public/uploaded/"
+                        + u.getFolder()
+                        + request().queryString().get("getfile"));
                 if (file.exists()) {
                     response().setHeader("Content-Length", ""+file.length());
                     response().setHeader( "Content-Disposition", "inline; filename=\"" + file.getName() + "\"" );
@@ -47,7 +53,10 @@ public class FileController extends Controller {
         } else if (request().queryString().containsKey("delfile")) {
             if (request().queryString().get("delfile") != null) {
                 String filename = request().queryString().get("delfile")[0];
-                File file = new File(Play.current().path().getAbsolutePath()+"/public/uploaded/" + filename);
+                File file = new File(Play.current().path().getAbsolutePath()
+                        + "/public/uploaded/"
+                        + u.getFolder()
+                        + filename);
                 if (file.exists()) {
                     file.delete(); // TODO:check and report success
                     ArrayNode json = mapper.createArrayNode();
@@ -60,7 +69,10 @@ public class FileController extends Controller {
             }
         } else if (request().queryString().containsKey("getthumb")) {
             if (request().queryString().get("getthumb") != null) {
-                File file = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/" + request().queryString().get("getthumb")[0]);
+                File file = new File(Play.current().path().getAbsolutePath()
+                        + "/public/uploaded/"
+                        + u.getFolder()
+                        + request().queryString().get("getthumb")[0]);
                 if (file.exists()) {
                     System.out.println(file.getAbsolutePath());
                     String mimetype = getMimeType(file);
@@ -74,9 +86,7 @@ public class FileController extends Controller {
                                     dir.mkdir();
                                 }
                                 File f = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/temp");
-
                                 f.createNewFile();
-
                                 if (mimetype.endsWith("png")) {
                                     ImageIO.write(thumb, "PNG", f);
                                     response().setHeader("Content-Type", "image/png");
@@ -96,44 +106,12 @@ public class FileController extends Controller {
                             }
                         } else if (mimetype.endsWith("pdf") || file.getAbsolutePath().endsWith("pdf")) {
                             File f = new File(Play.current().path().getAbsolutePath() + "/public/images/pdf-flat.png" );
-                            BufferedImage im = ImageIO.read(f);
-                            if (im != null) {
-                                BufferedImage thumb = resizeImage(im);
-                                File dir = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/");
-                                if (!dir.exists()) {
-                                    dir.mkdir();
-                                }
-                                File thumbFile = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/temp");
-
-                                thumbFile.createNewFile();
-
-                                ImageIO.write(thumb, "PNG", thumbFile);
-                                response().setHeader("Content-Type", "image/png");
-                                response().setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
-                                response().setHeader("Content-Length", "" + thumbFile.length());
-                                return ok(thumbFile);
-                            }
-
+                            File thumbFile = makeThumbFile(f, file);
+                            return ok(thumbFile);
                         } else if (mimetype.endsWith("docx") || file.getAbsolutePath().endsWith("docx")) {
                             File f = new File(Play.current().path().getAbsolutePath() + "/public/images/docx-flat.png" );
-                            BufferedImage img = ImageIO.read(f);
-                            if (img != null) {
-                                BufferedImage thumb = resizeImage(img);
-                                File dir = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/");
-                                if (!dir.exists()) {
-                                    dir.mkdir();
-                                }
-                                File thumbFile = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/temp");
-
-                                thumbFile.createNewFile();
-
-                                ImageIO.write(thumb, "PNG", thumbFile);
-                                response().setHeader("Content-Type", "image/png");
-                                response().setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
-                                response().setHeader("Content-Length", "" + thumbFile.length());
-                                return ok(thumbFile);
-                            }
-
+                            File thumbFile = makeThumbFile(f, file);
+                            return ok(thumbFile);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -144,7 +122,9 @@ public class FileController extends Controller {
             ArrayNode json = mapper.createArrayNode();
             ObjectNode jsonF = mapper.createObjectNode();
 
-            try (Stream<Path> paths = Files.walk(Paths.get(Play.current().path().getAbsolutePath() + "/public/uploaded/"))) {
+            try (Stream<Path> paths = Files.walk(Paths.get(Play.current().path().getAbsolutePath()
+                    + "/public/uploaded/"
+                    + u.getFolder()))) {
                 paths.forEach(filePath -> {
                     if (Files.isRegularFile(filePath) && !filePath.toString().contains("temp")) {
                         File f = filePath.toFile();
@@ -153,20 +133,17 @@ public class FileController extends Controller {
                         jsono.put("name", f.getName());
                         jsono.put("size", f.length());
                         jsono.put("thumbnailUrl", "upload?getthumb=" + f.getName());
-
                         jsono.put("deleteUrl", "upload?delfile=" + f.getName());
                         jsono.put("deleteType", "GET");
                         json.add(jsono);
                         jsonF.set("files", json);
                         System.out.println(jsonF.toString());
-
                     }
                 });
                 return ok(jsonF);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         return ok("call POST with multipart form data");
 
@@ -174,6 +151,7 @@ public class FileController extends Controller {
 
 
     public Result doPost() {
+        User u = Application.getCurrentUserObj();
         if (!request().contentType().get().equals("multipart/form-data")) {
             return badRequest("Request is not multipart, please 'multipart/form-data' enctype for your form.");
         }
@@ -181,22 +159,21 @@ public class FileController extends Controller {
         Http.MultipartFormData<File> body = request().body().asMultipartFormData();
         List<Http.MultipartFormData.FilePart<File>> files = body.getFiles();
         ObjectMapper mapper = new ObjectMapper();
-        File folder = new File(Play.current().path().getAbsolutePath()+"/public/uploaded");
+        File folder = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/" +u.getFolder());
         if (!folder.exists()) {
             folder.mkdir();
         }
         if (files != null) {
             for (Http.MultipartFormData.FilePart<File> file : files) {
-
                 Path tempfile = file.getFile().toPath();
-                File newFile = new File(Play.current().path().getAbsolutePath()+"/public/uploaded",file.getFilename());
+                File newFile = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/" + u.getFolder(),
+                        file.getFilename());
                 Path path = newFile.toPath();
                 try {
                     Files.move(tempfile, path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 ArrayNode json = mapper.createArrayNode();
                 ObjectNode jsonF = mapper.createObjectNode();
                 ObjectNode jsono = mapper.createObjectNode();
@@ -254,5 +231,23 @@ public class FileController extends Controller {
         g.dispose();
 
         return resizedImage;
+    }
+
+    private static File makeThumbFile(File f , File file) throws IOException {
+        BufferedImage img = ImageIO.read(f);
+        File dir = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        File thumbFile = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/temp");
+        if (img != null) {
+            BufferedImage thumb = resizeImage(img);
+            thumbFile.createNewFile();
+            ImageIO.write(thumb, "PNG", thumbFile);
+            response().setHeader("Content-Type", "image/png");
+            response().setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
+            response().setHeader("Content-Length", "" + thumbFile.length());
+        }
+        return thumbFile;
     }
 }

@@ -1,4 +1,4 @@
-@()
+@(connected : Boolean)
 
 @main("Agenda") {
     @*<div class="header-panel white-text">*@
@@ -6,16 +6,18 @@
         @*</ul>*@
     @*</div>*@
     <div class="container">
-    <link type="text/css" rel="stylesheet" href='/assets/stylesheets/fullcalendar.css'  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href='/assets/stylesheets/fullcalendar.min.css'  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialFullCalendar.css'  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialize.clockpicker.css'  media="screen,projection"/>
 
     <script type='text/javascript' src='/assets/javascripts/fullcalendar/moment.min.js'></script>
-    <script type='text/javascript' src='/assets/javascripts/fullcalendar/fullcalendar.js'></script>
+    @*<script type='text/javascript' src='/assets/javascripts/fullcalendar/fullcalendar.js'></script>*@
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js'></script>
     <script type='text/javascript' src='/assets/javascripts/fullcalendar/fr.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/agenda.js'></script>
     <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
     <script type='text/javascript' src='/assets/javascripts/materialize.clockpicker.js'></script>
+    <script type='text/javascript' src='https://fonts.googleapis.com/icon?family=Material+Icons'></script>
 
     <input type="hidden" value="-1" id="classeId"/>
 
@@ -112,12 +114,4 @@
         </ul>
     </div>
     </div>
-}
-
-
-
-
-
-
-
-
+}(connected)

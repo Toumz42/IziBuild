@@ -16,10 +16,56 @@ import java.util.List;
 
 public class UserController extends Controller {
     ObjectMapper mapper = new ObjectMapper();
+
     public Result getAllPros() {
         List<User> userList = User.find.query().where().eq("droit",1).findList();
         if (userList != null) {
             JsonNode userNode = mapper.valueToTree(userList);
+            return ok().sendJson(userNode);
+        }
+        return notFound();
+    }
+
+    public Result getAllProsByPage() {
+        JsonNode json = request().body().asJson();
+        Integer page = (json.get("page").asInt() - 1) * 10;
+        List<User> userList = User.find.query()
+                .where()
+                .eq("droit",1)
+                .setFirstRow(page)
+                .setMaxRows(10)
+                .findList();
+        if (userList != null) {
+            JsonNode userNode = mapper.valueToTree(userList);
+            return ok().sendJson(userNode);
+        }
+        return notFound();
+    }
+    public Result getProsPages() {
+        List<User> userList = User.find.query().where().eq("droit",1).findList();
+        if (userList != null) {
+            Integer size = (int) Math.ceil((double) userList.size() / 10d);
+            JsonNode userNode = mapper.valueToTree(size);
+            return ok().sendJson(userNode);
+        }
+        return notFound();
+    }
+
+    public Result getPartPages() {
+        List<User> userList = User.find.query().where().eq("droit",2).findList();
+        if (userList != null) {
+            Integer size = (int) Math.ceil((double) userList.size() / 10d);
+            JsonNode userNode = mapper.valueToTree(size);
+            return ok().sendJson(userNode);
+        }
+        return notFound();
+    }
+
+    public Result getAllUserPages() {
+        List<User> userList = User.find.query().where().not().eq("droit",0).findList();
+        if (userList != null) {
+            Integer size = (int) Math.ceil((double) userList.size() / 10d);
+            JsonNode userNode = mapper.valueToTree(size);
             return ok().sendJson(userNode);
         }
         return notFound();
@@ -50,6 +96,8 @@ public class UserController extends Controller {
             if (email != null) {
                 if (!email.equals("")) {
                     User person = new User(name, surname, email, sha1pass, type, categorie);
+                    person.save();
+                    person.makeUserDir();
                     person.save();
                     JsonNode retour = mapper.valueToTree(person);
                     return ok().sendJson(retour);
@@ -107,8 +155,11 @@ public class UserController extends Controller {
     }
 
     public Result getAllUser() {
-        User u = Application.getCurrentUserObj();
-        List<User> userList = User.find.query().where().not().eq("droit", 0).findList();
+        List<User> userList = User.find.query()
+                .where()
+                .not().eq("droit", 0)
+                .findList();
+        User u = User.find.query().where().eq("login", "admin@ecole-isitech.fr").findOne();
         if (userList.contains(u)) {
             userList.remove(u);
         }
@@ -119,9 +170,41 @@ public class UserController extends Controller {
         return notFound();
     }
 
-    public Result getAllArtisan() {
+    public Result getAllUserByPage() {
+        JsonNode json = request().body().asJson();
+        Integer page = (json.get("page").asInt() - 1) * 10;
+        List<User> userList = User.find.query()
+                .where()
+                .not().eq("droit", 0)
+                .setFirstRow(page)
+                .setMaxRows(10)
+                .findList();
+        User u = User.find.query().where().eq("login", "admin@ecole-isitech.fr").findOne();
+        if (userList.contains(u)) {
+            userList.remove(u);
+        }
+        if (userList.size() > 0) {
+            ArrayNode listResult = mapper.valueToTree(userList);
+            return ok().sendJson(listResult);
+        }
+        return notFound();
+    }
+
+    public Result getAllParticulierByPage() {
+        JsonNode json = request().body().asJson();
+        Integer page = (json.get("page").asInt() - 1) * 10;
+        List<User> userList = User.find.query().where()
+                .eq("droit",2)
+                .setFirstRow(page)
+                .setMaxRows(10)
+                .findList();
+        ArrayNode listResult = mapper.valueToTree(userList);
+        return ok().sendJson(listResult);
+    }
+
+    public Result getAllParticulier() {
         List<User> userList= null;
-        userList = User.find.query().where().eq("droit",1).findList();
+        userList = User.find.query().where().eq("droit",2).findList();
         ArrayNode listResult = mapper.valueToTree(userList);
         return ok().sendJson(listResult);
     }

@@ -18,7 +18,7 @@ $(function()
             $("#signInNameDiv").hide();
         }
     });
-
+    initPagination("/getAllUserPages", "allUserAdmin");
 
     $("#password1").focusout(function () {
         checkPass();
@@ -106,64 +106,7 @@ $(function()
             });
         }
     });
-
-    $("#subClasse").click(function(){
-        if ( ($("#classeName").size()!=0))
-        {
-            var url = "/addClasse";
-            var update = $("#idClasse").val() != "";
-            if (update) {
-                url  = "/updateClasse"
-            }
-            var data = {
-                "idClasse" : $("#idClasse").val(),
-                "name" : $("#classeName").val()
-            };
-            data = JSON.stringify(data);
-            $.ajax ({
-                url: url,
-                type: "POST",
-                data: data,
-                dataType: "text",
-                contentType: "application/json; charset=utf-8",
-                success: function(ret, textStatus, jqXHR){
-                    var json = $.parseJSON(ret);
-                    var res = classeToTab(json);
-                    classes = jsonToGlobalArray(classes, json);
-                    if ($("#classeContent").find("#noData").length) {
-                        $("#classeContent").empty();
-                    }
-                    emptyFields(classeFields);
-                    if (update) {
-                        var ids = $("#classeContent").find(".idClasse");
-                        if (ids.length) {
-                            $.each(ids, function (index, el) {
-                                $.each(res, function (index, element) {
-                                    if ($(el).val() == $(element).find(".idClasse").val()) {
-                                        $(el).parents("ul.stage").remove();
-                                        $("#classeContent").append(element);
-                                    }
-                                });
-                            });
-                        }else {
-                            $("#classeContent").append(res);
-                        }
-                        myToast("La classe a bien été mise à jour");
-                    } else{
-                        $("#classeContent").append(res);
-                        turn($("#addClasse"));
-                        initSelectClasse(json);
-                        // $("#classeAdderDiv").toggle("slide");
-                        myToast("La classe a bien été ajouté");
-                    }
-                },
-                error : function (xhr, ajaxOptions, thrownError) {
-                    myToast("Erreur dans l'ajout de la classe");
-                }
-            });
-        }
-    });
-
+    initSelectCategorie();
 
 
     $("#subGroupe").click(function(){
@@ -237,9 +180,8 @@ $(function()
     //     initTabGroup()
     // });
 
-    initTabClasse();
     initTabGroup('allGroup');
-    initTabUser('allUser');
+    initTabUser('allUser', 1);
 
     $('.datepicker').pickadate({
         monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -283,12 +225,20 @@ $(function()
     Materialize.scrollFire(options);
     $('#mainTabs').tabs({
         onShow: function () {
+            initTabUser(this.id, 1);
+            switch (this.id) {
+                case 'allUser':
+                    initPagination("/getAllUserPages",this.id+"Admin");
+                    break;
+                case 'part':
+                    initPagination("/getPartPages",this.id+"Admin");
+                    break;
+                case 'pro':
+                    initPagination("/getProsPages",this.id+"Admin");
+                    break;
+            }
             $(".scale-transition").addClass("scale-in");
         }
-    });
-
-    $('#mainTabs').click(function (e) {
-        initTab(e.target.id);
     });
     $(document).ajaxStop(function(event,request,settings){
         $(".delete").click(function () {
@@ -308,9 +258,8 @@ $(function()
                     contentType: "application/json; charset=utf-8",
                     success: function(ret, textStatus, jqXHR){
                         var json = $.parseJSON(ret);
-                        initTabClasse();
                         initTabGroup('allGroup');
-                        initTabUser('allUser');
+                        initTabUser('allUser', 1);
                         if ( json ) {
                             self.closest("ul").remove();
                             myToast("La suppression a bien été effectuée");
@@ -475,25 +424,30 @@ function initAutoComplete(json) {
 }
 
 
-function initSelectClasse(json) {
-    var reset=true;
-    if (!Array.isArray(json)) {
-        json = [json];
-        reset = false;
-    }
-    if (reset) {
-        $('#classeUser :not(.remain)').remove();
-    }
-    $.each(json,function (index, elem) {
-        var opt = $("<option />");
-        opt.prop("value",elem.id);
-        opt.text(elem.name);
-        if (!$("#classeUser option[value="+elem.id+"]").length ) {
-            $("#classeUser").append(opt);
+function initSelectCategorie() {
+    var dataGroup = JSON.stringify({code : "TYPE_METIER"});
+    $.ajax ({
+        url: "/getByCode",
+        type: "POST",
+        data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            if (!Array.isArray(json)) {
+                json = [json];
+            }
+            $.each(json,function (index, elem) {
+                var opt = $("<option />");
+                opt.prop("value",elem.id);
+                opt.text(elem.libelle);
+                if (!$("#categoriePro option[value="+elem.id+"]").length ) {
+                    $("#categoriePro").append(opt);
+                }
+            });
+            $('select').material_select();
         }
     });
-    $('select').material_select();
-
 }
 
 function pushToGroup(item) {
@@ -506,61 +460,8 @@ function removeFromGroup(item){
         groupids.splice(i, 1);
     }
 }
-function initTab(tabName) {
-    if (tabName == 'userTab') {
-        $("#classeTabUser").show();
-        $("#classeTabGroup").hide();
-        $("#classeTabUser").children().removeAttr("style");
-        $("#classeTabUser").children().tabs({
-            onShow: function () {
-                initTabUser(this.id);
-            }
-        });
-    }
-    if (tabName == 'projTab') {
-        $("#classeTabGroup").show();
-        $("#classeTabUser").hide();
-        $("#classeTabGroup").children().removeAttr("style");
-        $("#classeTabGroup").children().tabs({
-            onShow: function () {
-                initTabGroup(this.id);
-            }
-        });
-    }
-    if (tabName == 'classeTab') {
-        $("#classeTabUser").hide();
-        $("#classeTabGroup").hide();
-
-    }
-}
 
 
-
-function initTabClasse() {
-    $.ajax ({
-        url: "/getAllClasse",
-        type: "POST",
-        data: JSON.stringify({}),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            initSelectClasse(json);
-            if ( json.length != 0 ) {
-                classes = jsonToGlobalArray(classes, json);
-                var res = classeToTab(json);
-                $("#classeContent").empty();
-                $.each(res, function (index, element) {
-                    $("#classeContent").append(element);
-                });
-            } else {
-                $("#classeContent").empty();
-                res = cardStart + imgEmptyDiv + cardEnd;
-                $("#classeContent").append(res);
-            }
-        }
-    });
-}
 
 function initTabGroup(classeId) {
     var dataGroup = { 'classeId' : classeId };
@@ -585,8 +486,7 @@ function initTabGroup(classeId) {
                 $.each(res, function (index, element) {
                     $("#projetContent").append(element);
                 });
-            } else
-            {
+            } else {
                 $('#projetContent').empty();
                 res = cardStart + imgEmptyDiv + cardEnd;
                 $("#projetContent").append(res);
@@ -596,15 +496,26 @@ function initTabGroup(classeId) {
     });
 }
 
-function initTabUser(classeId) {
-    var dataGroup = { 'classeId' : classeId };
-    if (classeId == 'allUser') {
-        dataGroup={};
-        $("#usersContent").empty();
+function initTabUser(tab , page) {
+    var dataGroup = { 'page' : page };
+    url = "/getAllUserByPage";
+    switch (tab) {
+        case 'allUser':
+            url = "/getAllUserByPage";
+            $("#usersContent").empty();
+            break;
+        case 'part':
+            url = "/getAllParticulierByPage";
+            $("#usersContent").empty();
+            break;
+        case 'pro':
+            url = "/getAllProsByPage";
+            $("#usersContent").empty();
+            break;
     }
     dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
-        url: "/getAllUser",
+        url: url,
         type: "POST",
         data: dataGroup,
         dataType: "text",

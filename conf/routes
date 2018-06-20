@@ -16,6 +16,8 @@ GET     /createPro                                  controllers.Application.crea
 GET     /createPart                                 controllers.Application.createPart()
 GET     /admnote                                    controllers.Application.admNote()
 GET     /admin                                      controllers.Application.admin()
+GET     /repertoire                                 controllers.Application.repertoire()
+GET     /faq                                        controllers.Application.faq()
 POST    /delete                                     controllers.Application.deleteDispatcher()
 POST    /identifyUser                               controllers.Application.identifyUser()
 GET     /getProjects                                controllers.ProjectController.getProjects
@@ -27,7 +29,14 @@ GET     /getAllGroupeProject                        controllers.ProjectControlle
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 GET     /getAllUser                                 controllers.UserController.getAllUser
 POST    /getAllUser                                 controllers.UserController.getAllUser
+POST    /getAllUserByPage                           controllers.UserController.getAllUserByPage
 GET     /getAllPros                                 controllers.UserController.getAllPros
+POST    /getAllProsByPage                           controllers.UserController.getAllProsByPage
+POST    /getAllUserByPage                           controllers.UserController.getAllUserByPage
+POST    /getAllParticulierByPage                    controllers.UserController.getAllParticulierByPage
+GET     /getProsPages                               controllers.UserController.getProsPages
+GET     /getAllUserPages                            controllers.UserController.getAllUserPages
+GET     /getPartPages                               controllers.UserController.getPartPages
 GET     /checkAdmin                                 controllers.Application.checkAdminJson
 POST    /getCalendar                                controllers.CalendarController.getCalendar
 GET     /getMyCalendar                              controllers.CalendarController.getMyCalendar
@@ -39,7 +48,7 @@ POST    /addEvent                                   controllers.CalendarControll
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
 POST    /addProject                                 controllers.ProjectController.addProject()
 POST    /updateUser                                 controllers.UserController.updateUser()
-POST    /getAllArtisan                              controllers.UserController.getAllArtisan()
+GET     /getAllParticulier                          controllers.UserController.getAllParticulier()
 POST    /updateProjectGroup                         controllers.ProjectController.updateProjectGroup()
 GET     /upload                                     controllers.FileController.doGet()
 POST    /upload                                     controllers.FileController.doPost()

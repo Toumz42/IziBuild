@@ -1,5 +1,4 @@
-@(title: String)(content: Html)
-
+@(title: String)(content: Html)(connected: Boolean)
 <!DOCTYPE html>
 
 <html>
@@ -23,26 +22,27 @@
     <body>
         @*<div style="height: 90px;" id="headerHolder"></div>*@
         <header>
-            <nav class="top-nav red accent-4">
+            <nav class="top-nav pushpin-demo-nav red accent-4">
                 <div class="" style="height: inherit; margin-left: 2%;">
                     <div class="nav-wrapper">
                         <a href="#" data-activates="nav-mobile" id="menuIcon" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
                         <a class="page-title">Menu</a>
-                        <ul class="right hide-on-med-and-down">
+                        @if(connected) { <ul class="right hide-on-med-and-down">
                             <li><a class="logout">Déconnexion</a></li>
-                        </ul>
+                        </ul>}
                     </div>
                 </div>
             </nav>
             <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
                 <li id="logoLI" class="bold hideSoft"><img style="width: 95%;" src="/assets/images/logo2.png"></li>
                 <li class="bold"><a href="/">Bienvenue sur Easy-Build</a></li>
-                <li class="bold"><a href="/home">Acceuil</a></li>
-                <li class="bold"><a href="/agenda">Agenda</a></li>
-                <li class="bold"><a class="linkNote noteText" href="/messagerie">Messagerie</a></li>
-                <li class="bold"><a class="linkproj projText" href="/projet">Projet</a></li>
-                <li class="bold"><a href="/doc">Documents</a></li>
-                <li class="bold"><a class="logout" href="#">Déconnexion</a></li>
+                @if(connected) { <li class="bold"><a href="/home">Acceuil</a></li>
+                } else { <li class="bold"><a href="/login">Se connecter</a></li>}
+                @if(connected) { <li class="bold"><a href="/agenda">Agenda</a></li>}
+                @if(connected) { <li class="bold"><a class="linkNote noteText" href="/messagerie">Messagerie</a></li>}
+                @if(connected) { <li class="bold"><a class="linkproj projText" href="/projet">Projet</a></li>}
+                @if(connected) { <li class="bold"><a href="/doc">Documents</a></li>}
+                @if(connected) { <li class="bold"><a class="logout" href="#">Déconnexion</a></li>}
             </ul>
         </header>
         <main>

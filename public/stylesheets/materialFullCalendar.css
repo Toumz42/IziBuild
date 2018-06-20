@@ -115,12 +115,12 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 .fc-time-grid-event.fc-v-event.fc-event {
     opacity: .65 !important;
 }
-.ui-icon-arrow-material-p:after {
-    content: "PREC.";
-}
-.ui-icon-arrow-material-n:after {
-    content: "SUIV.";
-}
+/*.ui-icon-arrow-material-p:after {*/
+    /*content: "PREC.";*/
+/*}*/
+/*.ui-icon-arrow-material-n:after {*/
+    /*content: "SUIV.";*/
+/*}*/
 .ui-button {
     padding: 0.1em 1.3em 2.3em !important;
     margin: 0.2em !important;
@@ -131,24 +131,334 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 
 .fc-now-indicator {
     position: absolute;
-    border: 0 solid #D50000 ;
+    border: 0 solid #283593 ;
 }
 a[data-goto]:hover {
     text-decoration: none;
 }
 .fc-time-grid .fc-now-indicator-arrow {
     border-width: 5px 5px 5px 5px !important;
-    border-top-color: #D50000  !important;
-    border-bottom-color: #D50000  !important;
+    border-top-color: #283593  !important;
+    border-bottom-color: #283593  !important;
     border-radius: 10px !important;
 }
 .fc-row {
     border: none !important;
 }
 .fc-divider {
-    color: #8cb2c0;
+    color: #283593;
     height: auto !important;
     margin: auto !important;
     padding: 0 !important;
     border-style: outset !important;
+}
+
+.fc .fc-button-group .fc-prev-button,.fc .fc-button-group .fc-next-button,.fc-icon,.dataTables_wrapper .dataTables_paginate .paginate_button.first,.dataTables_wrapper .dataTables_paginate .paginate_button.previous,.dataTables_wrapper .dataTables_paginate .paginate_button.next,.dataTables_wrapper .dataTables_paginate .paginate_button.last {
+    color: rgba(0,0,0,0.87) !important;
+    font-family: "Material Icons";
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0 2px;
+    box-shadow: none;
+    border: 0;
+    border-radius: 50%;
+    background: transparent
+}
+
+.fc .fc-button-group .fc-prev-button::before,.fc .fc-button-group .fc-next-button::before,.fc-icon::before,.dataTables_wrapper .dataTables_paginate .paginate_button.first::before,.dataTables_wrapper .dataTables_paginate .paginate_button.previous::before,.dataTables_wrapper .dataTables_paginate .paginate_button.next::before,.dataTables_wrapper .dataTables_paginate .paginate_button.last::before {
+    display: block;
+    padding: 8px;
+    line-height: 24px;
+    font-size: 24px
+}
+
+.fc .disabled.fc-button.fc-prev-button,.fc .disabled.fc-button.fc-next-button,.disabled.fc-icon,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.first,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.previous,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.next,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.last,.fc .disabled.fc-button.fc-prev-button:hover,.fc .disabled.fc-button.fc-next-button:hover,.disabled.fc-icon:hover,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.first:hover,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.previous:hover,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.next:hover,.dataTables_wrapper .dataTables_paginate .disabled.paginate_button.last:hover {
+    color: rgba(0,0,0,0.26) !important;
+    border: 0
+}
+
+.fc .fc-button-group .fc-prev-button:hover,.fc .fc-button-group .fc-next-button:hover,.fc-icon:hover,.dataTables_wrapper .dataTables_paginate .paginate_button.first:hover,.dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,.dataTables_wrapper .dataTables_paginate .paginate_button.next:hover,.dataTables_wrapper .dataTables_paginate .paginate_button.last:hover,.fc .fc-button.fc-prev-button:active,.fc .fc-button.fc-next-button:active,.fc-icon:active,.dataTables_wrapper .dataTables_paginate .paginate_button.first:active,.dataTables_wrapper .dataTables_paginate .paginate_button.previous:active,.dataTables_wrapper .dataTables_paginate .paginate_button.next:active,.dataTables_wrapper .dataTables_paginate .paginate_button.last:active {
+    color: rgba(0,0,0,0.87) !important;
+    background: rgba(0,0,0,0.05);
+    border: 0;
+    box-shadow: none
+}
+
+.fc-today-button {
+    border: 0;
+    border-radius: 2px
+}
+
+.fc-toolbar.fc-header-toolbar {
+    margin: 0;
+    padding: 0 16px
+}
+
+.fc-toolbar.fc-header-toolbar h2 {
+    color: rgba(0,0,0,0.54);
+    display: inline-block;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 64px;
+    margin-left: 8px
+}
+
+.fc-toolbar.fc-header-toolbar .fc-button {
+    background: rgba(0,0,0,0.08);
+    border: 0;
+    box-shadow: none;
+    height: 32px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    float: left;
+    text-shadow: none;
+    padding: 0 12px
+}
+
+.fc-toolbar.fc-header-toolbar .fc-button.fc-prev-button,.fc-toolbar.fc-header-toolbar .fc-button.fc-next-button {
+    margin-top: 12px
+}
+
+.fc-toolbar.fc-header-toolbar .fc-button.fc-state-active {
+    background-color: #D50000;
+    color: #fff;
+    font-weight: 500
+}
+
+.fc-toolbar.fc-header-toolbar .fc-left .fc-button {
+    margin-right: 8px
+}
+
+.fc-toolbar.fc-header-toolbar .fc-right .fc-button {
+    margin-left: 8px
+}
+
+.fc-prev-button::before {
+    content: 'chevron_left'
+}
+
+.fc-next-button::before {
+    content: 'chevron_right'
+}
+
+.fc-state-default.fc-corner-right {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px
+}
+
+.fc-state-default.fc-corner-left {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px
+}
+
+.fc-ltr .fc-basic-view .fc-day-top .fc-day-number {
+    float: left
+}
+
+.fc tr {
+    border-bottom: 0
+}
+
+.fc-head .fc-head-container {
+    border-bottom: 0
+}
+
+.fc-head .fc-head-container .fc-day-header {
+    color: rgba(0,0,0,0.54);
+    font-weight: 400;
+    text-align: left
+}
+
+.fc-body>tr>.fc-widget-content {
+    border-top: 0
+}
+
+.fc .fc-view:not(.fc-agendaDay-view) .fc-widget-content.fc-today,.fc .fc-view:not(.fc-agendaDay-view) .fc-widget-header.fc-today {
+    background-color: #f4f4f4
+}
+
+.fc-agendaDay-view .fc-widget-content.fc-today {
+    background-color: transparent
+}
+
+.fc-day-top.fc-today .fc-day-number {
+    position: relative;
+    color: #fff;
+    padding-top: 4px;
+    padding-left: 4px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center
+}
+
+.fc-day-top.fc-today .fc-day-number::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    background-color: #D50000;
+    z-index: -1
+}
+
+.fc-day-top .fc-day-number {
+    float: left
+}
+
+.fc-day-top .fc-day-number,.fc-week-number,.fc-head-container .fc-day-header {
+    padding-top: 6px;
+    padding-left: 8px
+}
+
+.fc .fc-content,.fc .fc-divider,.fc .fc-list-heading td,.fc .fc-list-view,.fc .fc-popover,.fc .fc-row,.fc tbody,.fc td,.fc th,.fc thead {
+    border-color: #e0e0e0
+}
+
+.fc-event {
+    border-radius: 2px;
+    line-height: 22px;
+    margin: 2px 8px 0 0
+}
+
+.fc .fc-more-popover {
+    border: 0
+}
+
+.fc .fc-more-popover .fc-header {
+    padding: 6px 0 0 0;
+    background-color: #fff
+}
+
+.fc .fc-more-popover .fc-header .fc-title {
+    padding-left: 10px;
+    line-height: 40px
+}
+
+.fc .fc-more-popover .fc-header .fc-icon-x {
+    position: absolute;
+    right: 6px;
+    margin: 0
+}
+
+.fc .fc-more-popover .fc-header .fc-icon-x::after {
+    content: none
+}
+
+.fc .fc-more-popover .fc-header .fc-icon-x::before {
+    content: 'close'
+}
+
+.fc-agenda-view .fc-day-header {
+    font-size: 48px;
+    line-height: normal
+}
+
+.fc-agenda-view .fc-day-header::before {
+    content: '';
+    display: block;
+    font-size: 12px
+}
+
+.fc-agenda-view .fc-day-header.fc-sun::before {
+    content: 'Dim'
+}
+
+.fc-agenda-view .fc-day-header.fc-mon::before {
+    content: 'Lun'
+}
+
+.fc-agenda-view .fc-day-header.fc-tue::before {
+    content: 'Mar'
+}
+
+.fc-agenda-view .fc-day-header.fc-wed::before {
+    content: 'Mer'
+}
+
+.fc-agenda-view .fc-day-header.fc-thu::before {
+    content: 'Jeu'
+}
+
+.fc-agenda-view .fc-day-header.fc-fri::before {
+    content: 'Ven'
+}
+
+.fc-agenda-view .fc-day-header.fc-sat::before {
+    content: 'Sam'
+}
+
+.fc-agenda-view .fc-day-header.fc-today {
+    color: #D50000
+}
+
+.fc-agenda-view .fc-minor .fc-widget-content {
+    border: 0
+}
+
+.fc-agenda-view .fc-divider {
+    padding: 0;
+    border-bottom: 0
+}
+
+.fc-list-table td {
+    padding: 13px 14px
+}
+
+.fc-list-table .fc-list-heading:not(:first-child)+.fc-list-item .fc-list-item-time,.fc-list-table .fc-list-heading:not(:first-child)+.fc-list-item .fc-list-item-marker,.fc-list-table .fc-list-heading:not(:first-child)+.fc-list-item .fc-list-item-title {
+    border-top: 1px solid #e0e0e0
+}
+
+.fc-list-table .fc-list-heading {
+    display: table-caption;
+    height: 0;
+    width: 100px
+}
+
+.fc-list-table .fc-list-heading .fc-widget-header {
+    padding: 8px 14px;
+    line-height: 16px;
+    background-color: transparent
+}
+
+.fc-list-table .fc-list-heading .fc-list-heading-main,.fc-list-table .fc-list-heading .fc-list-heading-alt {
+    display: block;
+    float: none
+}
+
+.fc-list-table .fc-list-item {
+    font-size: 14px;
+    height: 48px
+}
+
+.fc-list-table .fc-list-item:hover td {
+    background-color: transparent
+}
+
+.fc-list-table .fc-list-item .fc-list-item-time,.fc-list-table .fc-list-item .fc-list-item-marker,.fc-list-table .fc-list-item .fc-list-item-title {
+    border-top: 0
+}
+
+.fc-list-table .fc-list-item .fc-list-item-time {
+    padding-left: 100px
+}
+
+.card .fc-head .fc-head-container {
+    border-left: 0;
+    border-right: 0
+}
+
+.card .fc-body>tr>.fc-widget-content {
+    border: 0
+}
+
+@media only screen and (max-width: 600px) {
+    .fc-agenda-view .fc-day-header {
+        font-size:24px
+    }
 }

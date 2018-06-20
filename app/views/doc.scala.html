@@ -1,114 +1,144 @@
-@()
+@(connected : Boolean)
 
 @main("Documents") {
 
     <script type='text/javascript' src='/assets/javascripts/views/doc.js'></script>
-
     <link rel="stylesheet" href="/assets/stylesheets/jquery.fileupload-ui.css">
-
     <script src="/assets/javascripts/fileupload/jquery.iframe-transport.js"></script>
-    <!-- The Templates plugin is included to render the upload/download listings -->
+        <!-- The Templates plugin is included to render the upload/download listings -->
     <script src="/assets/javascripts/fileupload/vendor/tmpl.min.js"></script>
-    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+        <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
     <script src="/assets/javascripts/fileupload/loadimage/load-image.all.min.js"></script>
-    <!-- The basic File Upload plugin -->
+        <!-- The basic File Upload plugin -->
     <script src="/assets/javascripts/fileupload/jquery.fileupload.js"></script>
-    <!-- The File Upload user interface plugin -->
+        <!-- The File Upload user interface plugin -->
     <script src="/assets/javascripts/fileupload/jquery.fileupload-ui.js"></script>
-
     <script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload-process.js"></script>
-
     <script src="/assets/javascripts/fileupload/jquery.fileupload-image.js"></script>
 
-    <div class="container">
-    <a id="addFile" class="btn-floating btn-large waves-effect waves-light red accent-4 admin"><i class="material-icons">add</i></a>
-    <div class="row" id="projectMainDiv">
-
-        <div class="row" style="padding: 0 1.5rem">
-            <span style="font-size: 25px;color: #00abff"></span><br>
+    <div class="waitOnDiv" style="display: none">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
         </div>
-
-
-        <ul class='stage'>
-            <div class="row">
-                <div class="col s12 m12 l12 push-s1 push-m1 push-l1">
-                    <div class="card card-1">
-                        <div class="card-content ">
-                            @*<div class="row" style="padding: 0 1.5rem" id="" >*@
+    </div>
+    <div class="container">
+        <a id="addFile" class="btn-floating btn-large waves-effect waves-light indigo"><i class="material-icons">add</i></a>
+        <div class="row" id="projectMainDiv">
+            <ul class='stage'>
+                <div class="row">
+                    <div class="col s12 m12 l12 push-s1 push-m1 push-l1">
+                        <div class="card card-1">
+                            <div class="card-content ">
+                                @*<div class="row" style="padding: 0 1.5rem" id="" >*@
                                 @*<p><a href="assets/ressources/Livret_RPI.pdf" target="_blank">Livret RPI</a></p>*@
                                 @*<p><a href="assets/ressources/soutenancesRPI2.pdf"  target="_blank">Soutenance RPI2</a></p>*@
                                 @*<p><a href="assets/ressources/Gestion_Projet_methodes.pdf"  target="_blank">Methode de Gestion de Projet</a></p>*@
-                            @*</div>*@
-                            <form id="fileupload" action="upload" method="POST" enctype="multipart/form-data">
-
-                                <div class="row">
-                                    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-                                    <div class="fileupload-buttonbar">
-                                        <div class="span7">
-                                                <!-- The fileinput-button span is used to style the file input field as button -->
-                                            <div class="file-field input-field">
-                                                <div class="btn " style="display: none">
-                                                    <span>File</span>
-                                                    <input id="addInput" class="red accent-4" type="file" name="files[]" multiple>
+                                @*</div>*@
+                                <form id="fileupload" action="upload" method="POST" enctype="multipart/form-data">
+                                    <div class="row">
+                                            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                                        <div class="fileupload-buttonbar">
+                                            <div class="span7">
+                                                    <!-- The fileinput-button span is used to style the file input field as button -->
+                                                <div class="file-field input-field">
+                                                    <div class="btn " style="display: none">
+                                                        <span>File</span>
+                                                        <input id="addInput" class="red accent-4" type="file" name="files[]" multiple>
+                                                    </div>
                                                 </div>
+                                                <input type="checkbox" class="toggle">
                                             </div>
-                                            <input type="checkbox" class="toggle">
-                                        </div>
-                                            <!-- The global progress information -->
-                                        <div class="span5 fileupload-progress hide">
-                                                <!-- The global progress bar -->
-                                            <div class="progress red accent-4 lighten-4 progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="bar red accent-4 determinate" style="width:0%;"></div>
+                                                <!-- The global progress information -->
+                                            <div class="span5 fileupload-progress hide">
+                                                    <!-- The global progress bar -->
+                                                <div class="progress red accent-4 lighten-4 progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="bar red accent-4 determinate" style="width:0%;"></div>
+                                                </div>
+                                                    <!-- The extended global progress information -->
+                                                <div class="progress-extended">&nbsp;</div>
                                             </div>
-                                                <!-- The extended global progress information -->
-                                            <div class="progress-extended">&nbsp;</div>
                                         </div>
-                                    </div>
-                                        <!-- The loading indicator is shown during file processing -->
-                                    <div class="fileupload-loading"></div>
-                                    <br>
-                                        <!-- The table listing the files available for upload/download -->
-                                    <table role="presentation" class='responsive-table highlight'><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+                                            <!-- The loading indicator is shown during file processing -->
+                                        <div class="fileupload-loading"></div>
+                                        <br>
+                                            <!-- The table listing the files available for upload/download -->
+                                        <table role="presentation" class='responsive-table highlight'><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
 
-                                </div>
-                            </form>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </ul>
+        </div>
+
+
+            <!-- modal-gallery is the modal dialog used for the image gallery -->
+        <div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+                <h3 class="modal-title"></h3>
             </div>
-        </ul>
-    </div>
-
-
-    <!-- modal-gallery is the modal dialog used for the image gallery -->
-    <div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">&times;</a>
-            <h3 class="modal-title"></h3>
+            <div class="modal-body"><div class="modal-image"></div></div>
+            <div class="modal-footer">
+                <a class="btn modal-download" target="_blank">
+                    <i class="icon-download"></i>
+                    <span>Download</span>
+                </a>
+                <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
+                    <i class="icon-play icon-white"></i>
+                    <span>Slideshow</span>
+                </a>
+                <a class="btn btn-info modal-prev">
+                    <i class="icon-arrow-left icon-white"></i>
+                    <span>Previous</span>
+                </a>
+                <a class="btn btn-primary modal-next">
+                    <span>Next</span>
+                    <i class="icon-arrow-right icon-white"></i>
+                </a>
+            </div>
         </div>
-        <div class="modal-body"><div class="modal-image"></div></div>
-        <div class="modal-footer">
-            <a class="btn modal-download" target="_blank">
-                <i class="icon-download"></i>
-                <span>Download</span>
-            </a>
-            <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
-                <i class="icon-play icon-white"></i>
-                <span>Slideshow</span>
-            </a>
-            <a class="btn btn-info modal-prev">
-                <i class="icon-arrow-left icon-white"></i>
-                <span>Previous</span>
-            </a>
-            <a class="btn btn-primary modal-next">
-                <span>Next</span>
-                <i class="icon-arrow-right icon-white"></i>
-            </a>
-        </div>
-    </div>
 
-    <!-- The template to display files available for upload -->
-    <script id="template-upload" type="text/x-tmpl">
+            <!-- The template to display files available for upload -->
+        <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
         <tr class="template-upload fade">
             <td>
@@ -120,7 +150,7 @@
             </td>
             <td>
                 <p class="size">Processing...</p>
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar determinate progress-bar-success" style="width:0%;"></div></div>
             </td>
             <td>
                 {% if (!i && !o.options.autoUpload) { %}
@@ -147,8 +177,8 @@
         </tr>
     {% } %}
     </script>
-    <!-- The template to display files available for download -->
-    <script id="template-download" type="text/x-tmpl">
+            <!-- The template to display files available for download -->
+        <script id="template-download" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
         <tr class="template-download fade">
             <td>
@@ -175,7 +205,7 @@
             </td>
             <td>
                 {% if (file.deleteUrl) { %}
-                    <button class="btn red accent-4 admin btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <button class="btn red accent-4 btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                         <i class="material-icons">delete</i>
                         <span>Delete</span>
                     </button>
@@ -195,12 +225,4 @@
     {% } %}
     </script>
     </div>
-}
-
-
-
-
-
-
-
-
+}(connected)
