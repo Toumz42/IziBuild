@@ -6,10 +6,10 @@ import models.User;
 import models.utils.ErrorUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import play.libs.Json;
-import play.mvc.Controller;
-import play.mvc.Result;
+import play.mvc.*;
 
 import java.util.Map;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Created by ttomc on 02/01/2017.

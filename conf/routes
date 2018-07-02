@@ -44,7 +44,8 @@ POST    /getCalendar                                controllers.CalendarControll
 GET     /getMyCalendar                              controllers.CalendarController.getMyCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
 POST    /addUser                                    controllers.UserController.addUser()
-POST    /getAnomaliesbyProjectId                    controllers.AnomaliesController.addAnomalie()
+POST    /addAnomalie                                controllers.AnomaliesController.addAnomalie()
+POST    /getUserById                                controllers.UserController.getUserById
 POST    /getAnomaliesbyProjectId                    controllers.AnomaliesController.getAnomaliesbyProjectId()
 POST    /addEvent                                   controllers.CalendarController.addEvent()
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
