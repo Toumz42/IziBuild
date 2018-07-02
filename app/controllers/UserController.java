@@ -154,6 +154,15 @@ public class UserController extends Controller {
         return badRequest("Erreur dans la suppression");
     }
 
+
+    public Result getUserById() {
+        User u = Application.getCurrentUserObj();
+        if (u != null) {
+            return ok(Json.toJson(u));
+        }
+        return badRequest("Erreur dans la recuperqtion");
+    }
+
     public Result getAllUser() {
         List<User> userList = User.find.query()
                 .where()

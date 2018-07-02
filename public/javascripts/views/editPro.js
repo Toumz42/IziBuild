@@ -18,7 +18,7 @@ $(function()
         checkPass2();
     });
     $.ajax ({
-        url: url,
+        url: '/getUserById',
         type: "POST",
         data: JSON.stringify({}),
         dataType: "text",
@@ -30,14 +30,14 @@ $(function()
             $("#type").val(ret.droit)
         },
         error : function (xhr, ajaxOptions, thrownError) {
-            myToast("Erreur dans l'ajout de l'utilisateur");
+            myToast("Erreur dans la recuperation de l'utilisateur");
         }
     });
 
     $("#sub").click(function(){
         if (check())
         {
-            var url = "/addUser";
+            var url = "/updateUser";
             var data = {
                 "idUser" : $("#idUser").val(),
                 "name" : $("#last_name").val(),

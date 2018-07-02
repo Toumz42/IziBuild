@@ -1,4 +1,4 @@
-@(connected : Boolean)
+@()
 
 @main("Bienvenue sur l'ENT ISITECH") {
     <div class="container">
@@ -9,122 +9,123 @@
                     @*<span style="font-size: 25px;color: #00abff">Menu</span><br>*@
                     @*</div>*@
                     <div class="row">
-                        <a class="col s10 m5 l5 card card-1 horizontal" href="/projet">
-                            <div class="card-image valign-wrapper">
+                        <div class="col s5 m5 l5 card card-1 horizontal">
+                            <div class="card-image">
                                 <img class="center-align responsive-img imgHome" src='/assets/images/menu/admin.png' align="middle" title="Projet">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title projText red-text">Projet</span>
-                                    <p class="linkproj grey-text" >
+                                    <a class="linkproj grey-text" href="/projet">
                                         Créez et Gérez vos différents projets.
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
 
-                        <a class="col s10 m5 l5 card push-l1 card-1 horizontal" href="/agenda">
-                            <div class="card-image valign-wrapper">
+                        <div class="col s10 m5 l5 card push-l1 card-1 horizontal">
+                            <div class="card-image">
                                 <img class="responsive-img imgHome " src='/assets/images/menu/calendar.png'title="Agenda">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title red-text" style="display: block;">Agenda</span>
-                                    <p class="grey-text" >
+                                    <a class="grey-text" href="/agenda">
                                         Consultez les évenements de votre agenda.
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
                     <div class="row">
-                        <a class="col s10 m5 l5 card  card-1 horizontal" href="/faq">
-                            <div class="card-image valign-wrapper">
+                        <div class="col s10 m5 l5 card  card-1 horizontal">
+                            <div class="card-image">
                                 <img class="responsive-img imgHome " src='/assets/images/menu/help.png' title="Aide">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title red-text noteText" style="display: block;">Aide</span>
-                                    <p class="linkNote grey-text" >
+                                    <a class="linkNote grey-text" href="/note">
                                         Un peu d'aide ? Des questions ?
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
 
-                        <a class="col s10 m5 l5 card push-l1 card-1 horizontal" href=/messagerie>
-                            <div class="card-image valign-wrapper">
+                        <div class="col s10 m5 l5 card push-l1 card-1 horizontal">
+                            <div class="card-image">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/conversation.png' title="Messagerie">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title red-text" style="display: block;">Messagerie</span>
-                                    <p class="grey-text"  >
+                                    <a class="grey-text" href=/messagerie target="_blank">
                                         Envoyez des messages aux autres utilisateurs.
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
                     <div class="row">
-                        <a class="col s10 m5 l5 card card-1 horizontal" href="/doc">
-                            <div class="card-image valign-wrapper">
+                        <div class="col s10 m5 l5 card card-1 horizontal">
+                            <div class="card-image">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/cloud-computing.png'title="Documents">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title red-text" style="display: block;">Documents</span>
-                                    <p class="grey-text" >
+                                    <a class="grey-text" href="/doc">
                                         Stockez les documents de votre projet.
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
-                        <a class="col s10 m5 l5 push-l1 card card-1 horizontal" href="/anomalie">
-                            <div class="card-image valign-wrapper">
+                        </div>
+                        <div class="col s10 m5 l5 push-l1 card card-1 horizontal">
+                            <div class="card-image">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/exclamation.png'title="Incident">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title red-text" style="display: block;">Incident</span>
-                                    <p class="grey-text" >
+                                    <a class="grey-text" href="/doc">
                                         Déclarez un incident sur un projet.
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
                     <div class="row">
-                        <a class="col s10 m5 l5 card card-1 horizontal" href=/messagerie>
-                            <div class="card-image valign-wrapper">
+                        <div class="col s10 m5 l5 card card-1 horizontal">
+                            <div class="card-image">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/contact.png' title="Carnet d’adresse">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title red-text" style="display: block;">Carnet d’adresse</span>
-                                    <p class="grey-text"  >
+                                    <a class="grey-text" href=/messagerie target="_blank">
                                         Consultez le répertoire des Artisans
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
-                        <a class="col s10 m5 l5 card push-l1 card-1 horizontal" href="/doc">
-                            <div class="card-image valign-wrapper">
+                        </div>
+                        <div class="col s10 m5 l5 card push-l1 card-1 horizontal">
+                            <div class="card-image">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/id-card.png'title="Gestion du compte">
                             </div>
                             <div class="card-stacked">
                                 <div class="card-content">
                                     <span class="card-title red-text" style="display: block;">Gestion du compte</span>
-                                    <p class="grey-text" >
+                                    <a class="grey-text" href="/editPro">
                                         Gérez votre compte, changez vos informations.
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </ul>
     </div>
 
-}(connected)
+}
+
