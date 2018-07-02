@@ -16,7 +16,7 @@ $(function()
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'month,agendaWeek,agendaDay,listMonth'
         },
         themeButtonIcons :
         {
@@ -24,9 +24,9 @@ $(function()
             next: 'arrow-material-n'
         },
         handleWindowResize: true,
-        weekends: false, // Hide weekends
+        weekends: true, // Hide weekends
         defaultView: 'agendaWeek', // Only show week view
-        minTime: '07:30:00', // Start time for the calendar
+        minTime: '07:00:00', // Start time for the calendar
         maxTime: '22:00:00', // End time for the calendar
         theme : true,
         timezone: 'local',

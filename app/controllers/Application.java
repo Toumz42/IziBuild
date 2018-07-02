@@ -1,15 +1,15 @@
 package controllers;
 
-import akka.stream.javadsl.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.User;
 import models.utils.ErrorUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import play.libs.Json;
-import play.mvc.*;
+import play.mvc.Controller;
+import play.mvc.Result;
 
 import java.util.Map;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Created by ttomc on 02/01/2017.
@@ -17,6 +17,14 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class Application extends Controller {
 
     public Application() {
+    }
+
+    public Result editPro() {
+        return ok(views.html.editPro.render(checkConnected()));
+    }
+
+    public Result editPart() {
+        return ok(views.html.editPart.render(checkConnected()));
     }
 
     public Result index() {

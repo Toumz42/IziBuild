@@ -59,10 +59,13 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
     color: black !important;
 }
 
-.fc-today a{
+.fc-day-header.fc-today a{
     color:#D50000 !important;
 }
 
+.fc-day-number a{
+    color:white !important;
+}
 /* Styling for each event from Schedule */
 .fc-time-grid-event.fc-v-event.fc-event {
     border-radius: 4px;
@@ -83,7 +86,6 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 .fc td, .fc th {
     border-style: none !important;
     border-width: 1px !important;
-    padding: 0 !important;
     vertical-align: top !important;
 }
 
@@ -121,7 +123,7 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 /*.ui-icon-arrow-material-n:after {*/
     /*content: "SUIV.";*/
 /*}*/
-.ui-button {
+.ui-button.red {
     padding: 0.1em 1.3em 2.3em !important;
     margin: 0.2em !important;
 }
@@ -271,15 +273,15 @@ a[data-goto]:hover {
     text-align: left
 }
 
-.fc-body>tr>.fc-widget-content {
+.fc-body>tr>.ui-widget-content {
     border-top: 0
 }
 
-.fc .fc-view:not(.fc-agendaDay-view) .fc-widget-content.fc-today,.fc .fc-view:not(.fc-agendaDay-view) .fc-widget-header.fc-today {
+.fc .fc-view:not(.fc-agendaDay-view) .ui-widget-content.fc-today,.fc .fc-view:not(.fc-agendaDay-view) .ui-widget-header.fc-today {
     background-color: #f4f4f4
 }
 
-.fc-agendaDay-view .fc-widget-content.fc-today {
+.fc-agendaDay-view .ui-widget-content.fc-today {
     background-color: transparent
 }
 
@@ -366,38 +368,38 @@ a[data-goto]:hover {
 }
 
 .fc-agenda-view .fc-day-header.fc-sun::before {
-    content: 'Dim'
+    content: 'Dim.'
 }
 
 .fc-agenda-view .fc-day-header.fc-mon::before {
-    content: 'Lun'
+    content: 'Lun.'
 }
 
 .fc-agenda-view .fc-day-header.fc-tue::before {
-    content: 'Mar'
+    content: 'Mar.'
 }
 
 .fc-agenda-view .fc-day-header.fc-wed::before {
-    content: 'Mer'
+    content: 'Mer.'
 }
 
 .fc-agenda-view .fc-day-header.fc-thu::before {
-    content: 'Jeu'
+    content: 'Jeu.'
 }
 
 .fc-agenda-view .fc-day-header.fc-fri::before {
-    content: 'Ven'
+    content: 'Ven.'
 }
 
 .fc-agenda-view .fc-day-header.fc-sat::before {
-    content: 'Sam'
+    content: 'Sam.'
 }
 
 .fc-agenda-view .fc-day-header.fc-today {
     color: #D50000
 }
 
-.fc-agenda-view .fc-minor .fc-widget-content {
+.fc-agenda-view .fc-minor .ui-widget-content {
     border: 0
 }
 
@@ -420,7 +422,7 @@ a[data-goto]:hover {
     width: 100px
 }
 
-.fc-list-table .fc-list-heading .fc-widget-header {
+.fc-list-table .fc-list-heading .ui-widget-header {
     padding: 8px 14px;
     line-height: 16px;
     background-color: transparent
@@ -434,6 +436,10 @@ a[data-goto]:hover {
 .fc-list-table .fc-list-item {
     font-size: 14px;
     height: 48px
+}
+
+.fc-left {
+    margin-left: -15px;
 }
 
 .fc-list-table .fc-list-item:hover td {
@@ -453,7 +459,7 @@ a[data-goto]:hover {
     border-right: 0
 }
 
-.card .fc-body>tr>.fc-widget-content {
+.card .fc-body>tr>.ui-widget-content {
     border: 0
 }
 
@@ -461,4 +467,7 @@ a[data-goto]:hover {
     .fc-agenda-view .fc-day-header {
         font-size:24px
     }
+}
+.fc .fc-view:not(.fc-agendaDay-view) .ui-widget-content.fc-today, .fc .fc-view:not(.fc-agendaDay-view) .ui-widget-header.fc-today {
+    background-color: #f4f4f4;
 }
