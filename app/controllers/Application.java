@@ -19,6 +19,16 @@ public class Application extends Controller {
     public Application() {
     }
 
+    public Result editPart() {
+
+
+        return ok(views.html.home.render(checkConnected()));
+    }
+
+    public Result editPro() {
+        return ok(views.html.home.render(checkConnected()));
+    }
+
     public Result index() {
         return ok(views.html.index.render(checkConnected()));
     }
