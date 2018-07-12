@@ -17,22 +17,9 @@ $(function()
     $("#password2").focusout(function () {
         checkPass2();
     });
-    $.ajax ({
-        url: '/getUserById',
-        type: "POST",
-        data: JSON.stringify({}),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            $("#last_name").val(ret.name)
-            $("#first_name").val(ret.surname)
-            $("#email").val(ret.email)
-            $("#type").val(ret.droit)
-        },
-        error : function (xhr, ajaxOptions, thrownError) {
-            myToast("Erreur dans la recuperation de l'utilisateur");
-        }
-    });
+    if (currentUser !== 'none') {
+        alert(currentUser.name);
+    }
 
     $("#sub").click(function(){
         if (check())

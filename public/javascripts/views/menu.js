@@ -1,6 +1,7 @@
 /**
  * Created by ttomc on 05/01/2017.
  */
+currentUser = 'none';
 $(function () {
     var btn = document.querySelector('.nav__button'), container = document.querySelector('.conteneur');
 
@@ -75,23 +76,24 @@ $(function () {
     $(".button-collapse").sideNav();
 
 
-$.ajax ({
-    url: "/checkAdmin",
-    type: "GET",
-    dataType: "text",
-    contentType: "application/json; charset=utf-8",
-    success: function(ret, textStatus, jqXHR){
-        var json = $.parseJSON(ret);
-        if (json){
-            $(".linkNote").prop("href","/admnote");
-            $(".noteText").text("Administration Notes");
+    $.ajax ({
+        url: "/getCurrentUser",
+        type: "GET",
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            if (json){
+                $("#nameNav").text(json.name + " " + json.surname);
+                $("#mailNav").text(json.email);
+                currentUser = json;
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            if(xhr.status==403) {
+
+            }
         }
-    },
-    error: function (xhr, ajaxOptions, thrownError) {
-        if(xhr.status==403) {
-            $(".linknote").prop("href","/note")
-        }
-    }
-});
+    });
 
 });

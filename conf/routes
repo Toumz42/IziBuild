@@ -14,8 +14,7 @@ GET     /doc                                        controllers.Application.doc(
 GET     /note                                       controllers.Application.note()
 GET     /createPro                                  controllers.Application.createPro()
 GET     /createPart                                 controllers.Application.createPart()
-GET     /editPro                                    controllers.Application.editPro()
-GET     /editPart                                   controllers.Application.editPart()
+GET     /editAccount                                   controllers.Application.editAccount()
 GET     /admnote                                    controllers.Application.admNote()
 GET     /admin                                      controllers.Application.admin()
 GET     /repertoire                                 controllers.Application.repertoire()
@@ -46,6 +45,7 @@ GET     /checkCfProjet                              controllers.ProjectControlle
 POST    /addUser                                    controllers.UserController.addUser()
 POST    /addAnomalie                                controllers.AnomaliesController.addAnomalie()
 POST    /getUserById                                controllers.UserController.getUserById
+GET     /getCurrentUser                             controllers.Application.getCurrentUserJSON
 POST    /getAnomaliesbyProjectId                    controllers.AnomaliesController.getAnomaliesbyProjectId()
 POST    /addEvent                                   controllers.CalendarController.addEvent()
 POST    /updateEvent                                controllers.CalendarController.updateEvent()

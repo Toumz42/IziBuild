@@ -17,34 +17,41 @@ $(function()
     $("#password2").focusout(function () {
         checkPass2();
     });
+    $(document).ajaxStop(function () {
+        if (currentUser !== 'none') {
+            $("#idUser").val(currentUser.id);
+            $("#last_name").val(currentUser.name).siblings("label").addClass("active");
+            $("#first_name").val(currentUser.surname).siblings("label").addClass("active");
+            $("#email").val(currentUser.email).siblings("label").addClass("active");
+        }
+    });
     $.ajax ({
-        url: '/getUserById',
+        url: url,
         type: "POST",
-        data: JSON.stringify({}),
+        data: JSON.stringify(data),
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
-            $("#last_name").val(ret.name)
-            $("#first_name").val(ret.surname)
-            $("#email").val(ret.email)
-            $("#type").val(ret.droit)
+            myToast("Votre Compte a bien été créé !");
+            myToast("Vous allez etre redirigé vers la page d'accueil !");
+            setTimeout(function() { document.location = "/home"; }, 2000);
         },
         error : function (xhr, ajaxOptions, thrownError) {
-            myToast("Erreur dans la recuperation de l'utilisateur");
+            myToast("Erreur dans l'ajout de l'utilisateur");
         }
     });
 
     $("#sub").click(function(){
         if (check())
         {
-            var url = "/addUser";
+            var url = "/updateUser";
             var data = {
-                "idUser" : $("#idUser").val(),
-                "name" : $("#last_name").val(),
-                "surname" : $("#first_name").val(),
-                "email" : $("#email").val(),
-                "type" : $("#type").val(),
-                "password" :  $("#password1").val()};
+                "idUser" :      $("#idUser").val(),
+                "name" :        $("#last_name").val(),
+                "surname" :     $("#first_name").val(),
+                "email" :       $("#email").val(),
+                "type" :        $("#type").val(),
+                "password" :    $("#password1").val()};
 
             $.ajax ({
                 url: url,

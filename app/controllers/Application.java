@@ -19,12 +19,21 @@ public class Application extends Controller {
     public Application() {
     }
 
-    public Result editPro() {
-        return ok(views.html.editPro.render(checkConnected()));
-    }
-
-    public Result editPart() {
-        return ok(views.html.editPart.render(checkConnected()));
+    public Result editAccount() {
+        User u = Application.getCurrentUserObj();
+        if (checkConnected()) {
+            if (u != null) {
+                switch (u.getDroit()) {
+                    case 0:
+                        return ok(views.html.home.render(checkConnected()));
+                    case 1:
+                        return ok(views.html.editPro.render(checkConnected()));
+                    case 2:
+                        return ok(views.html.editPart.render(checkConnected()));
+                }
+            }
+        }
+        return redirect("/login");
     }
 
     public Result index() {
@@ -229,6 +238,20 @@ public class Application extends Controller {
             return ok(jsonNode);
         } else {
             return forbidden();
+        }
+    }
+
+
+    public Result getCurrentUserJSON() {
+        String user = session("userId");
+        ObjectMapper mapr = new ObjectMapper();
+        if (user != null) {
+            Long id = Long.parseLong(user);
+            User u = User.find.byId(id);
+            JsonNode usr = mapr.valueToTree(u);
+            return ok(usr);
+        } else {
+            return notFound();
         }
     }
 
