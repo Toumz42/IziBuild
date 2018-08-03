@@ -2,19 +2,25 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import models.MailToken;
 import models.User;
 import models.utils.ErrorUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.loader.plan.exec.internal.AbstractLoadPlanBasedLoader;
 import play.libs.Json;
+import play.libs.mailer.MailerClient;
 import play.mvc.*;
 
+import javax.inject.Inject;
+import java.util.Date;
 import java.util.Map;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Created by ttomc on 02/01/2017.
  */
 public class Application extends Controller {
+    @Inject
+    MailerClient mailerClient;
 
     public Application() {
     }
@@ -25,11 +31,11 @@ public class Application extends Controller {
             if (u != null) {
                 switch (u.getDroit()) {
                     case 0:
-                        return ok(views.html.home.render(checkConnected()));
+                        return ok(views.html.home.render(checkConnected(), checkAdmin()));
                     case 1:
-                        return ok(views.html.editPro.render(checkConnected()));
+                        return ok(views.html.editPro.render(checkConnected(), checkAdmin()));
                     case 2:
-                        return ok(views.html.editPart.render(checkConnected()));
+                        return ok(views.html.editPart.render(checkConnected(), checkAdmin()));
                 }
             }
         }
@@ -37,7 +43,7 @@ public class Application extends Controller {
     }
 
     public Result index() {
-        return ok(views.html.index.render(checkConnected()));
+        return ok(views.html.index.render(checkConnected(), checkAdmin()));
     }
 
     public Result home() {
@@ -46,11 +52,11 @@ public class Application extends Controller {
             if (u != null) {
                 switch (u.getDroit()) {
                     case 0:
-                        return ok(views.html.home.render(checkConnected()));
+                        return ok(views.html.home.render(checkConnected(), checkAdmin()));
                     case 1:
-                        return ok(views.html.homePro.render(checkConnected()));
+                        return ok(views.html.homePro.render(checkConnected(),checkAdmin()));
                     case 2:
-                        return ok(views.html.homePart.render(checkConnected()));
+                        return ok(views.html.homePart.render(checkConnected(),checkAdmin()));
                 }
             }
         }
@@ -60,7 +66,7 @@ public class Application extends Controller {
     public Result login() {
         User.makeAdmin();
         User u = getCurrentUserObj();
-        return ok(views.html.login.render(checkConnected()));
+        return ok(views.html.login.render(checkConnected(), checkAdmin()));
     }
 
     public Result projet() {
@@ -69,10 +75,11 @@ public class Application extends Controller {
             if (u != null) {
                 switch (u.getDroit()) {
                     case 0:
+                        return ok(views.html.adminProjects.render(checkConnected(), checkAdmin()));
                     case 1:
-                        return ok(views.html.projectPro.render(checkConnected()));
+                        return ok(views.html.projectPro.render(checkConnected(), checkAdmin()));
                     case 2:
-                        return ok(views.html.project.render(checkConnected()));
+                        return ok(views.html.project.render(checkConnected(), checkAdmin()));
                 }
             }
         }
@@ -82,10 +89,10 @@ public class Application extends Controller {
     public Result admin() {
         User u = getCurrentUserObj();
         if (checkConnected() && checkAdmin()) {
-            return ok(views.html.admin.render(checkConnected()));
+            return ok(views.html.admin.render(checkConnected(), checkAdmin()));
         } else {
             if (checkConnected()) {
-                return ok(views.html.home.render(checkConnected()));
+                return ok(views.html.home.render(checkConnected(), checkAdmin()));
             } else {
                 return redirect("/login");
             }
@@ -94,7 +101,7 @@ public class Application extends Controller {
 
     public Result doc() {
         if (checkConnected()) {
-            return ok(views.html.doc.render(checkConnected()));
+            return ok(views.html.doc.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
         }
@@ -102,7 +109,7 @@ public class Application extends Controller {
 
     public Result agenda() {
         if (checkConnected()) {
-            return ok(views.html.agenda.render(checkConnected()));
+            return ok(views.html.agenda.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
         }
@@ -110,7 +117,7 @@ public class Application extends Controller {
 
     public Result repertoire() {
         if (checkConnected()) {
-            return ok(views.html.repertoire.render(checkConnected()));
+            return ok(views.html.repertoire.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
         }
@@ -118,23 +125,23 @@ public class Application extends Controller {
 
     public Result note() {
         if (checkConnected()) {
-            return ok(views.html.note.render(checkConnected()));
+            return ok(views.html.note.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
         }
     }
 
     public Result createPart() {
-        return ok(views.html.createPart.render(checkConnected()));
+        return ok(views.html.createPart.render(checkConnected(), checkAdmin()));
     }
 
     public Result createPro() {
-        return ok(views.html.createPro.render(checkConnected()));
+        return ok(views.html.createPro.render(checkConnected(), checkAdmin()));
     }
 
     public Result admNote() {
         if (checkAdmin() && checkConnected()) {
-            return ok(views.html.admnote.render(checkConnected()));
+            return ok(views.html.admnote.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
         }
@@ -142,7 +149,7 @@ public class Application extends Controller {
 
     public Result referentiel() {
         if (checkConnected()) {
-            return ok(views.html.referentiel.render(checkConnected()));
+            return ok(views.html.referentiel.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
         }
@@ -161,12 +168,13 @@ public class Application extends Controller {
         ErrorUtils retour = null;
         User p = null;
         try {
-            p = User.find.query().where().eq("login", login).eq("password", sha1pswd)
+            p = User.find.query().where()
+                    .eq("login", login)
+                    .eq("password", sha1pswd)
                     .findOne();
-
             if (p != null) {
                 session("userId", p.getId().toString());
-                return ok("/home");
+                return home();
             } else {
                 retour = ErrorUtils.createError(true, "Pas de Compte", "erreur");
             }
@@ -280,15 +288,56 @@ public class Application extends Controller {
     }
 
     public Result messagerie() {
-        return ok(views.html.messagerie.render(checkConnected()));
+        return ok(views.html.messagerie.render(checkConnected(), checkAdmin()));
     }
 
     public Result conversation() {
-        return ok(views.html.conversation.render(checkConnected()));
+        return ok(views.html.conversation.render(checkConnected(), checkAdmin()));
     }
 
     public Result faq() {
-        return ok(views.html.faq.render(checkConnected()));
+        return ok(views.html.faq.render(checkConnected(), checkAdmin()));
     }
 
+    public Result forgotPassword() {
+        JsonNode json = request().body().asJson();
+        String mail = json.get("mail").asText();
+        User u = User.find.query()
+                .where().ilike("email","%"+mail+"%")
+                .findOne();
+        if (u != null) {
+            u.setToken(new MailToken());
+            u.save();
+            u.resetPassword(mailerClient);
+            return ok();
+        }
+        return badRequest();
+    }
+
+    public Result resetPasswordForm(String tokenId) {
+        Long id = Long.parseLong(tokenId.split("-")[0]);
+        String token = tokenId.split("-")[1];
+        MailToken mailToken = MailToken.find.byId(id);
+        if (mailToken != null && mailToken.getToken() != null) {
+            if (mailToken.getToken().equals(token) && mailToken.getExpireDate().after(new Date())) {
+                User u = mailToken.getUser();
+                if (u != null) {
+                    session("userId", u.getId().toString());
+                    return ok(views.html.password.render(true, false));
+                }
+            }
+        }
+        return badRequest();
+    }
+
+    public Result resetPassword() {
+        JsonNode json = request().body().asJson();
+        String password = json.get("password").asText();
+        User u = Application.getCurrentUserObj();
+        if (u != null) {
+            u.setPassword(password);
+            return ok();
+        }
+        return badRequest();
+    }
 }

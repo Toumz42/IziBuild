@@ -12,17 +12,14 @@ $(function () {
     }
 
     $('#logoLI').show();
-    $('#nav-mobile').css({ 'margin-top': '0px'});
-    $('#nav-mobile').removeClass('fixed');
-    $('.button-collapse').removeClass('hide-on-large-only');
-    $('.button-collapse').addClass('show-on-large');
+    $('#nav-mobile').css({ 'margin-top': '0px'}).removeClass('fixed');
+    $('.button-collapse').removeClass('hide-on-large-only').addClass('show-on-large');
     $('.parallax').parallax();
     // Detect touch screen and enable scrollbar if necessary
     if (is_touch_device()) {
         $('.arrowCarousel').hide();
     }
-    $('.carousel.carousel-slider').carousel({fullWidth: true});
-    $('.carousel.carousel-slider').removeAttr("style");
+    $('.carousel.carousel-slider').carousel({fullWidth: true}).removeAttr("style");
   //  $('.carousel').css("height", $(window).height() );
   //  $('.parallax-carousel').css("height", $(window).height());
 

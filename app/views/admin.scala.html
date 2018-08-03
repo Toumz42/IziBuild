@@ -1,5 +1,4 @@
-@(connected : Boolean)
-
+@(connected : Boolean, admin:Boolean)
     @main("Administration") {
         <div class="header-panel white-text" >
             <ul class="tabs red accent-4 white-text" id="mainTabs">
@@ -101,4 +100,4 @@
                 </div>
             </div>
         </div>
-    }(connected)
+    }(connected, admin)

@@ -18,6 +18,11 @@ scalaVersion := "2.12.2"
 
 libraryDependencies += javaJpa
 
+libraryDependencies += guice
+
+libraryDependencies += "com.typesafe.play" %% "play-mailer" % "6.0.1"
+libraryDependencies += "com.typesafe.play" %% "play-mailer-guice" % "6.0.1"
+
 // https://mvnrepository.com/artifact/dom4j/dom4j
 libraryDependencies += "dom4j" % "dom4j" % "1.6"
 

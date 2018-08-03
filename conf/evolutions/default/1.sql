@@ -24,6 +24,15 @@ create table calendar_event (
   constraint pk_calendar_event primary key (id)
 );
 
+create table mail_token (
+  id                            bigint auto_increment not null,
+  token                         varchar(255),
+  expire_date                   datetime(6),
+  user_id                       bigint,
+  constraint uq_mail_token_user_id unique (user_id),
+  constraint pk_mail_token primary key (id)
+);
+
 create table message (
   id                            bigint auto_increment not null,
   message                       varchar(255),
@@ -83,6 +92,8 @@ alter table calendar_event add constraint fk_calendar_event_user_id foreign key 
 create index ix_calendar_event_projet_id on calendar_event (projet_id);
 alter table calendar_event add constraint fk_calendar_event_projet_id foreign key (projet_id) references projet (id) on delete restrict on update restrict;
 
+alter table mail_token add constraint fk_mail_token_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+
 create index ix_message_expediteur_id on message (expediteur_id);
 alter table message add constraint fk_message_expediteur_id foreign key (expediteur_id) references user (id) on delete restrict on update restrict;
 
@@ -118,6 +129,8 @@ alter table calendar_event drop foreign key fk_calendar_event_user_id;
 alter table calendar_event drop foreign key fk_calendar_event_projet_id;
 drop index ix_calendar_event_projet_id on calendar_event;
 
+alter table mail_token drop foreign key fk_mail_token_user_id;
+
 alter table message drop foreign key fk_message_expediteur_id;
 drop index ix_message_expediteur_id on message;
 
@@ -145,6 +158,8 @@ drop index ix_user_projet_projet on user_projet;
 drop table if exists anomalie;
 
 drop table if exists calendar_event;
+
+drop table if exists mail_token;
 
 drop table if exists message;
 

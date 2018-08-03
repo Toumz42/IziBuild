@@ -1,7 +1,7 @@
-@(connected : Boolean)
+@(connected : Boolean, admin:Boolean)
 
 @main("Administration Notes") {
-    <div class="container">
+
     <script type='text/javascript' src='/assets/javascripts/views/admnote.js'></script>
     <script type='text/javascript' src='/assets/javascripts/index.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/utils/adminUtils.js'></script>
@@ -22,6 +22,7 @@
             <li class="tab col s3"><a class="active" id="allUser" >Tout</a></li>
         </ul>
     </div>
+    <div class="container">
     <div class="push-down-50 container">
         <div class="row">
             <div id="note">
@@ -135,4 +136,4 @@
         </div>
     </div>
     </div>
-}(connected)
+}(connected, admin)

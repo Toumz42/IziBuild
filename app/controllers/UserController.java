@@ -3,7 +3,6 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Projet;
 import models.Referentiel;
 import models.User;
@@ -40,6 +39,7 @@ public class UserController extends Controller {
         }
         return notFound();
     }
+
     public Result getProsPages() {
         List<User> userList = User.find.query().where().eq("droit",1).findList();
         if (userList != null) {
@@ -79,7 +79,7 @@ public class UserController extends Controller {
         String email = json.get("email").asText();
         String pass = json.get("password").asText();
         Long categorieId = json.get("categorie")!= null ? json.get("categorie").asLong() : null;
-        String sha1pass = DigestUtils.sha1Hex(pass);
+
 
         Referentiel categorie = null;
         if (categorieId != null) {
@@ -94,10 +94,11 @@ public class UserController extends Controller {
         if (u == null) {
             if (email != null) {
                 if (!email.equals("")) {
-                    User person = new User(name, surname, email, sha1pass, type, categorie);
+                    User person = new User(name, surname, email, pass, type, categorie);
                     person.save();
                     person.makeUserDir();
                     person.save();
+                    session("userId", person.getId().toString());
                     JsonNode retour = mapper.valueToTree(person);
                     return ok().sendJson(retour);
                 } else {
@@ -107,7 +108,7 @@ public class UserController extends Controller {
                 return badRequest("Erreur dans le mail");
             }
         }
-        return badRequest("Déjà inscrit !");
+        return badRequest("Ce mail est déjà utilisé !");
     }
 
     public Result updateUser() {
@@ -187,7 +188,10 @@ public class UserController extends Controller {
                 .setFirstRow(page)
                 .setMaxRows(10)
                 .findList();
-        User u = User.find.query().where().eq("login", "admin@ecole-isitech.fr").findOne();
+        User u = User.find.query().where()
+                .eq("login", "admin@ecole-isitech.fr")
+                .findOne();
+
         if (userList.contains(u)) {
             userList.remove(u);
         }
@@ -229,8 +233,6 @@ public class UserController extends Controller {
                 return null;
         }
     }
-
-
 
 
 }

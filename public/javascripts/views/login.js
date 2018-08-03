@@ -48,6 +48,28 @@ $(function () {
             }
         });
     });
+    $(".modal").modal({startingTop: '25%', endingTop: '25%'});
+    $('.forgot-pass').bind("click", function () {
+        var id = $('#email').val();
+        if (id !== '') {
+            $.ajax({
+                method: 'POST',
+                url: '/forgotPassword',
+                data: JSON.stringify({"mail": id}),
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function (retour) {
+                    if (retour.error) {
+                        myToast(retour.messageRetour);
+                    } else {
+                        $(".modal").modal("open");
+                    }
+                }
+            });
+        } else {
+            myToast("Erreur le mail est vide")
+        }
+    });
 
     $('.input-field').keypress(function (e) {
         if (e.which == 13) {

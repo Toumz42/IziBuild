@@ -16,45 +16,6 @@ $(function () {
     if (is_touch_device()) {
         $('#nav-mobile').css({ overflow: 'auto'});
     }
-    
-    $.ajax ({
-        url: "/checkAdmin",
-        type: "GET",
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            if (json){
-                $(".linkproj").prop("href","/admin");
-                $(".projText").text("Administration");
-                $(".admin").show();
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            if(xhr.status==403) {
-                $(".linkproj").prop("href","/projet")
-            }
-        }
-    });
-
-    $.ajax ({
-        url: "/checkAdmin",
-        type: "GET",
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            if (json){
-                $(".linknote").prop("href","/admnote");
-                $(".noteText").text("Administration Note");
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            if(xhr.status==403) {
-                $(".linknote").prop("href","/note")
-            }
-        }
-    });
 
     $('.logout').on("click", function () {
         $.post(
@@ -74,7 +35,6 @@ $(function () {
             });
     });
     $(".button-collapse").sideNav();
-
 
     $.ajax ({
         url: "/getCurrentUser",

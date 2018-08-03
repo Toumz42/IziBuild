@@ -40,7 +40,7 @@ $(function()
                 success: function(ret, textStatus, jqXHR){
                     myToast("Votre Compte a bien été créé !");
                     myToast("Vous allez etre redirigé vers la page d'accueil !");
-                    setTimeout(function() { document.location = "/home"; }, 2000);
+                    setTimeout(function() { window.location = "/home"; }, 1000);
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout de l'utilisateur");

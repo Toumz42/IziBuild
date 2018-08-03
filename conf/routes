@@ -14,7 +14,7 @@ GET     /doc                                        controllers.Application.doc(
 GET     /note                                       controllers.Application.note()
 GET     /createPro                                  controllers.Application.createPro()
 GET     /createPart                                 controllers.Application.createPart()
-GET     /editAccount                                   controllers.Application.editAccount()
+GET     /editAccount                                controllers.Application.editAccount()
 GET     /admnote                                    controllers.Application.admNote()
 GET     /admin                                      controllers.Application.admin()
 GET     /repertoire                                 controllers.Application.repertoire()
@@ -30,7 +30,6 @@ GET     /getAllGroupeProject                        controllers.ProjectControlle
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 GET     /getAllUser                                 controllers.UserController.getAllUser
 POST    /getAllUser                                 controllers.UserController.getAllUser
-POST    /getAllUserByPage                           controllers.UserController.getAllUserByPage
 GET     /getAllPros                                 controllers.UserController.getAllPros
 POST    /getAllProsByPage                           controllers.UserController.getAllProsByPage
 POST    /getAllUserByPage                           controllers.UserController.getAllUserByPage
@@ -67,6 +66,9 @@ POST    /sendMessage                                controllers.MessagerieContro
 POST    /getAllConversations                        controllers.MessagerieController.getAllConversations
 POST    /getAllMessageFromUserAndDestinataire       controllers.MessagerieController.getAllMessageFromUserAndDestinataire
 POST    /getLastMessageFromUserAndDestinataire      controllers.MessagerieController.getLastMessageFromUserAndDestinataire
+POST    /forgotPassword                             controllers.Application.forgotPassword()
+GET     /resetPasswordForm/:token                   controllers.Application.resetPasswordForm(token: String)
+POST    /resetPassword                              controllers.Application.resetPassword()
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -1,15 +1,15 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Model;
 import io.ebean.Finder;
+import mailer.MailerService;
 import models.utils.FileUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import play.libs.mailer.MailerClient;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
-import java.io.File;
 import java.util.List;
 
 @Entity
@@ -26,6 +26,10 @@ public class User extends Model {
     private String password;
     private String folder;
     private Integer droit;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonBackReference
+    private MailToken token;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
@@ -50,22 +54,24 @@ public class User extends Model {
 
     public User(String name, String surname, String email,
                 String password, Integer droit) {
+        String sha1pass = DigestUtils.sha1Hex(password);
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.login = email;
         this.droit = droit;
-        this.password = password;
+        this.password = sha1pass;
     }
 
     public User(String name, String surname, String email,
                 String password, Integer droit, @Nullable Referentiel categorie) {
+        String sha1pass = DigestUtils.sha1Hex(password);
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.login = email;
         this.droit = droit;
-        this.password = password;
+        this.password = sha1pass;
         this.categorie = categorie;
     }
 
@@ -117,7 +123,8 @@ public class User extends Model {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        String sha1pass = DigestUtils.sha1Hex(password);
+        this.password = sha1pass;
     }
 
     public Integer getDroit() {
@@ -206,6 +213,21 @@ public class User extends Model {
         this.folder = FileUtils.createUploadDir(this);
     }
 
+    public void resetPassword(MailerClient mailerClient) {
+        MailerService ms = new MailerService(mailerClient);
+        ms.resetPassword(this);
+    }
+
+    public MailToken getToken() {
+        return token;
+    }
+
+    public void setToken(MailToken token) {
+        this.token = token;
+        if (token.getUser() == null) {
+            token.setUser(this);
+        }
+    }
 
     public static Finder<Long, User> find = new Finder<Long, User>(User.class);
 

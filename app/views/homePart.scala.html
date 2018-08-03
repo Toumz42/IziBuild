@@ -1,5 +1,4 @@
-@(connected : Boolean)
-
+@(connected : Boolean, admin:Boolean)
 @main("Bienvenue sur l'ENT ISITECH") {
     <div class="container">
         <ul id="stage1">
@@ -108,7 +107,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a class="col s10 m5 l5 card push-l1 push-m1 card-1 horizontal" href="/editPart">
+                        <a class="col s10 m5 l5 card push-l1 push-m1 card-1 horizontal" href="/editAccount">
                             <div class="card-image valign-wrapper">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/id-card.png'title="Gestion du compte">
                             </div>
@@ -127,4 +126,4 @@
         </ul>
     </div>
 
-}(connected)
+}(connected, admin)

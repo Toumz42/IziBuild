@@ -1,4 +1,4 @@
-@(connected : Boolean)
+@(connected : Boolean, admin:Boolean)
 
 @main("Connexion") {
     @*<script type='text/javascript' src='@routes.Assets.at("javascripts/views/admin.js")'></script>*@
@@ -72,6 +72,7 @@
                                         </div>
                                     </div>
                                     <a id="btn_connexion" class="waves-effect waves-light red accent-4 btn" style="float: right;">Valider</a>
+                                    <a class="forgot-pass force-pointer red-text" style="float: left;">J'ai oublier mon mot de passe.</a>
                                 </form>
                             </div>
                         </div>
@@ -79,7 +80,18 @@
                 </li>
             </ul>
         </div>
+        <div id="password-reset-modal" class="modal">
+            <div class="modal-content">
+                <h4>Un email viens de vous être envoyé</h4>
+                <p> Nous vous avons envoyé un lien pour pouvoir réinitialiser votre mot de passe.<br>
+                    Ouvrez vite votre boite mail ;)
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
+            </div>
+        </div>
     </div>
     </div>
 
-}(connected)
+}(connected, admin)
