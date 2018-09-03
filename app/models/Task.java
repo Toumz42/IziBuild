@@ -12,22 +12,24 @@ import java.util.Date;
  */
 
 @Entity
-public class Anomalie extends Model {
+public class Task extends Model {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     public Long id;
-    public Date dateAnomalie;
+    public Date dateTask;
+    @OneToOne
+    public Referentiel type;
     public String contenu;
     public Integer etat;
     @ManyToOne
     @JsonBackReference
     public Projet projet;
 
-    public Anomalie() {
+    public Task() {
     }
 
-    public Anomalie(Date dateAnomalie, String contenu, Integer etat, Projet projet) {
-        this.dateAnomalie = dateAnomalie;
+    public Task(Date dateTask, String contenu, Integer etat, Projet projet) {
+        this.dateTask = dateTask;
         this.contenu = contenu;
         this.etat = etat;
         this.projet = projet;
@@ -41,12 +43,12 @@ public class Anomalie extends Model {
         this.id = id;
     }
 
-    public Date getDateAnomalie() {
-        return dateAnomalie;
+    public Date getdateTask() {
+        return dateTask;
     }
 
-    public void setDateAnomalie(Date dateAnomalie) {
-        this.dateAnomalie = dateAnomalie;
+    public void setdateTask(Date dateTask) {
+        this.dateTask = dateTask;
     }
 
     public String getContenu() {
@@ -81,6 +83,6 @@ public class Anomalie extends Model {
         this.projet = projet;
     }
 
-    public static Finder<Long, Anomalie> find = new Finder<Long, Anomalie>(Anomalie.class);
+    public static Finder<Long, Task> find = new Finder<Long, Task>(Task.class);
 
 }

@@ -3,15 +3,6 @@
 
 # --- !Ups
 
-create table anomalie (
-  id                            bigint auto_increment not null,
-  date_anomalie                 datetime(6),
-  contenu                       varchar(255),
-  etat                          integer,
-  projet_id                     bigint,
-  constraint pk_anomalie primary key (id)
-);
-
 create table calendar_event (
   id                            bigint auto_increment not null,
   title                         varchar(255),
@@ -44,9 +35,11 @@ create table message (
 
 create table projet (
   id                            bigint auto_increment not null,
+  type_id                       bigint,
   theme                         varchar(255),
   date_creation                 datetime(6),
   user_id                       bigint,
+  constraint uq_projet_type_id unique (type_id),
   constraint pk_projet primary key (id)
 );
 
@@ -63,6 +56,17 @@ create table referentiel (
   commentaire                   varchar(255),
   type                          integer not null,
   constraint pk_referentiel primary key (id)
+);
+
+create table task (
+  id                            bigint auto_increment not null,
+  date_task                     datetime(6),
+  type_id                       bigint,
+  contenu                       varchar(255),
+  etat                          integer,
+  projet_id                     bigint,
+  constraint uq_task_type_id unique (type_id),
+  constraint pk_task primary key (id)
 );
 
 create table user (
@@ -84,9 +88,6 @@ create table user_projet (
   constraint pk_user_projet primary key (user_id,projet_id)
 );
 
-create index ix_anomalie_projet_id on anomalie (projet_id);
-alter table anomalie add constraint fk_anomalie_projet_id foreign key (projet_id) references projet (id) on delete restrict on update restrict;
-
 alter table calendar_event add constraint fk_calendar_event_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 
 create index ix_calendar_event_projet_id on calendar_event (projet_id);
@@ -100,6 +101,8 @@ alter table message add constraint fk_message_expediteur_id foreign key (expedit
 create index ix_message_destinataire_id on message (destinataire_id);
 alter table message add constraint fk_message_destinataire_id foreign key (destinataire_id) references user (id) on delete restrict on update restrict;
 
+alter table projet add constraint fk_projet_type_id foreign key (type_id) references referentiel (id) on delete restrict on update restrict;
+
 create index ix_projet_user_id on projet (user_id);
 alter table projet add constraint fk_projet_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 
@@ -108,6 +111,11 @@ alter table projet_user add constraint fk_projet_user_projet foreign key (projet
 
 create index ix_projet_user_user on projet_user (user_id);
 alter table projet_user add constraint fk_projet_user_user foreign key (user_id) references user (id) on delete restrict on update restrict;
+
+alter table task add constraint fk_task_type_id foreign key (type_id) references referentiel (id) on delete restrict on update restrict;
+
+create index ix_task_projet_id on task (projet_id);
+alter table task add constraint fk_task_projet_id foreign key (projet_id) references projet (id) on delete restrict on update restrict;
 
 create index ix_user_categorie_id on user (categorie_id);
 alter table user add constraint fk_user_categorie_id foreign key (categorie_id) references referentiel (id) on delete restrict on update restrict;
@@ -120,9 +128,6 @@ alter table user_projet add constraint fk_user_projet_projet foreign key (projet
 
 
 # --- !Downs
-
-alter table anomalie drop foreign key fk_anomalie_projet_id;
-drop index ix_anomalie_projet_id on anomalie;
 
 alter table calendar_event drop foreign key fk_calendar_event_user_id;
 
@@ -137,6 +142,8 @@ drop index ix_message_expediteur_id on message;
 alter table message drop foreign key fk_message_destinataire_id;
 drop index ix_message_destinataire_id on message;
 
+alter table projet drop foreign key fk_projet_type_id;
+
 alter table projet drop foreign key fk_projet_user_id;
 drop index ix_projet_user_id on projet;
 
@@ -146,6 +153,11 @@ drop index ix_projet_user_projet on projet_user;
 alter table projet_user drop foreign key fk_projet_user_user;
 drop index ix_projet_user_user on projet_user;
 
+alter table task drop foreign key fk_task_type_id;
+
+alter table task drop foreign key fk_task_projet_id;
+drop index ix_task_projet_id on task;
+
 alter table user drop foreign key fk_user_categorie_id;
 drop index ix_user_categorie_id on user;
 
@@ -154,8 +166,6 @@ drop index ix_user_projet_user on user_projet;
 
 alter table user_projet drop foreign key fk_user_projet_projet;
 drop index ix_user_projet_projet on user_projet;
-
-drop table if exists anomalie;
 
 drop table if exists calendar_event;
 
@@ -168,6 +178,8 @@ drop table if exists projet;
 drop table if exists projet_user;
 
 drop table if exists referentiel;
+
+drop table if exists task;
 
 drop table if exists user;
 

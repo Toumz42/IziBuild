@@ -202,11 +202,11 @@ function refreshEcranSaisie(data)
      $("#idReferentiel").val(data.id);
      $("#code").val(data.code);
      $("#libelle").val(data.libelle);
-     $("#commentaireLong").val(data.commentaireLong);
+     $("#commentaireLong").val(data.commentaire);
      $("#cbx_referentiel").prop("disabled", true);
      $("#inputReferentiel").show("slide");
      $("#inputReferentiel .field").eq(0).select();
-     $.each($("#inputReferentiel input"), function (index, value) {
+     $.each($("#inputReferentiel input, #inputReferentiel textarea"), function (index, value) {
          if ($(this).val() !== "") {
              $("label[for='" + this.id + "']").addClass("active");
          }

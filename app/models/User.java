@@ -163,8 +163,8 @@ public class User extends Model {
         User u = User.find.query().where().eq("login", "admin@ecole-isitech.fr").findOne();
         if (u == null) {
             String pass = "1Sit3CH!";
-            pass = DigestUtils.sha1Hex(pass);
-            User adm = new User("Admin", "Admin", "admin@ecole-isitech.fr", pass, 0);
+            String sha1pass = DigestUtils.sha1Hex(pass);
+            User adm = new User("Admin", "Admin", "admin@ecole-isitech.fr", sha1pass, 0);
             adm.save();
         }
     }

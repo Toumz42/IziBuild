@@ -2,7 +2,6 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
 import models.utils.DateUtils;
@@ -19,18 +18,16 @@ import java.util.Locale;
 /**
  * Created by ttomc on 28/03/2017.
  */
-public class AnomaliesController extends Controller {
+public class TasksController extends Controller {
 
-
-
-    public Result addAnomalie() {
+    public Result addTask() {
         JsonNode json = request().body().asJson();
         String idProjStr = json.get("idProj").asText();
         String dateString = json.get("date").asText();
         String contenu = json.get("contenu").asText();
         dateString = dateString.replace(",","");
         Date date = null;
-        SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH);
         try {
             date = parser.parse(dateString);
         } catch (ParseException e) {
@@ -48,16 +45,11 @@ public class AnomaliesController extends Controller {
             }
         }
 
-
         if (contenu != null) {
             if (!contenu.equals("")) {
-                Anomalie suivi = new Anomalie(date,contenu,0,grp);
+                Task suivi = new Task(date,contenu,0,grp);
                 suivi.save();
                 ObjectNode result = Json.toJson(suivi).deepCopy();
-                result.remove("dateSoutenance");
-                DateUtils dU = new DateUtils();
-                String dateSuivi = dU.toFrenchDateString(suivi.dateAnomalie);
-                result.put("dateAnomalie", dateSuivi );
                 return ok(result);
 
             } else {
@@ -69,13 +61,13 @@ public class AnomaliesController extends Controller {
     }
 
 
-    public Result getAnomaliesbyProjectId() {
+    public Result getTasksbyProjectId() {
         JsonNode json = request().body().asJson();
-        Long id = json.get("idProject").asLong();
+        Long id = json.get("id").asLong();
         Projet p = Projet.find.byId(id);
         if (p != null) {
             ObjectMapper mapper = new ObjectMapper();
-            List<Anomalie> list = p.getAnomalieList();
+            List<Task> list = p.getTaskList();
             JsonNode result = mapper.valueToTree(list);
             return ok().sendJson(result);
 

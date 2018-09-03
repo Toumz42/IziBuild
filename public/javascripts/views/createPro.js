@@ -29,7 +29,7 @@ $(function()
                 "surname" : $("#first_name").val(),
                 "email" : $("#email").val(),
                 "type" : $("#type").val(),
-                "classe" : $("#classeUser").val(),
+                "categorie" : $("#categorie").val(),
                 "password" :  $("#password1").val()};
 
             $.ajax ({

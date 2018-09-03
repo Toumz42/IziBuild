@@ -63,11 +63,11 @@ function groupeToTab(json) {
         tr = $('<tr/>');
         tr.append("<th>Membres du groupe</th>");
         $(table2).append(tr);
-        for (var j = 0; j < json[i].userList.length; j++) {
+        for (var j = 0; j < json[i].user.length; j++) {
             tr = $('<tr/>');
-            tr.append("<td>" + json[i].userList[j].id + "</td>");
-            tr.append("<td>" + json[i].userList[j].name+ "</td>");
-            tr.append("<td>" + json[i].userList[j].surname + "</td>");
+            tr.append("<td>" + json[i].user[j].id + "</td>");
+            tr.append("<td>" + json[i].user[j].name+ "</td>");
+            tr.append("<td>" + json[i].user[j].surname + "</td>");
             $(table2).append(tr);
         }
         div = $('<div class="right-align suppDiv"/>');

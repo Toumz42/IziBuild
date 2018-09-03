@@ -29,8 +29,18 @@ $(function()
                 autoUpload: false,
                 multipart: true,
                 disableImageResize: /Android(?!.*Chrome)|Opera/
-                .test(window.navigator.userAgent)
+                .test(window.navigator.userAgent),
+                add: function (e, data) {
+                    data.submit()
+                        .done(function () {
+                            $(".noDoc").hide()
+                        })
+                },
+                stop: function (e) {
+                    var t = e;
+                }
         });
+
 
     $('#addFile').click(function () {
         $('#addInput').click();
@@ -114,9 +124,15 @@ $(function()
     }).always(function () {
         $(this).removeClass('fileupload-processing');
     }).done(function (result) {
+        if (result === {}) {
+            $(".noDoc").show();
+        }
+        if (result.files !== undefined) {
+            $(".noDoc").hide()
+        }
         $(this).fileupload('option', 'done')
             .call(this, $.Event('done'), {result: result});
-    })
+    });
         // }
     $(document).ajaxStart(function () {
         $(".waitOnDiv").show();

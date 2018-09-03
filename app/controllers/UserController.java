@@ -78,7 +78,7 @@ public class UserController extends Controller {
         Integer type = json.get("type").asInt();
         String email = json.get("email").asText();
         String pass = json.get("password").asText();
-        Long categorieId = json.get("categorie")!= null ? json.get("categorie").asLong() : null;
+        Long categorieId = json.get("categorie") != null ? json.get("categorie").asLong() : null;
 
 
         Referentiel categorie = null;

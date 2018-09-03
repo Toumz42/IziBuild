@@ -19,6 +19,7 @@ GET     /admnote                                    controllers.Application.admN
 GET     /admin                                      controllers.Application.admin()
 GET     /repertoire                                 controllers.Application.repertoire()
 GET     /faq                                        controllers.Application.faq()
+GET     /administration                             controllers.Application.admin()
 POST    /delete                                     controllers.Application.deleteDispatcher()
 POST    /identifyUser                               controllers.Application.identifyUser()
 GET     /getProjects                                controllers.ProjectController.getProjects
@@ -42,10 +43,10 @@ POST    /getCalendar                                controllers.CalendarControll
 GET     /getMyCalendar                              controllers.CalendarController.getMyCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
 POST    /addUser                                    controllers.UserController.addUser()
-POST    /addAnomalie                                controllers.AnomaliesController.addAnomalie()
+POST    /addTask                                    controllers.TasksController.addTask()
 POST    /getUserById                                controllers.UserController.getUserById
 GET     /getCurrentUser                             controllers.Application.getCurrentUserJSON
-POST    /getAnomaliesbyProjectId                    controllers.AnomaliesController.getAnomaliesbyProjectId()
+POST    /getTasksbyProjectId                        controllers.TasksController.getTasksbyProjectId()
 POST    /addEvent                                   controllers.CalendarController.addEvent()
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
 POST    /addProject                                 controllers.ProjectController.addProject()

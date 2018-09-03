@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Projet;
-import models.Anomalie;
+import models.Task;
 import models.User;
 import models.utils.DateUtils;
 import play.libs.Json;
@@ -72,9 +72,9 @@ public class ProjectController extends Controller {
     }
 
     public static Result deleteAnomalies(Long id) {
-        Anomalie anomalie = Anomalie.find.byId(id);
-        if (anomalie != null) {
-            anomalie.delete();
+        Task task = Task.find.byId(id);
+        if (task != null) {
+            task.delete();
             return ok(Json.toJson(true));
         }
         return badRequest("Erreur dans la suppression");
@@ -93,18 +93,19 @@ public class ProjectController extends Controller {
             projetList = Projet.find.all();
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode listResult = mapper.createArrayNode();
-            for (Projet g : projetList) {
-                List<User> userList = User.find.query().fetch("projet").where().eq("projet.id",g.getId()).findList();
-                ArrayNode array = mapper.valueToTree(userList);
-                ObjectNode userNode = mapper.valueToTree(g);
-                userNode.remove("dateCreation");
-                userNode.put("date", g.getDateSoutenanceString());
-                userNode.put("theme", g.getTheme() );
-                userNode.putArray("users").addAll(array);
-                listResult.add(userNode);
-            }
-//                JsonNode retour = Json.toJson(projetList);
-            return ok().sendJson(listResult);
+//            for (Projet g : projetList) {
+//                List<User> userList = User.find.query().fetch("projet").where().eq("projet.id",g.getId()).findList();
+//                ArrayNode array = mapper.valueToTree(userList);
+//                ObjectNode userNode = mapper.valueToTree(g);
+//                userNode.remove("dateCreation");
+//                userNode.put("date", g.getDateSoutenanceString());
+//                userNode.put("theme", g.getTheme() );
+//                userNode.putArray("users").addAll(array);
+//                listResult.add(userNode);
+//            }
+            JsonNode retour = Json.toJson(projetList);
+            //return ok().sendJson(listResult);
+            return ok().sendJson(retour);
         }
         return notFound();
 
@@ -282,10 +283,10 @@ public class ProjectController extends Controller {
         JsonNode json = request().body().asJson();
         Long id = json.get("id").asLong();
         Boolean state = json.get("state").asBoolean();
-        Anomalie anomalie = Anomalie.find.byId(id);
-        if (anomalie != null) {
-            anomalie.setEtatBoolean(state);
-            anomalie.update();
+        Task task = Task.find.byId(id);
+        if (task != null) {
+            task.setEtatBoolean(state);
+            task.update();
         }
         return ok();
     }

@@ -18,6 +18,9 @@ var cardStartcol = "<ul class='stage'><div class='row'>" +
 var cardEnd = "</div></div></div></li></div></div></ul>";
 var deleteIcon = "<i class='material-icons'>delete</i>";
 var editIcon = "<i class='material-icons'>edit</i>";
+var addIcon = "<i class='material-icons'>add</i>";
+var checkIcon = "<i class='material-icons'>check</i>";
+var closeIcon = "<i class='material-icons'>close</i>";
 var cardCollapseStart = '<ul class="stage">'+
     '<div class="row">'+
     '<div class="col m12 s12 l12 push-s1 push-l1 push-m1">'+
@@ -25,7 +28,7 @@ var cardCollapseStart = '<ul class="stage">'+
     '<ul class="card-2 collapsible" data-collapsible="accordion">'+
     '<li>'+
     '<div class="card-1 card card-content wrapped collapsible-header">'+
-    '<div class="row">';
+    '<div class="col m12 s12 l12">';
 var cardCollapseMiddle = "</div></div>";
 var cardCollapseEnd2 = "</li></ul></li></div></div></ul>";
 
@@ -66,7 +69,7 @@ function jsonToGlobalArray(array, json) {
 
 function modalize(el,parent,set) {
     if (set) {
-        el.addClass("modal");
+        el.addClass("modal").addClass("modal-fixed-footer");
         $(".modal").modal(
             {
                 startingTop: '25%',
@@ -95,8 +98,9 @@ function modalize(el,parent,set) {
         el.modal('open');
         parent.show();
     } else {
-        el.modal('close');
+        parent.show();
         el.show();
+        el.modal('close');
     }
 }
 function activeFields(array) {
@@ -230,4 +234,11 @@ function jumpToPage(page, func) {
         $("#firstArrow").removeClass("disabled");
     }
     $(page).parent().addClass("indigo active").removeClass("waves-effect");
+}
+function javaToFrenchDate(time) {
+    var date = new Date(time);
+    var day = date.getDay() < 10 ? "0" + date.getDay() : date.getDay();
+    var month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+
+    return day + "/" + month + "/" + date.getFullYear();
 }

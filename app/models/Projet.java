@@ -16,6 +16,8 @@ public class Projet extends Model {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    @OneToOne
+    private Referentiel type;
     private String theme;
     private Date dateCreation;
 
@@ -29,7 +31,7 @@ public class Projet extends Model {
 
     @OneToMany(mappedBy="projet")
     @JsonManagedReference
-    private List<Anomalie> anomalieList;
+    private List<Task> taskList;
 
     @OneToMany(mappedBy="projet")
     @JsonManagedReference
@@ -90,12 +92,12 @@ public class Projet extends Model {
         this.user = user;
     }
 
-    public List<Anomalie> getAnomalieList() {
-        return anomalieList;
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
-    public void setAnomalieList(List<Anomalie> anomalieList) {
-        this.anomalieList = anomalieList;
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 
     public List<CalendarEvent> getEventList() {

@@ -174,7 +174,7 @@ public class Application extends Controller {
                     .findOne();
             if (p != null) {
                 session("userId", p.getId().toString());
-                return home();
+                return ok("/home");
             } else {
                 retour = ErrorUtils.createError(true, "Pas de Compte", "erreur");
             }
@@ -200,7 +200,7 @@ public class Application extends Controller {
             case "projet":
                 r = ProjectController.deleteGroupe(id);
                 break;
-            case "suivi":
+            case "task":
                 r = ProjectController.deleteAnomalies(id);
                 break;
         }
@@ -225,8 +225,8 @@ public class Application extends Controller {
                 return true;
             }
         }
-        //return false;
-        return true;
+        return false;
+//        return true;
     }
 
     public Boolean checkPro() {

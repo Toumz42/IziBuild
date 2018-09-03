@@ -2,13 +2,11 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import models.Anomalie;
 import models.Referentiel;
 import models.utils.TypesReferentiel;
-import play.api.libs.json.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class ReferentielController extends Controller {

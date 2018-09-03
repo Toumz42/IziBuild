@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
+import akka.http.javadsl.model.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -87,6 +88,7 @@ public class FileController extends Controller {
                                 }
                                 File f = new File(Play.current().path().getAbsolutePath() + "/public/uploaded/temp/temp");
                                 f.createNewFile();
+
                                 if (mimetype.endsWith("png")) {
                                     ImageIO.write(thumb, "PNG", f);
                                     response().setHeader("Content-Type", "image/png");
