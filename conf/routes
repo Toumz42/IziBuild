@@ -52,6 +52,7 @@ POST    /getUserById                                controllers.UserController.g
 GET     /getCurrentUser                             controllers.Application.getCurrentUserJSON
 POST    /getTasksbyProjectId                        controllers.TasksController.getTasksbyProjectId()
 POST    /toggleTasksbyId                            controllers.TasksController.toggleTasksbyId()
+GET     /getMyCalendar                              controllers.CalendarController.getMyCalendar
 POST    /addEvent                                   controllers.CalendarController.addEvent()
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
 POST    /addProject                                 controllers.ProjectController.addProject()

@@ -69,8 +69,8 @@ $(function()
             {
                 id: 1,
                 url: '/getMyCalendar',
-                type: 'POST',
-                data: JSON.stringify(data),
+                type: 'GET',
+                dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 error: function() {
                     // alert('there was an error while fetching events!');
@@ -160,8 +160,8 @@ $(function()
             var data = {
                 "idEvent" : $("#idEvent").val(),
                 "titre" : $("#titleEvent").val(),
-                "guest" : autocomplete.$el.data("value"),
-                "classe" : $("#classeEvent").val(),
+                "guestId" : autocomplete.$el.data("value"),
+                "proj" : $("#classeEvent").val(),
                 "dateEvent" :  $("#dateEvent").val(),
                 "hourStart" :  $("#hourStart").val(),
                 "hourEnd" :  $("#hourEnd").val()
@@ -189,18 +189,20 @@ $(function()
             });
         }
     });
+    var source = calendar.fullCalendar( 'getEventSourceById', 1 );
+    calendar.fullCalendar( 'refetchEvents');
     $(document).ajaxStop(function () {
-        $("#mainTabs").tabs(
-            {
-                onShow: function () {
-                    $("#classeId").val(this.id);
-                    var source = calendar.fullCalendar( 'getEventSourceById', 1 );
-                    var data = { "classeId" : $('#classeId').val()};
-                    source.data = JSON.stringify(data);
-                    calendar.fullCalendar( 'refetchEvents');
-                }
-            }
-        );
+
+        // $("#mainTabs").tabs(
+        //     {
+        //         onShow: function () {
+        //             $("#classeId").val(this.id);
+        //             var data = { "classeId" : $('#classeId').val()};
+        //             source.data = JSON.stringify(data);
+        //
+        //         }
+        //     }
+        // );
     });
 });
 

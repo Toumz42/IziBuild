@@ -43,7 +43,7 @@ public class CalendarController extends Controller{
     }
 
     public Result getMyCalendar() {
-        JsonNode json = request().body().asJson();
+        //JsonNode json = request().body().asJson();
         User u = Application.getCurrentUserObj();
         if (u != null) {
             ObjectMapper mapper = new ObjectMapper();
