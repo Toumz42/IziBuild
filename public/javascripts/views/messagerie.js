@@ -3,7 +3,6 @@
  */
 $(function()
 {
-    $(".page-title").empty().append("Messagerie");
     initAutoComplete();
     initConversations();
     initNewMessage();
@@ -143,12 +142,20 @@ function usersToCollections(json) {
             }
         });
         tr.append("<div class='open-conversation secondary-content' style='cursor:pointer' id='"+element.id+"'><i class='material-icons'>send</i></div>");
-        $("#messagerie .collection").append(tr);
+        if ($("#messagerie .collection").length > 0) {
+            $("#messagerie .collection").append(tr);
+            $("#noProj").hide();
+            $("#messagerie").show();
+        } else {
+            if (element.id == 1) {
+                $("#incidents .collection").append(tr);
+                $("#noProj").hide();
+                $("#incidents").show();
+            }
+        }
         $(".open-conversation").click(function () {
             window.location.href = "/conversation?id=" + this.id;
         });
-        $("#messagerie").show();
-        $("#noProj").hide();
 
     });
 

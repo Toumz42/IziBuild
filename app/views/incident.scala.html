@@ -1,0 +1,77 @@
+@(connected : Boolean, admin:Boolean)
+
+@main("Incidents") {
+    <script type='text/javascript' src='/assets/javascripts/views/utils/utils.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/views/messagerie.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
+    <a id="addMsg" class="btn-floating btn-large waves-effect waves-light indigo"><i class="material-icons">add</i></a>
+    <div class="container">
+        <div class="row">
+        <ul class="stage">
+            <div class="row" id="msgDiv" style="display: none">
+                <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                    <div class="card card-1">
+                        <form id="formGroupe" class="red-text ">
+                            <div class="modal-content">
+                                <h4 class="@*card-title*@ red-text ">Nouveau Message</h4>
+                                <div class="row">
+                                    @if(admin) {
+                                    <div class="input-field col s12">
+                                        <div class="autocomplete" id="single">
+                                            <div class="ac-input">
+                                                <div class="valign-wrapper">
+                                                    <i class="valign material-icons prefix">account_circle</i>
+                                                    <input type="text" id="singleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez les membres du projet" data-activates="singleDropdown" data-beloworigin="true" autocomplete="off">
+                                                </div>
+                                                <input type="hidden" id="destId"/>
+                                            </div>
+                                            <ul id="singleDropdown" class="dropdown-content ac-dropdown"></ul>
+                                        </div>
+                                        <label class="active" for="singleInput">Single autocomplete: </label>
+                                    </div>
+                                    }else{
+                                        <input type="hidden" id="destId" class="hide" value="1"/>
+                                    }
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">textsms</i>
+                                        <textarea class="materialize-textarea" id="message"></textarea>
+                                        <label for="message">Message</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#!" id="sendMessage" class="modal-action modal-close waves-effect waves-light btn red accent-4 right-align">Valider</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="incidents" style="display: none">
+                <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                    <div class="card card-1">
+                        <ul class="collection">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="noProj">
+                <div class="col s12 push-s1 push-m1 push-l1">
+                    <div class="card horizontal card-1">
+                        <div class="card-image">
+                            <img class="noProj" src="/assets/images/construction-worker.png">
+                        </div>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <span class="card-title">Aucun Incidents</span>
+                                <p>Vous n'avez aucun incidents déclarés. Tout va bien ! </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ul>
+    </div>
+    </div>
+}(connected, admin)

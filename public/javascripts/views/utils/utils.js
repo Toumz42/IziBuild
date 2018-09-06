@@ -242,3 +242,48 @@ function javaToFrenchDate(time) {
 
     return day + "/" + month + "/" + date.getFullYear();
 }
+
+
+function initMaterial() {
+    $('.collapsible').collapsible();
+
+    $('.datepicker').pickadate({
+        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
+        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+
+        labelMonthNext: 'Mois suivant',
+        labelMonthPrev: 'Mois precédent',
+        labelMonthSelect: 'Selection mois',
+        labelYearSelect: 'Selection année',
+
+        today: 'Auj',
+        clear: 'Effacer',
+        close: 'Fermer',
+        firstDay: true,
+        formatSubmit: 'yyyy-mm-dd',
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15 // Creates a dropdown of 15 years to control year
+    });
+}
+
+function initValidProj() {
+    $(".validTask").click(function () {
+        var data = {
+            "id": this.id,
+            "value": $(this).is(":checked")
+        };
+        $.ajax({
+            url: "/toggleTasksbyId",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (ret, textStatus, jqXHR) {
+                $(this).prop("checked", "checked");
+            }
+        });
+    });
+}

@@ -107,6 +107,14 @@ public class Application extends Controller {
         }
     }
 
+    public Result incident() {
+        if (checkConnected()) {
+            return ok(views.html.incident.render(checkConnected(), checkAdmin()));
+        } else {
+            return redirect("/login");
+        }
+    }
+
     public Result agenda() {
         if (checkConnected()) {
             return ok(views.html.agenda.render(checkConnected(), checkAdmin()));

@@ -26,6 +26,10 @@ GET     /getProjects                                controllers.ProjectControlle
 POST    /getProjects                                controllers.ProjectController.getProjects
 POST    /getProjectsPro                             controllers.ProjectController.getProjectsPro
 GET     /getProjectsPro                             controllers.ProjectController.getProjectsPro
+GET     /getProjectPages                            controllers.ProjectController.getProjectPages
+POST    /getProjectPages                            controllers.ProjectController.getProjectsPro
+GET     /getAllProjectByPage                        controllers.ProjectController.getAllProjectByPage
+POST    /getAllProjectByPage                        controllers.ProjectController.getAllProjectByPage
 POST    /toggleStateSuivi                           controllers.ProjectController.toggleStateSuivi
 GET     /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
 POST    /getAllGroupeProject                        controllers.ProjectController.getAllGroupeProject
@@ -47,6 +51,7 @@ POST    /addTask                                    controllers.TasksController.
 POST    /getUserById                                controllers.UserController.getUserById
 GET     /getCurrentUser                             controllers.Application.getCurrentUserJSON
 POST    /getTasksbyProjectId                        controllers.TasksController.getTasksbyProjectId()
+POST    /toggleTasksbyId                            controllers.TasksController.toggleTasksbyId()
 POST    /addEvent                                   controllers.CalendarController.addEvent()
 POST    /updateEvent                                controllers.CalendarController.updateEvent()
 POST    /addProject                                 controllers.ProjectController.addProject()
@@ -55,6 +60,8 @@ GET     /getAllParticulier                          controllers.UserController.g
 POST    /updateProjectGroup                         controllers.ProjectController.updateProjectGroup()
 GET     /upload                                     controllers.FileController.doGet()
 POST    /upload                                     controllers.FileController.doPost()
+POST    /incident                                   controllers.Application.incident
+GET     /incident                                   controllers.Application.incident
 POST    /logout                                     controllers.Application.logout()
 POST    /getAllByTypeId                             controllers.ReferentielController.getAllByTypeId()
 GET     /referentiel                                controllers.Application.referentiel()

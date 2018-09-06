@@ -90,7 +90,7 @@ function makeProjectDiv(json) {
             table3 = $("<table class='responsive-table highlight taskTable'></table>");
             table4 = $("<table class='responsive-table highlight hide addTaskTable'></table>");
             tr = $('<tr/>');
-            tr.append("<th style='width: 25%'>Projet</th>");
+            tr.append("<th style='width: 25%'><h5>Projet</h5></th>");
             tr.append("<th> Theme </th>");
             tr.append("<th>Date</th>");
             table.append(tr);
@@ -125,18 +125,19 @@ function makeProjectDiv(json) {
                     table2.append(tr);
                 }
             }
+            table4.append('<tr><td>Tâches</td></tr>');
             for (var k = 0; k < json[i].taskList.length; k++) {
                 tr = $('<tr/>');
                 tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
                 tr.append("<td>" + javaToFrenchDate(json[i].taskList[k].dateTask) + "</td>");
                 tr.append("<td>" + json[i].taskList[k].contenu + "</td>");
                 var checked = "";
-                if (json[i].etat == 1) {
+                if (json[i].taskList[k].etat == 1) {
                     checked = "checked";
                 }
                 var toggle ="<div class='switch right-align'><label>"+
                     "   Validation  " +
-                    "   <input type='checkbox' id='"+json[i].taskList[k].id+"' type='checkbox' "+checked+">"+
+                    "   <input type='checkbox' id='"+json[i].taskList[k].id+"' class='validTask' type='checkbox' "+checked+">"+
                     "   <span class='lever'>" +
                     "</span></label></div> ";
                 tr.append("<td>" + toggle + "</td>");
@@ -162,6 +163,7 @@ function makeProjectDiv(json) {
             tr.append("<td>" +
                 "<div class='closeIcon'>"+closeIcon +"</div>"+
                 "</td>");
+            table3.prepend('<tr><td><h5>Tâches</h5></td></tr>');
             table4.append(tr);
             if (json[i].taskList.length > 0) {
                 accordContent.empty();
@@ -250,18 +252,23 @@ function makeProjectDiv(json) {
                     }
                     var toggle ="<div class='switch right-align'><label>"+
                         "   Validation  " +
-                        "   <input type='checkbox' id='"+json.id+"' type='checkbox' "+checked+">"+
+                        "   <input type='checkbox' id='"+json.id+"'  class='validTask' type='checkbox' "+checked+">"+
                         "   <span class='lever'>" +
                         "</span></label></div> ";
-                    tr.append("<td>" + toggle + "</td>");
+                    tr.append("<td>" + toggle +
+                        "<div class='deleteIcon' data-taskId='"+json[i].taskList[k].id+"'>"+deleteIcon+"</div>"
+                        + "</td>");
                     taskTable.append(tr);
                     if (noTaskTable) {
                         collapseBody.append(taskTable);
                     }
+                    initValidProj();
                 }
             });
         }
     });
+    initMaterial();
+    initValidProj();
 }
 
 function initTabUser() {
@@ -332,29 +339,4 @@ function removeFromGroup(item){
     if (i > -1) {
         groupids.splice(i, 1);
     }
-}
-
-function initMaterial() {
-    $('.collapsible').collapsible();
-
-    $('.datepicker').pickadate({
-        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
-        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
-        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
-
-        labelMonthNext: 'Mois suivant',
-        labelMonthPrev: 'Mois precédent',
-        labelMonthSelect: 'Selection mois',
-        labelYearSelect: 'Selection année',
-
-        today: 'Auj',
-        clear: 'Effacer',
-        close: 'Fermer',
-        firstDay: true,
-        formatSubmit: 'yyyy-mm-dd',
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
-    });
 }

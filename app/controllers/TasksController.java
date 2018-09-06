@@ -74,4 +74,22 @@ public class TasksController extends Controller {
         }
         return ok().sendJson(Json.toJson(false));
     }
+
+    public Result toggleTasksbyId() {
+        JsonNode json = request().body().asJson();
+        Long id = json.get("id").asLong();
+        Boolean val = json.get("value").asBoolean();
+        Task p = Task.find.byId(id);
+        if (p != null) {
+            p.setEtatBoolean(val);
+            p.save();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode result = mapper.valueToTree(p);
+            return ok().sendJson(result);
+
+        }
+        return ok().sendJson(Json.toJson(false));
+    }
+
+
 }

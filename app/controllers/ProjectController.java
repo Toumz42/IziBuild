@@ -174,6 +174,30 @@ public class ProjectController extends Controller {
         }
         return notFound();
     }
+    public Result getProjectPages() {
+        List<Projet> projetList = Projet.find.all();
+        if (projetList != null) {
+            Integer size = (int) Math.ceil((double) projetList.size() / 10d);
+            JsonNode userNode = mapper.valueToTree(size);
+            return ok().sendJson(userNode);
+        }
+        return notFound();
+    }
+
+    public Result getAllProjectByPage() {
+        JsonNode json = request().body().asJson();
+        Integer page = (json.get("page").asInt() - 1) * 10;
+        List<Projet> projetList = Projet.find.query()
+                .setFirstRow(page)
+                .setMaxRows(10)
+                .findList();
+        if (projetList != null) {
+            JsonNode userNode = mapper.valueToTree(projetList);
+            return ok().sendJson(userNode);
+        }
+        return notFound();
+    }
+
 
     public Result addProject() {
         JsonNode json = request().body().asJson();
