@@ -11,7 +11,7 @@ $(function()
 {
     currentPage = 1;
     $(".page-title").empty().append("Répertoire");
-    initPagination("/getProsPages", "proRep");
+    initPagination("/getAllUserPages", "allUserAdmin");
     getPros(currentPage);
     $.ajax({
         type: "POST",
@@ -22,6 +22,8 @@ $(function()
         success: function(data) {
             data = JSON.parse(data);
             $(".filter").append('<div class="chip blueB force-pointer" id="all">Tout</div>');
+            $(".filter").append('<div class="chip blueB force-pointer" id="user">Utilisateurs</div>');
+            $(".filter").append('<div class="chip blueB force-pointer" id="pros">Professionnels</div>');
             $.each(data,function(index,value)
             {
                 $(".filter").append('<div class="chip force-pointer" id="'+value.id+'">'+value.libelle+'</div>');
@@ -31,9 +33,15 @@ $(function()
                 var id = this.id;
                 if (id === "all") {
                     $("li.collection-item").show();
+                } else if (id === "user") {
+                    $("li.collection-item").show();
+                    $("li.collection-item:not([data-type='" + -1 + "'])").hide();
+                } else if (id === "pros") {
+                    $("li.collection-item").show();
+                    $("li.collection-item:not([data-type='" + -2 + "'])").hide();
                 } else {
                     $("li.collection-item").show();
-                    $("li.collection-item:not([data-type='" + id + "'])").hide();
+                    $("li.collection-item:not([data-cat='" + id + "'])").hide();
                 }
                 $(".chip").removeClass("blueB");
                 $(this).toggleClass("blueB");
@@ -89,7 +97,7 @@ function getPros(page) {
     dataGroup = JSON.stringify(dataGroup);
     waitOn();
     $.ajax ({
-        url: "/getAllProsByPage",
+        url: "/getAllUserByPage",
         type: "POST",
         data: dataGroup,
         dataType: "text",
@@ -122,14 +130,20 @@ function usersToCollections(json) {
         json = [json];
     }
     $.each(json,function (index, element) {
-        tr = $('<li class="collection-item avatar" data-type="'+element.categorie.id+'" /> ');
+        var catId = element.categorie !== null ? element.categorie.id : -1;
+        var type = element.categorie !== null ? -2 : -1;
+        tr = $('<li class="collection-item avatar" data-cat="'+catId+'" data-type="'+type+'" /> ');
         tr.append("<input type='hidden' class='idUser' value='" + element.id + "'>");
         tr.append("<img src='/assets/images/avatar/worker.png' alt='' class='circle'>");
-        tr.append("<div style='font-weight: bold' class='title'>" + element.societe + "</div>");
+        if (element.societe !== null) {
+            tr.append("<div style='font-weight: bold' class='title'>" + element.societe + "</div>");
+        }
         tr.append("<div style='font-weight: bold' class='title'>" + element.name +" "+ element.surname + "</div>");
         tr.append("<p style='font-weight: 400' id='info"+element.id+"'>"+element.adresse+" " + element.codePostal+" " + element.ville+"<br></p>");
         tr.append("<p style='font-weight: 400' id='info"+element.id+"'>"+element.portable+"<br></p>");
-        tr.append("<p style='font-weight: 400' id='info"+element.id+"'>"+element.categorie.libelle+"<br></p>");
+        if (element.categorie !== null) {
+            tr.append("<p style='font-weight: 400' id='info" + element.id + "'>" + element.categorie.libelle + "<br></p>");
+        }
         tr.append("<div class='open-conversation secondary-content' style='cursor:pointer' id='"+element.id+"'><i class='material-icons'>send</i></div>");
         $(".collection").append(tr);
         $(".open-conversation").click(function () {

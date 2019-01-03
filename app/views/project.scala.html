@@ -9,54 +9,110 @@
     <a id="addSuivi" class="btn-floating btn-large waves-effect waves-light indigo"><i class="material-icons">add</i></a>
     <div class="row" id="projectMainDiv">
         <ul class='stage'>
+            <div class="row" id="projectMenu">
+                <div class="col s12 m12 l12">
+                   <div class="card card-1">
+                       <div class="card-content">
+                           <span class="card-title projText red-text">Que voulez vous rénover ?</span>
+                        </div>
+                   </div>
+                </div>
+                <a class="col s12 m12 l4 linkMenuProjet" id="bathroom" data-name="Salle de Bain">
+                   <div class="card card-1 medium card-menu ">
+                        <div class="card-image ">
+                            <img class="center-align responsive-img imgHome" src='/assets/images/bathroom.png' align="middle" title="Projet">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title projText red-text">Salle de Bain</span>
+                            <p class="linkproj grey-text" >
+                                Une douche à l'italienne ? Une baignoire ?
+                            </p>
+                        </div>
+                   </div>
+                </a>
+                <a class="col s12 m12 l4 linkMenuProjet" id="kitchen" data-name="Cuisine">
+                    <div class=" card push-l1 medium card-1 card-menu  " >
+                        <div class="card-image ">
+                            <img class="responsive-img imgHome " src='/assets/images/kitchen.png'title="Agenda">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title red-text" style="display: block;">Cuisine</span>
+                            <p class="grey-text" >
+                                Place à la cuisine du chef !
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <a class="col s12 m12 l4 linkMenuProjet" id="bedroom" data-name="Chambre">
+                    <div class="card medium card-1 card-menu">
+                        <div class="card-image ">
+                            <img class="responsive-img imgHome" src='/assets/images/bedroom.png' title="Chambre">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title red-text" style="display: block;">Chambre</span>
+                            <p class="grey-text" >
+                                Une nouvelle chambre où faire de beaux rêves.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </ul>
+        <ul class='stage'>
             <div id="projetAdderDiv" style="display: none">
                 <ul class="stage">
                     <div class="row">
-                        <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                        <div class="col m12 s12 l12">
                             <li>
-                                <div class="card card-1">
-                                    <div class="card-content ">
-                                        <div class="row" id="formParent">
-                                            <form id="formGroupe" class="red-text ">
-                                                <div class="modal-content">
-                                                    <h4 class="@*card-title*@ red-text ">Editer projet</h4>
-                                                    <input type="hidden" id="idGroupe" value="">
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="theme" type="text" class="">
-                                                            <label for="theme">Theme</label>
+                                <form id="formGroupe" class="red-text card card-1">
+                                    <div class="modal-content">
+                                        <h4 class="@*card-title*@ red-text ">Editer projet</h4>
+                                        <input type="hidden" id="idProject" value="">
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input id="theme" readonly="readonly" type="text" class="">
+                                                <label for="theme">Theme</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input id="date" type="text" class="datepicker">
+                                                <label for="date">Date</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input id="adresse" type="text" class="">
+                                                <label for="adresse">Adresse</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input id="superficie" type="text" class="">
+                                                <label for="superficie">Superficie</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <div class="autocomplete" id="multiple">
+                                                    <div class="ac-users"></div>
+                                                    <div class="ac-input">
+                                                        <div class="valign-wrapper">
+                                                            <i class="valign material-icons prefix">account_circle</i>
+                                                            <input type="text" id="multipleInput" placeholder="Selectionnez les membres du projet" data-target="multipleDropdown" data-beloworigin="true" autocomplete="off">
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <input id="date" type="text" class="datepicker">
-                                                            <label for="date">Date</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <div class="autocomplete" id="multiple">
-                                                                <div class="ac-users"></div>
-                                                                <div class="ac-input">
-                                                                    <div class="valign-wrapper">
-                                                                        <i class="valign material-icons prefix">account_circle</i>
-                                                                        <input type="text" id="multipleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez les membres du projet" data-activates="multipleDropdown" data-beloworigin="true" autocomplete="off">
-                                                                    </div>
-                                                                </div>
-                                                                <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
-                                                                <input type="hidden" name="multipleHidden" />
-                                                            </div>
-                                                            <label class="active" style="padding-bottom: 10px" for="multipleInput">Membres du projet : </label>
-                                                        </div>
-                                                    </div>
+                                                    <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
+                                                    <input type="hidden" name="multipleHidden" />
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <a href="#!" id="subProject" class="modal-action modal-close waves-effect waves-light btn red accent-4 right-align">Valider</a>
-                                                </div>
-                                            </form>
+                                                <label class="active" style="padding-bottom: 10px" for="multipleInput">Artisans à ajouter au projet : </label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="modal-footer">
+                                        <a href="#!" id="subProject" class="modal-action modal-close waves-effect waves-light btn red accent-4 right-align">Valider</a>
+                                    </div>
+                                </form>
                             </li>
                         </div>
                     </div>
@@ -65,7 +121,7 @@
         </ul>
         <ul class='stage'>
             <div class="row" id="noProj">
-                <div class="col s12 push-s1 push-m1 push-l1">
+                <div class="col s12">
                     <div class="card horizontal card-1">
                         <div class="card-image">
                             <img class="noProj" src="/assets/images/construction-worker.png">
@@ -80,8 +136,6 @@
                 </div>
             </div>
         </ul>
-
-
     </div>
     </div>
 }(connected, admin)

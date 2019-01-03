@@ -3,13 +3,13 @@
 @main("Bienvenue sur EasyBuild") {
     <div class="container">
         <ul id="stage1">
-            <div class="row">
-                <div class="col s12 m12 l12 push-s1">
+            <div class="row" id="homeMenu">
+                <div class="col s12 m12 l12 ">
                     @*<div class="row" style="padding: 0 1.5rem">*@
                     @*<span style="font-size: 25px;color: #00abff">Menu</span><br>*@
                     @*</div>*@
                     <div class="row">
-                        <a class="col s11 m12 l6 card card-1 card-menu horizontal" href="/projet">
+                        <a class="col s12 m12 l6 " href="/projet"><div class="card card-1 card-menu horizontal" >
                             <div class="card-image valign-wrapper">
                                 <img class="center-align responsive-img imgHome" src='/assets/images/menu/admin.png' align="middle" title="Projet">
                             </div>
@@ -21,9 +21,10 @@
                                     </p>
                                 </div>
                             </div>
+                            </div>
                         </a>
 
-                        <a class="col s11 m12 l6 card push-l1 card-1 card-menu horizontal" href="/agenda">
+                        <a class="col s12 m12 l6 " href="/agenda"><div class="card  card-1 card-menu horizontal" >
                             <div class="card-image valign-wrapper">
                                 <img class="responsive-img imgHome " src='/assets/images/menu/calendar.png'title="Agenda">
                             </div>
@@ -35,10 +36,12 @@
                                     </p>
                                 </div>
                             </div>
+                            </div>
                         </a>
                     </div>
                     <div class="row">
-                        <a class="col s11 m12 l6 card  card-1 card-menu horizontal" href="/referentiel">
+                        <a class="col s12 m12 l6" href="/referentiel">
+                            <div class=" card  card-1 card-menu horizontal">
                             <div class="card-image valign-wrapper">
                                 <img class="responsive-img imgHome " src='/assets/images/menu/help.png' title="Aide">
                             </div>
@@ -50,9 +53,11 @@
                                     </p>
                                 </div>
                             </div>
+                            </div>
                         </a>
 
-                        <a class="col s11 m12 l6 card push-l1 card-1 card-menu horizontal" href=/messagerie>
+                        <a class="col s12 m12 l6 " href=/messagerie>
+                            <div class="card  card-1 card-menu horizontal">
                             <div class="card-image valign-wrapper">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/conversation.png' title="Messagerie">
                             </div>
@@ -64,38 +69,12 @@
                                     </p>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                    <div class="row">
-                        <a class="col s11 m12 l6 card card-1 card-menu horizontal" href="/doc">
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome" src='/assets/images/menu/cloud-computing.png'title="Documents">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Documents</span>
-                                    <p class="grey-text" >
-                                        Stockez les documents de votre projet.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="col s11 m12 l6 push-l1 card card-1 card-menu horizontal" href="/incident">
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome" src='/assets/images/menu/exclamation.png'title="Incident">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Incident</span>
-                                    <p class="grey-text" >
-                                        Déclarez un incident sur un projet.
-                                    </p>
-                                </div>
                             </div>
                         </a>
                     </div>
                     <div class="row">
-                        <a class="col s11 m12 l6 card card-1 card-menu horizontal" href=/messagerie>
+                        <a class="col s12 m12 l6" href=/repertoire>
+                            <div class="card card-1 card-menu horizontal">
                             <div class="card-image valign-wrapper">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/contact.png' title="Carnet d’adresse">
                             </div>
@@ -107,8 +86,10 @@
                                     </p>
                                 </div>
                             </div>
+                        </div>
                         </a>
-                        <a class="col s11 m12 l6 card push-l1 card-1 card-menu horizontal" href="/admin">
+                        <a class="col s12 m12 l6" href="/admin">
+                            <div class="card  card-1 card-menu horizontal">
                             <div class="card-image valign-wrapper">
                                 <img class="responsive-img imgHome" src='/assets/images/menu/id-card.png'title="Gestion du compte">
                             </div>
@@ -119,6 +100,7 @@
                                         Gérez les comptes, changez leurs informations.
                                     </p>
                                 </div>
+                            </div>
                             </div>
                         </a>
                     </div>

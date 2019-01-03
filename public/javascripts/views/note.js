@@ -9,7 +9,7 @@ $(function()
    
 function initTabUser() {
     var dataGroup={};
-
+    waitOn();
     dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
         url: "/getMyNotes",
@@ -46,6 +46,11 @@ function initTabUser() {
                 res = cardStart + imgEmptyDiv + cardEnd;
                 $("#note").append(res);
             }
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
         }
     });
 }

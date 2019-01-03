@@ -64,6 +64,7 @@ $(function()
 
     $("#btnReferentielRetour").click(function()
     {
+        waitOn();
         $.ajax({
             type: "POST",
             url : "/getAllByTypeId",
@@ -79,10 +80,14 @@ $(function()
                 });
                 $("#cbx_referentiel").prop("disabled", false);
                 $("#inputReferentiel").hide("slide");
+            },
+            error : function (xhr, ajaxOptions, thrownError) {
+                myToast("Erreur dans la recuperation");
+                waitOff();
             }
         });
     });
-
+    waitOn();
     $.ajax({
         url : "/getAllTypes",
         type: "POST",
@@ -93,7 +98,12 @@ $(function()
             {
                 $("#cbx_referentiel").append('<option value="'+value+'">'+index+'</option>');
             });
-            $('select').material_select();
+            $('select').formSelect();
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
         }
     });
 
@@ -106,7 +116,9 @@ $(function()
         }
         refreshList();
     });
-
+    if ($("#cbx_referentiel").val() == null) {
+        $("#btn_addRecord").hide();
+    }
 
     $("#code").change(function () { saveByChamps("code", $("#code").val()); });
     $("#libelle").change(function(){ saveByChamps("libelle", $("#libelle").val()); });
@@ -198,7 +210,9 @@ function supprimerReferentiel(idReferentiel)
 function refreshEcranSaisie(data)
  {
      $("html, body").stop().animate({scrollTop:0}, 500, 'swing');
-     $("#btn_addRecord").hide();
+     if ($("#cbx_referentiel").val() === "-1") {
+         $("#btn_addRecord").hide();
+     }
      $("#idReferentiel").val(data.id);
      $("#code").val(data.code);
      $("#libelle").val(data.libelle);

@@ -100,10 +100,10 @@
             enable: false,
             maxSize: 4,
             onExist: function (item) {
-                Materialize.toast('Tag: ' + item.text + '(' + item.id + ') is already added!', 2000);
+                M.toast({html: 'Tag: ' + item.text + '(' + item.id + ') is already added!', displayLength: 2000});
             },
             onExceed: function (maxSize, item) {
-                Materialize.toast('Can\'t add over ' + maxSize + ' tags!', 2000);
+                M.toast({html: 'Tag: ' + item.text + '(' + item.id + ') is already added!', displayLength: 2000});
             },
             onAppend: function (item) {
                 var self = this;
@@ -191,7 +191,7 @@
                 if (value !== currentValue) {
                     return false;
                 }
-                
+                self.updateDropdown()
                 if(itemsHtml) {
                     self.$dropdown.html(itemsHtml);
                     self.$dropdown.show();
@@ -228,7 +228,7 @@
             self.$el.on('input', function (e) {
                 var $t = $(this);
                 var value = $t.val();
-
+                self.updateDropdown();
                 if (!value) {
                     self.$dropdown.hide();
                     return false;
@@ -350,6 +350,25 @@
                 self.remove(item);
             });
 
+            self.empty = function () {
+                self.$appender.find(".close").each(function (index, value) {
+                    var $t = $(value);
+                    var $li = $t.closest('[data-id');
+                    var item = {
+                        id: $li.data('id'),
+                        text: $li.data('text'),
+                        classe: $li.data('classe')
+                    };
+                    self.remove(item);
+                });
+            };
+        },
+        updateDropdown : function () {
+            var instance = M.Dropdown.getInstance(this.$el);
+            if(instance) {
+                if(!instance.isOpen) instance.open();
+                    instance.recalculateDimensions();
+            }
         },
         render: function () {
             var self = this;
@@ -497,7 +516,87 @@
 
         var autocomplete = new Autocomplete(el, options);
         $el.data('autocomplete', autocomplete);
-        $el.dropdown();
+        $el.dropdown(
+            {
+                coverTrigger: false,
+                autoFocus: false
+            });
+        var elem = $el[0];
+
+        var instance = M.Dropdown.getInstance(elem);
+        if(instance instanceof M.Dropdown)
+        {
+            instance._getDropdownPosition = function ()
+            {
+                var offsetParentBRect = this.el.offsetParent.getBoundingClientRect();
+                var triggerBRect = this.el.getBoundingClientRect();
+                var dropdownBRect = this.dropdownEl.getBoundingClientRect();
+                var idealHeight = dropdownBRect.height;
+                var idealWidth = dropdownBRect.width;
+                var idealXPos = triggerBRect.left - dropdownBRect.left;
+                var idealYPos = triggerBRect.top - dropdownBRect.top;
+                var dropdownBounds = {
+                    left: idealXPos,
+                    top: idealYPos,
+                    height: idealHeight,
+                    width: idealWidth
+                };
+                // Countainer here will be closest ancestor with overflow: hidden
+                var closestOverflowParent = !!this.dropdownEl.offsetParent ? this.dropdownEl.offsetParent : this.dropdownEl.parentNode;
+                var alignments = M.checkPossibleAlignments(this.el, closestOverflowParent, dropdownBounds, this.options.coverTrigger ? 0 : triggerBRect.height);
+                var verticalAlignment = 'top';
+                var horizontalAlignment = this.options.alignment;
+                idealYPos += this.options.coverTrigger ? 0 : triggerBRect.height;
+                // Reset isScrollable
+                this.isScrollable = false;
+                if (!alignments.top) {
+                    if (alignments.bottom) {
+                        verticalAlignment = 'bottom';
+                    } else {
+                        this.isScrollable = true;
+                        // Determine which side has most space and cutoff at correct height
+                        if (alignments.spaceOnTop > alignments.spaceOnBottom) {
+                            verticalAlignment = 'bottom';
+                            idealHeight += alignments.spaceOnTop;
+                            idealYPos -= alignments.spaceOnTop + this.el.offsetHeight;
+                        } else {
+                            idealHeight += alignments.spaceOnBottom;
+                        }
+                    }
+                }
+                // If preferred horizontal alignment is possible
+                if (!alignments[horizontalAlignment]) {
+                    var oppositeAlignment = horizontalAlignment === 'left' ? 'right' : 'left';
+                    if (alignments[oppositeAlignment]) {
+                        horizontalAlignment = oppositeAlignment;
+                    } else {
+                        // Determine which side has most space and cutoff at correct height
+                        if (alignments.spaceOnLeft > alignments.spaceOnRight) {
+                            horizontalAlignment = 'right';
+                            idealWidth += alignments.spaceOnLeft;
+                            idealXPos -= alignments.spaceOnLeft;
+                        } else {
+                            horizontalAlignment = 'left';
+                            idealWidth += alignments.spaceOnRight;
+                        }
+                    }
+                }
+                if (verticalAlignment === 'bottom') {
+                    idealYPos = idealYPos - dropdownBRect.height + (this.options.coverTrigger ? triggerBRect.height : 0);
+                }
+                if (horizontalAlignment === 'right') {
+                    idealXPos = idealXPos - dropdownBRect.width + triggerBRect.width;
+                }
+                return {
+                    x: idealXPos,
+                    y: idealYPos,
+                    verticalAlignment: verticalAlignment,
+                    horizontalAlignment: horizontalAlignment,
+                    height: idealHeight,
+                    width: idealWidth
+                };
+            }
+        }
         return autocomplete;
     };
 

@@ -5,7 +5,7 @@ name := """Easy-Build"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean, DebianPlugin)
+lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean, DebianPlugin, LauncherJarPlugin)
 
 maintainer in Linux := "TOMCZAK Thomas <tooms42@gmail.com>"
 
@@ -36,6 +36,7 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.12"
 // must exclude dom4j in hibernate core because it causes staxeventreader exceptions
 // http://stackoverflow.com/questions/36222306/caused-by-java-lang-classnotfoundexception-org-dom4j-io-staxeventreader
 libraryDependencies += "org.hibernate" % "hibernate-core" % "5.2.3.Final" exclude("dom4j", "dom4j") exclude("javax.transaction", "jta") exclude("org.slf4j", "slf4j-api")
+
 
 libraryDependencies += "io.ebean" % "ebean-elastic" % "2.1.1"
 playEnhancerEnabled := false

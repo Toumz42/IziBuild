@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -33,8 +34,14 @@ public class CalendarEvent extends Model {
     private Date start;
     private Date end;
     private String color;
-    @OneToOne()
+
+    @ManyToOne
     private User user;
+
+    @ManyToMany
+    @JsonBackReference
+    private List<User> proList;
+
     @ManyToOne
     @JsonBackReference
     private Projet projet;
@@ -49,6 +56,7 @@ public class CalendarEvent extends Model {
         this.end = end;
         this.projet = projet;
         this.user = user;
+        this.color = generateColor();
     }
 
     public Long getId() {
@@ -101,8 +109,16 @@ public class CalendarEvent extends Model {
         this.projet = projet;
     }
 
-    public Long getClasseId() {
-        return projet.getId();
+    public Long getProjectId() {
+        return projet != null ? projet.getId() : -1L;
+    }
+
+    public List<User> getProList() {
+        return proList;
+    }
+
+    public void setProList(List<User> proList) {
+        this.proList = proList;
     }
 
     public String generateColor() {

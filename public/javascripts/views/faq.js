@@ -3,7 +3,6 @@
  */
 $(function()
 {
-    $(".page-title").empty().append("FAQ");
     //initAutoComplete();
     initConversations();
     //initNewMessage();
@@ -74,7 +73,7 @@ function initConversations() {
             data = JSON.parse(data);
             $(".collapsible").empty();
             refFaqToCollapsible(data);
-        }
+        },
     });
 }
 
@@ -106,14 +105,20 @@ function refFaqToCollapsible(json) {
     if (!Array.isArray(json)) {
         json = [json];
     }
-    $.each(json,function (index, element) {
+    if (json.length > 0) {
+        $.each(json, function (index, element) {
+            tr = $('<li/>');
+            tr.append("<div class='collapsible-header'><i class='material-icons'>help</i>" + element.libelle + "</div>");
+            tr.append("<div class='collapsible-body'><span>" + element.commentaire + ".</span></div>");
+            $(".collapsible").append(tr);
+            //$("#messagerie").show();
+            //$("#noProj").hide();
+        });
+    } else {
         tr = $('<li/>');
-        tr.append("<div class='collapsible-header'><i class='material-icons'>help</i>"+element.libelle+"</div>");
-        tr.append("<div class='collapsible-body'><span>"+element.commentaire+".</span></div>");
+        tr.append("<div class='collapsible-header'><i class='material-icons'>help</i>Comment ajouter des éléments ? </div>");
+        tr.append("<div class='collapsible-body'><span>Rendez-vous dans l'interface d'administration</span></div>");
         $(".collapsible").append(tr);
-        //$("#messagerie").show();
-        //$("#noProj").hide();
-    });
-
-    return res;
+    }
+    $(".collapsible").collapsible();
 }

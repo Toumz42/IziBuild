@@ -20,10 +20,30 @@ $(function()
     if (currentUser !== 'none') {
         alert(currentUser.name);
     }
+    $(document).ajaxStop(function () {
+        if (currentUser !== 'none') {
+            $("#idUser").val(currentUser.id);
+            $("#last_name").val(currentUser.name).siblings("label").addClass("active");
+            $("#first_name").val(currentUser.surname).siblings("label").addClass("active");
+            $("#email").val(currentUser.email).siblings("label").addClass("active");
+            $("#adresse").val(currentUser.adresse).siblings("label").addClass("active");
+            $("#siret").val(currentUser.siret).siblings("label").addClass("active");
+            $("#societe").val(currentUser.societe).siblings("label").addClass("active");
+            $("#droit").val(currentUser.droit).siblings("label").addClass("active");
+            $("#ville").val(currentUser.ville).siblings("label").addClass("active");
+            $("#codePostal").val(currentUser.codePostal).siblings("label").addClass("active");
+            $("#portable").val(currentUser.portable).siblings("label").addClass("active");
+            $("#telephone").val(currentUser.telephone).siblings("label").addClass("active");
+            $("#dateNaissance").val(currentUser.dateNaissance).siblings("label").addClass("active");
+            $("#password1").val(currentUser.password.substring(0,8)).siblings("label").addClass("active");
+            $("#password2").val(currentUser.password.substring(0,8)).siblings("label").addClass("active");
+        }
+    });
 
     $("#sub").click(function(){
         if (check())
         {
+            waitOn();
             var url = "/updateUser";
             var data = {
                 "idUser" : $("#idUser").val(),
@@ -31,6 +51,16 @@ $(function()
                 "surname" : $("#first_name").val(),
                 "email" : $("#email").val(),
                 "type" : $("#type").val(),
+                "categorie" : $("#categorie").val(),
+                "droit" : 1,
+                "adresse" : $("#adresse").val(),
+                "ville" : $("#ville").val(),
+                "codePostal" : $("#codePostal").val(),
+                "portable" : $("#portable").val(),
+                "telephone" : $("#telephone").val(),
+                "dateNaissance" : $("#dateNaissance").val(),
+                "siret" : $("#siret").val(),
+                "societe" : $("#societe").val(),
                 "password" :  $("#password1").val()};
 
             $.ajax ({
@@ -42,10 +72,14 @@ $(function()
                 success: function(ret, textStatus, jqXHR){
                     myToast("Votre Compte a bien été créé !");
                     myToast("Vous allez etre redirigé vers la page d'accueil !");
-                    setTimeout(function() { document.location = "/home"; }, 2000);
+                    setTimeout(function() {
+                        waitOff();
+                        document.location = "/home";
+                    }, 1000);
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout de l'utilisateur");
+                    waitOff();
                 }
             });
 
@@ -53,34 +87,23 @@ $(function()
     });
 
 
-    $('.datepicker').pickadate({
-        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
-        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
-        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
-
-        labelMonthNext: 'Mois suivant',
-        labelMonthPrev: 'Mois precédent',
-        labelMonthSelect: 'Selection mois',
-        labelYearSelect: 'Selection année',
+    $('.datepicker').datepicker({
+        i18n : {
+            months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthsShort: [ 'janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.' ],
+            weekdays: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+            weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            weekdaysAbbrev: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+            clear: 'Effacer',
+            cancel: 'Annuler'
+        },
         container: '#datepicker-container',
-
-        today: 'Auj',
-        clear: 'Effacer',
-        close: 'Fermer',
-        firstDay: true,
-        formatSubmit: 'yyyy-mm-dd',
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
+        firstDay: 1,
+        format: 'dd mmmm yyyy',
+        yearRange: [new Date().getFullYear() - 100, new Date().getFullYear() + 20] // Creates a dropdown of 15 years to control year
     });
-
-    Materialize.showStaggeredList($("#stage1"));
-
+    initCategorie();
     //fixedMailInput();
-
-    var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
-    Materialize.scrollFire(options);
 
     $('.collapsible').collapsible();
 });
@@ -198,7 +221,40 @@ function initAutoComplete(json) {
     });
 }
 
+function initCategorie() {
+    var dataGroup = JSON.stringify({code : "TYPE_METIER"});
+    waitOn();
+    $.ajax ({
+        url: "/getByCode",
+        type: "POST",
+        data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            initSelectCategorie(json);
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
+        }
+    });
+}
+function initSelectCategorie(json) {
+    var reset=true;
+    if (!Array.isArray(json)) {
+        json = [json];
+        reset = false;
+    }
+    $.each(json,function (index, elem) {
+        var opt = $("<option />");
+        opt.prop("value",elem.id);
+        opt.text(elem.libelle);
+        if (!$("#categorie option[value="+elem.id+"]").length ) {
+            $("#categorie").append(opt);
+        }
+    });
+    $('select').formSelect();
 
-
-
-
+}

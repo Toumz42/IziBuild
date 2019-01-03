@@ -61,7 +61,7 @@ $(function()
                 "droit" : $("#droit").val(),
                 "classe" : $("#classeUser").val(),
                 "password" :  $("#password1").val()};
-
+            waitOn();
             $.ajax ({
                 url: url,
                 type: "POST",
@@ -93,83 +93,23 @@ $(function()
                         }
                         myToast("L'utilisateur a bien été mis à jour");
                     } else{
-                        initAutoComplete(json);
+                        //initAutoComplete(json);
                         turn($("#addUser"));
                         $("#usersContent").append(res);
                         // $("#usersAdderDiv").toggle("slide");
                         myToast("L'utilisateur a bien été ajouté");
                     }
+                    waitOff();
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout de l'utilisateur");
+                    waitOff();
                 }
             });
         }
     });
     initSelectCategorie();
 
-
-    $("#subGroupe").click(function(){
-        if ( ($("#groupeName").val()!=""))
-        {
-            var url = "/addProjectGroup";
-            var update =  $("#idGroupe").val() != "";
-            if (update) {
-                url  = "/updateProjectGroup";
-                if (groupids) {
-
-                }
-            }
-            var data = {
-                "idGroup" : $("#idGroupe").val(),
-                "theme": $("#theme").val(),
-                "date" : $("#date").val(),
-                "groupids" : groupids
-            };
-            $.ajax ({
-                url: url,
-                type: "POST",
-                data: JSON.stringify(data),
-                dataType: "text",
-                contentType: "application/json; charset=utf-8",
-                success: function(ret, textStatus, jqXHR){
-                    var res;
-                    var json = $.parseJSON(ret);
-                    res = groupeToTab(json);
-                    groupes = jsonToGlobalArray(groupes, json);
-                    if ($("#projetContent").find("#noData").length) {
-                        $("#projetContent").empty();
-                    }
-                    emptyFields(grpFields);
-                    emptyComplete(groupids);
-                    if (update) {
-                        var ids = $("#projetContent").find(".idGroupe");
-                        if (ids.length) {
-                            $.each(ids, function (index, el) {
-                                $.each(res, function (index, element) {
-                                    if ($(el).val() == $(element).find(".idGroupe").val()) {
-                                        $(el).parents("ul.stage").remove();
-                                        $("#projetContent").append(element);
-                                    }
-                                });
-                            });
-                        } else {
-                            $("#projetContent").append(res);
-                        }
-                        myToast("Le groupe a bien été mis à jour");
-                    } else {
-                        $("#projetContent").append(res);
-                        turn($("#addGroupe"));
-                        // $("#projetAdderDiv").toggle("slide");
-                        myToast("Le groupe de projet a bien été ajouté");
-                    }
-                },
-                error : function (xhr, ajaxOptions, thrownError) {
-                    myToast("Erreur dans l'ajout du groupe de projet");
-                }
-            });
-        }
-    });
 
     // $("#allUser").click(function () {
     //     initTabUser()
@@ -183,46 +123,39 @@ $(function()
     initTabGroup('allGroup');
     initTabUser('allUser', 1);
 
-    $('.datepicker').pickadate({
-        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
-        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
-        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
-
-        labelMonthNext: 'Mois suivant',
-        labelMonthPrev: 'Mois precédent',
-        labelMonthSelect: 'Selection mois',
-        labelYearSelect: 'Selection année',
+    $('.datepicker').datepicker({
+        i18n : {
+            months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthsShort: [ 'janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.' ],
+            weekdays: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+            weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            weekdaysAbbrev: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+            clear: 'Effacer',
+            cancel: 'Annuler'
+        },
         container: '#datepicker-container',
-
-        today: 'Auj',
-        clear: 'Effacer',
-        close: 'Fermer',
-        firstDay: true,
-        formatSubmit: 'yyyy-mm-dd',
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
+        firstDay: 1,
+        format: 'dd mmm, yyyy',
+        yearRange: [new Date().getFullYear(), new Date().getFullYear() + 20] // Creates a dropdown of 15 years to control year
     });
+
 
     $('#droit').change(function (e) {
         var val = $(this).val();
         if (val == 0) {
             $('#classeUser').val(0);
             $('#classeUser option').prop("disabled",true);
-            $('#classeUser').material_select();
+            $('#classeUser').formSelect();
         }
         else{
             $('#classeUser option:not(".remain")').removeAttr("disabled");
-            $('#classeUser').material_select();
+            $('#classeUser').formSelect();
         }
     });
-    Materialize.showStaggeredList($("#stage1"));
 
     //fixedMailInput();
 
-    var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
-    Materialize.scrollFire(options);
+
     $('#mainTabs').tabs({
         onShow: function () {
             initTabUser(this.id, 1);
@@ -277,16 +210,6 @@ $(function()
                     modalize($('#formSign'),$('#usersAdderDiv'),true);
                     var user = find(users,id);
                     fillEditFormUser(user,id);
-                    break;
-                case "classe" :
-                    modalize($('#formClasse'),$('#classeAdderDiv'),true);
-                    var classe = find(classes,id);
-                    fillEditFormClasse(classe,id);
-                    break;
-                case "groupe" :
-                    modalize($('#formGroupe'),$('#projetAdderDiv'),true);
-                    var groupe = find(groupes,id);
-                    fillEditFormGroupe(groupe,id);
                     break;
             }
         });
@@ -445,7 +368,7 @@ function initSelectCategorie() {
                     $("#categoriePro").append(opt);
                 }
             });
-            $('select').material_select();
+            $('select').formSelect();
         }
     });
 }
@@ -522,7 +445,7 @@ function initTabUser(tab , page) {
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
-            initAutoComplete(json);
+            //initAutoComplete(json);
             if ( json.length != 0 ) {
                 users = jsonToGlobalArray(users, json);
                 var res = userToTab(json);

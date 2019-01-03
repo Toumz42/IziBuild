@@ -20,6 +20,7 @@ $(function()
 
 
     $("#sub").click(function(){
+        waitOn();
         if (check())
         {
             var url = "/addUser";
@@ -28,8 +29,17 @@ $(function()
                 "name" : $("#last_name").val(),
                 "surname" : $("#first_name").val(),
                 "email" : $("#email").val(),
+                "droit" : 1,
                 "type" : $("#type").val(),
                 "categorie" : $("#categorie").val(),
+                "adresse" : $("#adresse").val(),
+                "ville" : $("#ville").val(),
+                "codePostal" : $("#codePostal").val(),
+                "portable" : $("#portable").val(),
+                "telephone" : $("#telephone").val(),
+                "dateNaissance" : $("#dateNaissance").val(),
+                "siret" : $("#siret").val(),
+                "societe" : $("#societe").val(),
                 "password" :  $("#password1").val()};
 
             $.ajax ({
@@ -41,9 +51,11 @@ $(function()
                 success: function(ret, textStatus, jqXHR){
                     myToast("Votre Compte a bien été créé !");
                     myToast("Vous allez etre redirigé vers la page d'accueil !");
+                    waitOff();
                     setTimeout(function() { window.location = "/home"; }, 1000);
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
+                    waitOff();
                     myToast("Erreur dans l'ajout de l'utilisateur");
                 }
             });
@@ -51,37 +63,25 @@ $(function()
     });
 
 
-    $('.datepicker').pickadate({
-        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
-        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
-        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
-
-        labelMonthNext: 'Mois suivant',
-        labelMonthPrev: 'Mois precédent',
-        labelMonthSelect: 'Selection mois',
-        labelYearSelect: 'Selection année',
+    $('.datepicker').datepicker({
+        i18n : {
+            months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthsShort: [ 'janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.' ],
+            weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+            weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+            clear: 'Effacer',
+        },
         container: '#datepicker-container',
-
-        today: 'Auj',
-        clear: 'Effacer',
-        close: 'Fermer',
-        firstDay: true,
-        formatSubmit: 'yyyy-mm-dd',
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
+        firstDay: 1,
+        format: 'dd mmmm yyyy',
+        yearRange: [new Date().getFullYear() - 100, new Date().getFullYear()] // Creates a dropdown of 15 years to control year
     });
 
-    Materialize.showStaggeredList($("#stage1"));
 
     //fixedMailInput();
-
-    var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
-    Materialize.scrollFire(options);
-
     $('.collapsible').collapsible();
-    $('select').material_select();
+    $('select').formSelect();
     initCategorie();
 });
 
@@ -201,6 +201,7 @@ function initAutoComplete(json) {
 
 function initCategorie() {
     var dataGroup = JSON.stringify({code : "TYPE_METIER"});
+    waitOn();
     $.ajax ({
         url: "/getByCode",
         type: "POST",
@@ -210,6 +211,11 @@ function initCategorie() {
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
             initSelectCategorie(json);
+            waitOff()
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
         }
     });
 }
@@ -227,7 +233,7 @@ function initSelectCategorie(json) {
             $("#categorie").append(opt);
         }
     });
-    $('select').material_select();
+    $('select').formSelect();
 
 }
 

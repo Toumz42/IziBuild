@@ -30,6 +30,19 @@ function userToTab(json) {
             "</td>");
         tr.append("<td>" + json[i].name + "</td>");
         tr.append("<td>" + json[i].surname + "</td>");
+        $(table).append(tr);
+        tr = $('<tr/>');
+        tr.append("<th>Adresse</th>");
+        tr.append("<th>Ville</th>");
+        tr.append("<th>Code Postal</th>");
+        tr.append("<th>Portable</th>");
+        $(table).append(tr);
+        tr = $('<tr/>');
+
+        tr.append("<td>" + json[i].adresse + "</td>");
+        tr.append("<td>" + json[i].ville + "</td>");
+        tr.append("<td>" + json[i].codePostal + "</td>");
+        tr.append("<td>" + json[i].portable + "</td>");
         div = $('<div class="right-align suppDiv"/>');
         div.append("<div class='buttonIcon edit' type='user' id='"+json[i].id+"'>" + editIcon + "</div>");
         div.append("<div class='buttonIcon delete' type='user' id='"+json[i].id+"'>" + deleteIcon + "</div>");
@@ -177,8 +190,13 @@ function fillEditFormUser(val,id) {
     $("#first_name").val(user.surname);
     $("#email").val(user.email);
     $("#droit").val(user.droit);
-    $("#classeUser").val(user.classeId);
-    $('select').material_select();
+    if (user.categorie != null) {
+        $("#categoriePro").val(user.categorie.id);
+        $('select').formSelect();
+        $("#categoriePro").parent().parent().show();
+    } else {
+        $("#categoriePro").parent().parent().hide()
+    }
     $("#password").val(user.password);
     $("#password").val(user.password);
     activeFields(userFields);
@@ -189,23 +207,6 @@ function fillEditFormClasse(val,id) {
     $("#classeName").parent().children("label").addClass("active");
     $("#classeName").val(classe.name);
 }
-function fillEditFormGroupe(val,id) {
-    var groupe = val[0];
-    $("#idGroupe").val(id);
-    $("#groupeName").val(groupe.name);
-    $("#theme").val(groupe.theme);
-    $("#date").val(groupe.date);
-    groupids = [];
-    $.each(groupe.users,function () {
-        var chip = {
-            'id' : this.id,
-            'text' : this.name
-        };
-        autocomplete.append(chip)
-    });
-    activeFields(grpFields);
-}
-
 function emptyComplete(array) {
     for ( var i = array.length - 1 ; i >=0 ; i--) {
         var element = array[i];

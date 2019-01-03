@@ -15,7 +15,6 @@ GET     /note                                       controllers.Application.note
 GET     /createPro                                  controllers.Application.createPro()
 GET     /createPart                                 controllers.Application.createPart()
 GET     /editAccount                                controllers.Application.editAccount()
-GET     /admnote                                    controllers.Application.admNote()
 GET     /admin                                      controllers.Application.admin()
 GET     /repertoire                                 controllers.Application.repertoire()
 GET     /faq                                        controllers.Application.faq()
@@ -46,8 +45,11 @@ GET     /checkAdmin                                 controllers.Application.chec
 POST    /getCalendar                                controllers.CalendarController.getCalendar
 GET     /getMyCalendar                              controllers.CalendarController.getMyCalendar
 GET     /checkCfProjet                              controllers.ProjectController.checkCfProjetJson
+GET     /getAllProjectPros                          controllers.ProjectController.getAllProjectPros
+GET     /getAllProjectPros                          controllers.ProjectController.getAllProjectUsers
 POST    /addUser                                    controllers.UserController.addUser()
 POST    /addTask                                    controllers.TasksController.addTask()
+POST    /changeTasksbyId                            controllers.TasksController.changeTasksbyId()
 POST    /getUserById                                controllers.UserController.getUserById
 GET     /getCurrentUser                             controllers.Application.getCurrentUserJSON
 POST    /getTasksbyProjectId                        controllers.TasksController.getTasksbyProjectId()
@@ -71,6 +73,7 @@ POST    /addNewRef                                  controllers.ReferentielContr
 POST    /getAllTypes                                controllers.ReferentielController.getAllTypes()
 POST    /saveByChamps                               controllers.ReferentielController.saveByChamps()
 POST    /getByCode                                  controllers.ReferentielController.getByCode()
+POST    /getUsedByCode                              controllers.ReferentielController.getUsedByCode()
 POST    /sendMessage                                controllers.MessagerieController.sendMessage
 POST    /getAllConversations                        controllers.MessagerieController.getAllConversations
 POST    /getAllMessageFromUserAndDestinataire       controllers.MessagerieController.getAllMessageFromUserAndDestinataire

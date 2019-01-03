@@ -16,6 +16,7 @@ $(function () {
     if (is_touch_device()) {
         $('#nav-mobile').css({ overflow: 'auto'});
     }
+    //addToHomescreen()
 
     $('.logout').on("click", function () {
         $.post(
@@ -34,7 +35,7 @@ $(function () {
                 }
             });
     });
-    $(".button-collapse").sideNav();
+    $(".sidenav").sidenav();
 
     $.ajax ({
         url: "/getCurrentUser",

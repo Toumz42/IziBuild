@@ -6,8 +6,10 @@ $(function()
     initAutoComplete();
     initConversations();
     initNewMessage();
+    $('.fixed-action-btn').floatingActionButton({direction:'left'});
     $("#addMsg").click(function () {
-        $("#msgDiv").show();
+        turn($(this));
+        $("#msgDiv").toggle();
     });
 });
 
@@ -15,7 +17,7 @@ function initAutoComplete() {
     var json;
     var dataGroup = JSON.stringify({});
     $.ajax({
-        url: "/getAllUser",
+        url: "/getAllProjectPros",
         type: "GET",
         // data: dataGroup,
         dataType: "text",
@@ -60,6 +62,7 @@ function initAutoComplete() {
 
 function initConversations() {
     var dataGroup={};
+    waitOn();
     dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
         url: "/getAllConversations",
@@ -77,6 +80,11 @@ function initConversations() {
                 $("#messagerie").hide();
                 $("#noProj").show();
             }
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
         }
     });
 }
@@ -118,6 +126,7 @@ function usersToCollections(json) {
         tr.append("<p style='font-weight: 400' id='info"+element.id+"'><span class='lastMsg'> </span><br><span class='lastMsgDate'> </span> </p>");
         var dataGroup={ id : element.id};
         dataGroup = JSON.stringify(dataGroup);
+        waitOn();
         $.ajax ({
             url: "/getLastMessageFromUserAndDestinataire",
             type: "POST",
@@ -139,6 +148,11 @@ function usersToCollections(json) {
                     // initTab('userTab');
 
                 }
+                waitOff();
+            },
+            error : function (xhr, ajaxOptions, thrownError) {
+                myToast("Erreur dans la recuperation");
+                waitOff();
             }
         });
         tr.append("<div class='open-conversation secondary-content' style='cursor:pointer' id='"+element.id+"'><i class='material-icons'>send</i></div>");

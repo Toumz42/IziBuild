@@ -173,10 +173,10 @@ textarea.materialize-textarea {
   }
 
   position: relative;
-  padding-top: 2rem !important;
+  padding-top: 1rem !important;
   padding-bottom: 1rem !important;
   background: #eeeeee;
-  box-shadow: inset 0px -10px 0px 12px white;
+  box-shadow: inset 0px -10px 0px 12px $card-bg-color;
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
 
@@ -335,7 +335,7 @@ textarea {
   padding-top: 1.2rem; /* prevents text jump on Enter keypress */
 
   // Reduces repaints
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: -1;
 }

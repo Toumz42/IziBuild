@@ -10,6 +10,7 @@ import play.libs.mailer.MailerClient;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,16 @@ public class User extends Model {
     private String login;
     private String password;
     private String folder;
+
+    private String adresse;
+    private String ville;
+    private String codePostal;
+    private String portable;
+    private String telephone;
+    private String dateNaissance;
+    private String siret;
+    private String societe;
+
     private Integer droit;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
@@ -35,9 +46,17 @@ public class User extends Model {
     @JsonBackReference
     private List<Projet> projetListUser;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonBackReference
+    private List<CalendarEvent> eventListUser;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "proList")
     @JsonBackReference
     private List<Projet> projetListPro;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "proList")
+    @JsonBackReference
+    private List<CalendarEvent> eventListPro;
 
     @ManyToOne(fetch = FetchType.EAGER)
     Referentiel categorie;
@@ -73,6 +92,25 @@ public class User extends Model {
         this.droit = droit;
         this.password = sha1pass;
         this.categorie = categorie;
+    }
+
+    public User(String name, String surname, String email, String password, String adresse,
+                String ville, String codePostal, String portable, String telephone,
+                String dateNaissance, String siret, String societe, Integer droit ) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.login = email;
+        this.password = password;
+        this.adresse = adresse;
+        this.ville = ville;
+        this.codePostal = codePostal;
+        this.portable = portable;
+        this.telephone = telephone;
+        this.dateNaissance = dateNaissance;
+        this.siret = siret;
+        this.societe = societe;
+        this.droit = droit;
     }
 
     public User() {
@@ -147,6 +185,10 @@ public class User extends Model {
         this.projetListPro.add(projet);
     }
 
+    public void removeFromProjetListPro(Projet projet) {
+        this.projetListPro.remove(projet);
+    }
+
     public List<Projet> getProjetListUser() {
         return projetListUser;
     }
@@ -159,12 +201,15 @@ public class User extends Model {
         this.projetListUser.add(projet);
     }
 
+    public void removeFromProjetListUser(Projet projet) {
+        this.projetListUser.remove(projet);
+    }
+
     public static void makeAdmin() {
-        User u = User.find.query().where().eq("login", "admin@ecole-isitech.fr").findOne();
+        User u = User.find.query().where().eq("login", "admin@ifpass.fr").findOne();
         if (u == null) {
-            String pass = "1Sit3CH!";
-            String sha1pass = DigestUtils.sha1Hex(pass);
-            User adm = new User("Admin", "Admin", "admin@ecole-isitech.fr", sha1pass, 0);
+            String pass = "soleil";
+            User adm = new User("Admin", "Admin", "admin@ifpass.fr", pass, 0);
             adm.save();
         }
     }
@@ -213,20 +258,140 @@ public class User extends Model {
         this.folder = FileUtils.createUploadDir(this);
     }
 
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getPortable() {
+        return portable;
+    }
+
+    public void setPortable(String portable) {
+        this.portable = portable;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(String dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getSiret() {
+        return siret;
+    }
+
+    public void setSiret(String siret) {
+        this.siret = siret;
+    }
+
+    public String getSociete() {
+        return societe;
+    }
+
+    public void setSociete(String societe) {
+        this.societe = societe;
+    }
+
     public void resetPassword(MailerClient mailerClient) {
         MailerService ms = new MailerService(mailerClient);
         ms.resetPassword(this);
     }
 
     public MailToken getToken() {
-        return token;
+        return token != null ? token : this.setToken(new MailToken()).saveAndReturn().getToken();
     }
 
-    public void setToken(MailToken token) {
+    public User setToken(MailToken token) {
         this.token = token;
         if (token.getUser() == null) {
             token.setUser(this);
         }
+        return this;
+    }
+
+    public List<CalendarEvent> getEventList() {
+        List<CalendarEvent> eventList = new ArrayList<>();
+        if (this.getDroit()!= null) {
+            if (this.getDroit() == 2) {
+                if (getEventListUser() != null) {
+                    eventList = getEventListUser();
+                }
+            } else if (this.getDroit() == 1) {
+                if (getEventListPro() != null) {
+                    eventList = getEventListPro();
+                }
+            }
+        }
+        return eventList;
+    }
+
+    public void setEventListUser(List<CalendarEvent> eventListUser) {
+        this.eventListUser = eventListUser;
+    }
+
+    public void setEventListPro(List<CalendarEvent> eventListPro) {
+        this.eventListPro = eventListPro;
+    }
+
+    public List<CalendarEvent> getEventListUser() {
+        return eventListUser;
+    }
+
+    public void addToEventList(CalendarEvent event) {
+        if (droit == 2) {
+            this.eventListUser.add(event);
+        } else if (droit == 1) {
+            this.eventListPro.add(event);
+        }
+    }
+
+    public void addToEventListUser(CalendarEvent event) {
+        this.eventListUser.add(event);
+    }
+
+    public List<CalendarEvent> getEventListPro() {
+        return eventListPro;
+    }
+
+    public void addToEventListPro(CalendarEvent event) {
+        if (!this.eventListPro.contains(event)) {
+            this.eventListPro.add(event);
+        }
+    }
+
+    public User saveAndReturn() {
+        super.save();
+        return this;
     }
 
     public static Finder<Long, User> find = new Finder<Long, User>(User.class);

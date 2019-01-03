@@ -11,10 +11,22 @@ $(function()
     $("#addMsg").click(function () {
         $("#msgDiv").show();
     });
+    $.ajax({
+        url: "/getUserById",
+        type: "POST",
+        data: JSON.stringify({id : idUser}),
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function (ret, textStatus, jqXHR) {
+            var json = $.parseJSON(ret);
+            $("#nameConvers").text(json.name +" "+ json.surname);
+        }
+    });
 });
 
 
 function initConversation() {
+    waitOn();
     var dataGroup = {id: idUser};
     dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
@@ -34,6 +46,11 @@ function initConversation() {
                 $("#messagerie").hide();
                 $("#noProj").show();
             }
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
         }
     });
 }

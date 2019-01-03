@@ -21,6 +21,9 @@ public class Projet extends Model {
     private String theme;
     private Date dateCreation;
 
+    private String adresse;
+    private Long superficie;
+
     @ManyToOne
     @JsonManagedReference
     private User user;
@@ -29,11 +32,11 @@ public class Projet extends Model {
     @JsonManagedReference
     private List<User> proList;
 
-    @OneToMany(mappedBy="projet")
+    @OneToMany(mappedBy="projet", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Task> taskList;
 
-    @OneToMany(mappedBy="projet")
+    @OneToMany(mappedBy="projet", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CalendarEvent> eventList;
 
@@ -65,7 +68,7 @@ public class Projet extends Model {
         return dateCreation;
     }
 
-    public String getDateSoutenanceString() {
+    public String getDateString() {
         DateUtils dU = new DateUtils();
         return dU.toFrenchDateString(dateCreation);
     }
@@ -82,7 +85,11 @@ public class Projet extends Model {
         this.proList = userList;
     }
 
-    public void addToProList(User user) { this.proList.add(user); }
+    public void addToProList(User user) {
+        if (!this.proList.contains(user)) {
+            this.proList.add(user);
+        }
+    }
 
     public User getUser() {
         return user;
@@ -106,6 +113,30 @@ public class Projet extends Model {
 
     public void setEventList(List<CalendarEvent> eventList) {
         this.eventList = eventList;
+    }
+
+    public Referentiel getType() {
+        return type;
+    }
+
+    public void setType(Referentiel type) {
+        this.type = type;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public Long getSuperficie() {
+        return superficie;
+    }
+
+    public void setSuperficie(Long superficie) {
+        this.superficie = superficie;
     }
 
     public static Finder<Long, Projet> find = new Finder<Long, Projet>(Projet.class);

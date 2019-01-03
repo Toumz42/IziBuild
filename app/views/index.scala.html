@@ -1,7 +1,8 @@
 @(connected : Boolean, admin:Boolean)
 
 @main("EasyBuild") {
-    <div class="carousel carousel-slider center" data-indicators="true">
+    <script type='text/javascript' src='/assets/javascripts/views/faq.js'></script>
+    <div class="big-carousel"><div class="carousel carousel-slider center" data-indicators="true">
         <div class="carousel-fixed-item center">
             <span class="arrowCarousel">
                 <a class="waves-effect prev white-text darken-text-2">
@@ -15,51 +16,69 @@
             </span>
         </div>
         <div class="carousel-item red accent-4 white-text" href="#one!">
-            <div class="top">
-                <h3>Bienvenue sur EasyBuild</h3>
-                <h5 class="white-text">Une nouvelle façon de gérer vos travaux !</h5>
-                <a href="/login" class="btn red accent-4 waves-effect hide-on-large-only">C'est parti !</a>
+            <div class="bottom row">
+                <div class="card carousel-card card-1 col s8 push-s2 push-m3 push-l4 m6 l4 red-text">
+                    <div class="card-content">
+                        <span class="card-title">Bienvenue sur EasyBuild</span>
+                        <p class="black-text">Une nouvelle façon de gérer vos travaux !</p>
+                    </div>
+                    <div class="" style="padding: 10px">
+                        <a @if(connected) { href="/home"} else { href="/login"}class="btn red accent-4 waves-effect">C'est parti !</a>
+                    </div>
+                </div>
             </div>
-            <a href="/login" class="bottom btn red accent-4 waves-effect hide-on-small-and-down" >C'est parti !</a>
+            @*<a href="/login" class="bottom btn red accent-4 waves-effect hide-on-med-and-down" >C'est parti !</a>*@
             <img class="responsive-img" src="/assets/images/tools.jpg">
         </div>
-        <div class="carousel-item red white-text" href="#two!">
-            <div class="left-align">
-                <h3>Restez en contact</h3>
-                <h5 class="white-text">Une messagerie intégrée pour être joignable à tout moment.</h5>
+        <div class="carousel-item red white-text " href="#two!">
+            <div class="left-align row">
+                <div class="card carousel-card card-1 col s8 m6 l5 red-text left-align">
+                    <div class="card-content">
+                        <span class="card-title">Simple</span>
+                        <p class="black-text">
+                            Vous souhaitez vous lancer dans des travaux de rénovation mais cela vous effraie ?
+                            Pas de panique, EasyBuild est là pour vous !</p>
+                    </div>
+                </div>
             </div>
             <img class="responsive-img" src="/assets/images/lego.jpg">
         </div>
         <div class="carousel-item red white-text" href="#three!">
-            <div class="bottom">
-                <h3>Un espace pour vous</h3>
-                <h5 class="white-text">Stocker vos documents pour les avoir à portée de main.</h5>
+            <div class="bottom right-align row">
+                <div class="card card-1 carousel-card col s8 push-m1 push-l3 m6 l5 red-text left-align">
+                    <div class="card-content">
+                        <span class="card-title">Mobile</span>
+                        <p class="black-text">Pilotez vos opérations à partir de votre smartphone et interagissez directement avec vos artisans. </p>
+                    </div>
+                </div>
             </div>
             <img class="responsive-img" src="/assets/images/pelle.jpg">
         </div>
-    </div>
+    </div></div>
     <div class="section white">
-        <h3 class="header">Pourquoi faire appel a nous ?</h3>
+        <h4 class="header">Pourquoi faire appel a nous ?</h4>
         <div class="row container">
             <div class="col s4">
                 <div class="center promo promo-example">
                     <i class="material-icons">flash_on</i>
-                    <p class="promo-caption">Optimiser le temps de vos travaux</p>
-                    <p class="light center">A travers ses diverses fonctionnalités, EasyBuild vous permet de planifier l'ensemble des tâches à l'avance et de pouvoir réagir en cas d'imprévus.</p>
+                    <p class="promo-caption">Challenger vos artisans</p>
+                    <p class="light center">Le planning interactif vous permet d'organiser vos travaux en maitrisant les durées de chaque tâche et facilite la communication avec vos artisans
+                    </p>
                 </div>
             </div>
             <div class="col s4">
                 <div class="center promo promo-example">
                     <i class="material-icons">group</i>
-                    <p class="promo-caption">Suivre l'avancée du chantier</p>
-                    <p class="light center">L'agenda intégré vous permet d'accéder directement aux plannings des artisans et connaitre les tâches réalisées.</p>
+                    <p class="promo-caption">Suivre l'avancée de votre chantier</p>
+                    <p class="light center">Vous pouvez visualiser sans vous déplacer et en temps réel l'évolution de votre chantier</p>
                 </div>
             </div>
             <div class="col s4">
                 <div class="center promo promo-example">
                     <i class="material-icons">settings</i>
-                    <p class="promo-caption">Facile à prendre en main</p>
-                    <p class="light center">Grace a son interface facile d'utilisation EasyBuild deviendra le compagnon de tous vos travaux.</p>
+                    <p class="promo-caption">Améliorer la communication</p>
+                    <p class="light center">Aussi simple et rapide qu'un SMS, la messagerie instantanée vous permet de discuter avec vos artisans et instaurer une proximité, comme si vous y êtiez !
+                    </p>
                 </div>
             </div>
         </div>
@@ -68,17 +87,36 @@
         <div class="parallax"><img src="/assets/images/IMG_3661.jpg"></div>
     </div>
     <div class="section white">
-        <h3 class="header">Pourquoi faire appel a nous ?</h3>
+        <h4 class="header">Ils nous font confiance</h4>
         <div class="row container">
-            <div class="col s12 ">
-                <p class="grey-text text-darken-3 lighten-3">Parallax is
-                    an effect where the background content or image in this case,
-                    is moved at a different speed than the foreground content while scrolling.
-                </p>
+            <div class="col s12">
+                <div class="small-carousel">
+                    <div class="carousel">
+                        <a class="carousel-item" href="#one!"><img src="/assets/images/color/1.png"></a>
+                        <a class="carousel-item" href="#two!"><img src="/assets/images/color/2.png"></a>
+                        <a class="carousel-item" href="#three!"><img src="/assets/images/color/3.png"></a>
+                        <a class="carousel-item" href="#four!"><img src="/assets/images/color/4.png"></a>
+                        <a class="carousel-item" href="#five!"><img src="/assets/images/color/5.png"></a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-    <div class="parallax-container">
+    <div class="parallax-container" style="height: auto !important;">
+        <div class=" container">
+            <div class="row" id="faq">
+                <div class="col m8 s8 l8 push-s2 push-m2 push-l2 push-down-50">
+                    <div class="card card-1">
+                        <div class="card-content">
+                            <span class="card-title">Foire aux questions</span>
+                            <ul class="collapsible">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="parallax"><img src="/assets/images/IMG_3661.jpg"></div>
     </div>
     <script src='/assets/javascripts/views/index.js' type="text/javascript"></script>

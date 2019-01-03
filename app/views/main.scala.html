@@ -12,9 +12,11 @@
         <link type="text/css" rel="stylesheet" href='/assets/stylesheets/materialize.css'  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href='/assets/stylesheets/main.css'  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href='/assets/stylesheets/menu.css'  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href='/assets/stylesheets/addtohomescreen.css'  media="screen,projection"/>
         <link rel="shortcut icon" type="image/png" href='/assets/images/favicon.png'>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="/assets/javascripts/jquery-3.3.1.min.js"></script>
         <script src='/assets/javascripts/jquery-ui.min.js' type="text/javascript"></script>
+        <script src='/assets/javascripts/addtohomescreen.js' type="text/javascript"></script>
         <script src='/assets/javascripts/materialize/bin/materialize.js' type="text/javascript"></script>
         <script src='/assets/javascripts/views/utils/utils.js' type="text/javascript"></script>
         <script src='/assets/javascripts/jquery.touchSwipe.min.js' type="text/javascript"></script>
@@ -22,41 +24,46 @@
     <body>
         @*<div style="height: 90px;" id="headerHolder"></div>*@
         <header>
-            <nav class="top-nav pushpin-demo-nav red accent-4">
+            <nav class="top-nav red darken-4">
                 <div class="" style="height: inherit; margin-left: 2%;">
                     <div class="nav-wrapper">
-                        <a href="#" data-activates="nav-mobile" id="menuIcon" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
-                        <a class="page-title">Menu</a>
+                        <a href="#" data-target="nav-mobile" id="menuIcon" class="sidenav-trigger top-nav full sidenav-close"><i class="material-icons">menu</i></a>
+                        <a class="brand-logo"><img style="height: 100px" src="/assets/images/logo3.png"></a>
                         @if(connected) { <ul class="right hide-on-med-and-down">
                             <li><a class="logout">Déconnexion</a></li>
                         </ul>}
                     </div>
                 </div>
             </nav>
-            <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
+            <ul id="nav-mobile" class="sidenav sidenav-fixed">
                 <li>
                     <div class="user-view">
-                    <div class="background">
-                        <img class="responsive-img" src="/assets/images/1.jpg">
+                        <div class="background">
+                            <img class="responsive-img" src="/assets/images/1.jpg">
+                        </div>
+                        <a href="/editAccount"><img class="circle" src="/assets/images/avatar/user.png"></a>
+                        <a href="/editAccount"><span id="nameNav" class="white-text name"></span></a>
+                        <a href="/editAccount"><span id="mailNav" class="white-text email"></span></a>
                     </div>
-                    <a href="/editAccount"><img class="circle" src="/assets/images/avatar/user.png"></a>
-                    <a href="/editAccount"><span id="nameNav" class="white-text name"></span></a>
-                    <a href="/editAccount"><span id="mailNav" class="white-text email"></span></a>
-                </div>
                 </li>
                 <li id="logoLI" class="bold hideSoft"><img style="width: 95%;" src="/assets/images/logo2.png"></li>
                 <li class="bold"><a href="/">Bienvenue sur Easy-Build</a></li>
                 @if(connected) {
-                    <li class="bold"><a href="/home">Acceuil</a></li>
+                    <li class="bold"><a class="logout" href="#">Déconnexion</a></li>
+                    <li class="bold"><a href="/home">Accueil</a></li>
                 } else {
                     <li class="bold"><a href="/login">Se connecter</a></li>
                 }
+                <li><div class="divider"></div></li>
                 @if(connected) {
                     @if(admin) {
                         <li class="bold"><a href="/projet">Administration des projets</a></li>
                     } else {
                         <li class="bold"><a href="/projet">Projet</a></li>
+                        <li class="bold"><a href="/agenda">Agenda</a></li>
                     }
+                    <li class="bold"><a class="linkNote noteText" href="/messagerie">Messagerie</a></li>
+                    <li><div class="divider"></div></li>
                     @if(admin) {
                         <li class="bold"><a href="/administration">Administration des comptes</a></li>
                     } else {
@@ -67,10 +74,6 @@
                     } else {
                         <li class="bold"><a href="/faq">Aide</a></li>
                     }
-                    <li class="bold"><a href="/agenda">Agenda</a></li>
-                    <li class="bold"><a class="linkNote noteText" href="/messagerie">Messagerie</a></li>
-                    <li class="bold"><a href="/doc">Documents</a></li>
-                    <li class="bold"><a class="logout" href="#">Déconnexion</a></li>
                 }
             </ul>
         </header>
@@ -81,28 +84,73 @@
         <footer class="page-footer red accent-4">
             <div class="container">
                 <div class="row">
-                    <div class="col l6 s12">
+                    <div class="col l5 m5 s12">
                         <h5 class="white-text">Contact</h5>
-                        <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+                        <p class="grey-text text-lighten-4">
+                            EASY-BUILD<br/>
+                            50 Avenue Tony Garnier<br/>
+                            69007 LYON<br/>
+                            service.easybuild&#x40;gmail.com
+                        </p>
                     </div>
-                    <div class="col l4 offset-l2 s12">
-                        <h5 class="white-text">Links</h5>
-                        <ul>
-                            <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                            <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                            <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                            <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-                        </ul>
+                    <div class="col l5 m5 offset-l1 s12">
+                        <h5 class="white-text">Carte</h5>
+                        <div class="iframeMap">
+                            <iframe  width="100%" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=4.821581840515138%2C45.723820996548895%2C4.831624031066895%2C45.72845710801218&amp;layer=mapnik&amp;marker=45.726139100376024%2C4.826602935791016">
+                            </iframe><br/>
+                            <small><a href="https://www.openstreetmap.org/?mlat=45.72614&amp;mlon=4.82660#map=17/45.72614/4.82660">Afficher une carte plus grande</a></small>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="footer-copyright">
                 <div class="container">
                     © 2017 EasyBuild
-                    <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
                 </div>
             </div>
         </footer>
         <script src='/assets/javascripts/views/menu.js' type="text/javascript"></script>
+        <div class="waitOnDiv" style="display: none">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+                <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+                <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+                <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

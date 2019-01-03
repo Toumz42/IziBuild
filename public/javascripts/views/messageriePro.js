@@ -6,25 +6,16 @@ $(function()
     initAutoComplete();
     initConversations();
     initNewMessage();
+
     $("#addMsg").click(function () {
         $("#msgDiv").show();
     });
 });
-
-function initNavbar() {
-    $(".nav-wrapper").append(" <div class='nav-content'>\n" +
-        "      <span class='nav-title'>Messagerie</span>\n" +
-        "      <a class='btn-floating btn-large halfway-fab waves-effect waves-light indigo'>" +
-        "        <i class='material-icons'>add</i>" +
-        "      </a>" +
-        "    </div>")
-
-}
 function initAutoComplete() {
     var json;
     var dataGroup = JSON.stringify({});
     $.ajax({
-        url: "/getAllUser",
+        url: "/getAllProjectUsers",
         type: "GET",
         // data: dataGroup,
         dataType: "text",

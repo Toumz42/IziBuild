@@ -73,12 +73,21 @@ public class UserController extends Controller {
 
     public Result addUser() {
         JsonNode json = request().body().asJson();
-        String name = json.get("name").asText();
-        String surname = json.get("surname").asText();
-        Integer type = json.get("type").asInt();
-        String email = json.get("email").asText();
-        String pass = json.get("password").asText();
+        String name = json.get("name")!= null ? json.get("name").asText() : "";
+        String surname = json.get("surname")!= null ? json.get("surname").asText() : "";
+        Integer droit = json.get("droit") != null ? json.get("droit").asInt() : null;
+        String email = json.get("email")!= null ? json.get("email").asText() : "";
+        String pass = json.get("password")!= null ? json.get("password").asText() : "";
+        String adresse = json.get("adresse")!= null ? json.get("adresse").asText() : "";
+        String ville = json.get("ville")!= null ? json.get("ville").asText() : "";
+        String codePostal = json.get("codePostal")!= null ? json.get("codePostal").asText() : "";
+        String portable = json.get("portable")!= null ? json.get("portable").asText() : "";
+        String telephone = json.get("telephone")!= null ? json.get("telephone").asText() : "";
+        String dateNaissance = json.get("dateNaissance")!= null ? json.get("dateNaissance").asText() : "";
+        String siret = json.get("siret") != null ? json.get("siret").asText() : "";
+        String societe = json.get("societe") != null ? json.get("societe").asText() : "";
         Long categorieId = json.get("categorie") != null ? json.get("categorie").asLong() : null;
+        String sha1pass = DigestUtils.sha1Hex(pass);
 
 
         Referentiel categorie = null;
@@ -94,13 +103,16 @@ public class UserController extends Controller {
         if (u == null) {
             if (email != null) {
                 if (!email.equals("")) {
-                    User person = new User(name, surname, email, pass, type, categorie);
+                    User person = new User(name, surname, email, sha1pass, adresse, ville, codePostal, portable, telephone, dateNaissance, siret, societe,droit);
+                    if (categorie != null) {
+                        person.setCategorie(categorie);
+                    }
                     person.save();
                     person.makeUserDir();
                     person.save();
                     session("userId", person.getId().toString());
                     JsonNode retour = mapper.valueToTree(person);
-                    return ok().sendJson(retour);
+                    return redirect("/home");
                 } else {
                     return badRequest("Erreur dans le mail");
                 }
@@ -113,35 +125,53 @@ public class UserController extends Controller {
 
     public Result updateUser() {
         JsonNode json = request().body().asJson();
-        Long id = json.get("idUser").asLong();
-        String name = json.get("name").asText();
-        String surname = json.get("surname").asText();
-        Integer droit = json.get("droit").asInt();
-        String email = json.get("email").asText();
-        String pass = json.get("password").asText();
-        String sha1pass = DigestUtils.sha1Hex(pass);
+        Long id = json.get("idUser") != null ? json.get("idUser").asLong() : null;
+        String name = json.get("name") != null ? json.get("name").asText() : "";
+        String surname = json.get("surname") != null ? json.get("surname").asText() : "";
+        Integer droit = json.get("droit") != null ? json.get("droit").asInt() : null;
+        String email = json.get("email") != null ? json.get("email").asText() : "";
+        String adresse = json.get("adresse") != null ? json.get("adresse").asText() : "";
+        String ville = json.get("ville") != null ? json.get("ville").asText() : "";
+        String codePostal = json.get("codePostal") != null ? json.get("codePostal").asText() : "";
+        String portable = json.get("portable") != null ? json.get("portable").asText() : "";
+        String telephone = json.get("telephone") != null ? json.get("telephone").asText() : "";
+        String dateNaissance = json.get("dateNaissance") != null ? json.get("dateNaissance").asText() : "";
+        String siret = json.get("siret") != null ? json.get("siret").asText() : "";
+        String societe = json.get("societe") != null ? json.get("societe").asText() : "";
+        String pass = json.get("password") != null ? json.get("password").asText() : "";
+        Long categorieId = json.get("categorie") != null ? json.get("categorie").asLong() : null;
 
         User u = User.find.byId(id);
-
         if (u != null) {
-            if (email != null) {
-                if (!email.equals("")) {
-                    u.setName(name);
-                    u.setSurname(surname);
-                    u.setDroit(droit);
-                    u.setEmail(email);
-                    u.setPassword(sha1pass);
-                    u.save();
-                    JsonNode retour = mapper.valueToTree(u);
-                    return ok().sendJson(retour);
-                } else {
-                    return badRequest("Erreur dans le mail");
+            if (!u.getPassword().contains(pass)) {
+                String sha1pass = DigestUtils.sha1Hex(pass);
+                u.setPassword(sha1pass);
+            }
+            if (!email.equals("")) {
+                u.setName(name);
+                u.setSurname(surname);
+                u.setDroit(droit);
+                u.setEmail(email);
+                u.setAdresse(adresse);
+                u.setVille(ville);
+                u.setCodePostal(codePostal);
+                u.setPortable(portable);
+                u.setTelephone(telephone);
+                u.setDateNaissance(dateNaissance);
+                u.setSiret(siret);
+                u.setSociete(societe);
+                if (categorieId != null) {
+                    Referentiel categorie = Referentiel.find.byId(categorieId);
+                    u.setCategorie(categorie);
                 }
+                u.save();
+                JsonNode retour = mapper.valueToTree(u);
+                return ok().sendJson(retour);
             } else {
                 return badRequest("Erreur dans le mail");
             }
         }
-        return badRequest("Déjà inscrit !");
+        return notFound();
     }
 
 

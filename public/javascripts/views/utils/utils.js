@@ -1,7 +1,8 @@
 /**
  * Created by ttomc on 23/03/2017.
  */
-
+var monthsShort = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+var grpFields =["#idProject","#groupeName", "#theme", "#date", "#adresse","#superficie"];
 var imgEmptyDiv = "<div id='noData' class='valign-wrapper'>" +
     "<img class='center-align responsive-img noData imgHome' src='/assets/images/empty.png'/>" +
     "</div>"+
@@ -9,7 +10,7 @@ var imgEmptyDiv = "<div id='noData' class='valign-wrapper'>" +
     "<div class='center-align red-text'> Désolé nous n'avons rien trouvé </div>" +
     "</div>";
 var cardStart = "<ul class='stage'><div class='row'>"+
-    "<div class='col push-s1 push-l1 push-m1 m12 s12 l12'>"+ "<li>"+
+    "<div class='col m12 s12 l12'>"+ "<li>"+
     "<div class='card card-1'><div class='card-content'>";
 
 var cardStartcol = "<ul class='stage'><div class='row'>" +
@@ -23,7 +24,7 @@ var checkIcon = "<i class='material-icons'>check</i>";
 var closeIcon = "<i class='material-icons'>close</i>";
 var cardCollapseStart = '<ul class="stage">'+
     '<div class="row">'+
-    '<div class="col m12 s12 l12 push-s1 push-l1 push-m1">'+
+    '<div class="col m12 s12 l12 ">'+
     '<li>'+
     '<ul class="card-2 collapsible" data-collapsible="accordion">'+
     '<li>'+
@@ -45,13 +46,14 @@ function turn(selector) {
 
 function myToast(toastContent) {
     $toastContent = $("<span style='white-space: nowrap'>"+toastContent+"</span>");
-    Materialize.toast($toastContent, 3000, 'rounded')
+    M.toast({html: $toastContent, displayLength: 3000, classes :'rounded'})
 }
 function emptyFields(array) {
     $.each(array,function () {
         $(""+this).val("");
     });
-    $('select').material_select();
+    emptyComplete()
+    $('select').formSelect();
 }
 function find(array, id) {
     return $.grep(array, function(e){ return e.id == id; });
@@ -67,14 +69,15 @@ function jsonToGlobalArray(array, json) {
     return array;
 }
 
-function modalize(el,parent,set) {
+function modalize(el,parent,set, callback) {
     if (set) {
         el.addClass("modal").addClass("modal-fixed-footer");
-        $(".modal").modal(
+        $("#"+el[0].id+"").modal(
             {
                 startingTop: '25%',
                 endingTop: '5%',
-                complete: function() {
+                onCloseEnd: function() {
+                    modal = this;
                     parent.hide();
                     var id = this.id;
                     switch (id) {
@@ -92,15 +95,18 @@ function modalize(el,parent,set) {
                             emptyFields(agendaFields);
                             break;
                     }
-                } // Callback for Modal close
+                }
+                // Callback for Modal close
             }
         );
         el.modal('open');
         parent.show();
     } else {
-        parent.show();
-        el.show();
-        el.modal('close');
+        if (typeof modal != 'undefined') {
+            el.removeClass("modal");
+            el.removeClass("modal-fixed-footer");
+            modal.destroy();
+        }
     }
 }
 function activeFields(array) {
@@ -237,35 +243,45 @@ function jumpToPage(page, func) {
 }
 function javaToFrenchDate(time) {
     var date = new Date(time);
-    var day = date.getDay() < 10 ? "0" + date.getDay() : date.getDay();
-    var month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+    var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
 
     return day + "/" + month + "/" + date.getFullYear();
+}
+function timeToDatePicker(time) {
+    var date = new Date(time);
+    var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    var month = date.getMonth();
+    var month = monthsShort[month];
+
+    return day + " " + month + ", " + date.getFullYear();
 }
 
 
 function initMaterial() {
-    $('.collapsible').collapsible();
+    $('.collapsible').collapsible({
+            onOpenEnd : function () {
+                $.each($('.materialize-textarea'),function (i, val) {
+                    M.textareaAutoResize($(val));
+                })
+            }
+        }
+    );
 
-    $('.datepicker').pickadate({
-        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
-        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
-        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
-
-        labelMonthNext: 'Mois suivant',
-        labelMonthPrev: 'Mois precédent',
-        labelMonthSelect: 'Selection mois',
-        labelYearSelect: 'Selection année',
-
-        today: 'Auj',
-        clear: 'Effacer',
-        close: 'Fermer',
-        firstDay: true,
-        formatSubmit: 'yyyy-mm-dd',
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
+    $('.datepicker').datepicker({
+        i18n : {
+            months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthsShort: monthsShort,
+            weekdays: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+            weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            weekdaysAbbrev: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+            clear: 'Effacer',
+            cancel: 'Annuler'
+        },
+        container: '#datepicker-container',
+        firstDay: 1,
+        format: 'dd mmm, yyyy',
+        yearRange: [new Date().getFullYear(), new Date().getFullYear() + 20] // Creates a dropdown of 15 years to control year
     });
 }
 
@@ -285,5 +301,52 @@ function initValidProj() {
                 $(this).prop("checked", "checked");
             }
         });
+    });
+}
+function fillEditFormProject(val,id) {
+    var project = val[0];
+    $("#idProject").val(id);
+    $("#projectName").val(project.name);
+    $("#theme").val(project.theme);
+    $("#adresse").val(project.adresse);
+    $("#superficie").val(project.superficie);
+    $("#date").val(timeToDatePicker(project.dateCreation));
+    groupids = [];
+    $.each(project.proList,function () {
+        var chip = {
+            'id' : this.id,
+            'text' : this.name +" "+ this.surname
+        };
+        autocomplete.append(chip)
+    });
+    activeFields(grpFields);
+}
+
+function emptyComplete() {
+    $('#multipleInput').data('autocomplete').empty();
+    groupids = [];
+}
+function waitOn() {
+    $(".waitOnDiv").show();
+    $("body").addClass("noScroll");
+}
+function waitOff() {
+    $(".waitOnDiv").hide();
+    $("body").removeClass("noScroll");
+}
+function filterUlFromInput(ul, input) {
+    // Declare variables
+    var input, filter, ul, li, txtValue;
+    filter = input.val().toUpperCase();
+    li = ul.find("li");
+
+    // Loop through all list items, and hide those who don't match the search query
+    $.each(li, function (index, value) {
+        txtValue = value.textContent || value.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            $(value).show();
+        } else {
+            $(value).hide();
+        }
     });
 }

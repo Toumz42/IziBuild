@@ -23,21 +23,15 @@ $(function()
             $("#last_name").val(currentUser.name).siblings("label").addClass("active");
             $("#first_name").val(currentUser.surname).siblings("label").addClass("active");
             $("#email").val(currentUser.email).siblings("label").addClass("active");
-        }
-    });
-    $.ajax ({
-        url: url,
-        type: "POST",
-        data: JSON.stringify(data),
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function(ret, textStatus, jqXHR){
-            myToast("Votre Compte a bien été créé !");
-            myToast("Vous allez etre redirigé vers la page d'accueil !");
-            setTimeout(function() { document.location = "/home"; }, 2000);
-        },
-        error : function (xhr, ajaxOptions, thrownError) {
-            myToast("Erreur dans l'ajout de l'utilisateur");
+            $("#adresse").val(currentUser.adresse).siblings("label").addClass("active");
+            $("#droit").val(currentUser.droit).siblings("label").addClass("active");
+            $("#ville").val(currentUser.ville).siblings("label").addClass("active");
+            $("#codePostal").val(currentUser.codePostal).siblings("label").addClass("active");
+            $("#portable").val(currentUser.portable).siblings("label").addClass("active");
+            $("#telephone").val(currentUser.telephone).siblings("label").addClass("active");
+            $("#dateNaissance").val(currentUser.dateNaissance).siblings("label").addClass("active");
+            $("#password1").val(currentUser.password.substring(0,8)).siblings("label").addClass("active");
+            $("#password2").val(currentUser.password.substring(0,8)).siblings("label").addClass("active");
         }
     });
 
@@ -51,8 +45,15 @@ $(function()
                 "surname" :     $("#first_name").val(),
                 "email" :       $("#email").val(),
                 "type" :        $("#type").val(),
+                "adresse" :     $("#adresse").val(),
+                "droit" :       2,
+                "ville" :       $("#ville").val(),
+                "codePostal" :  $("#codePostal").val(),
+                "portable" :    $("#portable").val(),
+                "telephone" :   $("#telephone").val(),
+                "dateNaissance" : $("#dateNaissance").val(),
                 "password" :    $("#password1").val()};
-
+            waitOn();
             $.ajax ({
                 url: url,
                 type: "POST",
@@ -60,12 +61,16 @@ $(function()
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 success: function(ret, textStatus, jqXHR){
-                    myToast("Votre Compte a bien été créé !");
+                    myToast("Votre Compte a bien été modifié !");
                     myToast("Vous allez etre redirigé vers la page d'accueil !");
-                    setTimeout(function() { document.location = "/home"; }, 2000);
+                    setTimeout(function() {
+                        document.location = "/home";
+                        waitOff();
+                    }, 2000);
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout de l'utilisateur");
+                    waitOff()
                 }
             });
 
@@ -73,34 +78,27 @@ $(function()
     });
 
 
-    $('.datepicker').pickadate({
-        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
-        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
-        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
-
-        labelMonthNext: 'Mois suivant',
-        labelMonthPrev: 'Mois precédent',
-        labelMonthSelect: 'Selection mois',
-        labelYearSelect: 'Selection année',
+    $('.datepicker').datepicker({
+        i18n : {
+            months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthsShort: [ 'janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.' ],
+            weekdays: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+            weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            weekdaysAbbrev: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+            clear: 'Effacer',
+            cancel: 'Annuler'
+        },
         container: '#datepicker-container',
-
-        today: 'Auj',
-        clear: 'Effacer',
-        close: 'Fermer',
-        firstDay: true,
-        formatSubmit: 'yyyy-mm-dd',
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
+        firstDay: 1,
+        format: 'dd mmmm yyyy',
+        yearRange: [new Date().getFullYear()- 100, new Date().getFullYear()] // Creates a dropdown of 15 years to control year
     });
 
-    Materialize.showStaggeredList($("#stage1"));
+
 
     //fixedMailInput();
 
-    var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
-    Materialize.scrollFire(options);
+
 
     $('.collapsible').collapsible();
 });

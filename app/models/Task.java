@@ -83,6 +83,8 @@ public class Task extends Model {
         this.projet = projet;
     }
 
+
+
     public static Finder<Long, Task> find = new Finder<Long, Task>(Task.class);
 
 }

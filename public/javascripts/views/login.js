@@ -25,26 +25,26 @@ $(function () {
     $('#btn_connexion').bind("click", function () {
         var id = $('#email').val();
         var password = $('#password').val();
-        var data = 'login='+ id +'&pswd='+password;
+        var stay = $('#stay').is(":checked");
+        var data = {'login': id ,'pswd':password,"stay":stay};
         // $.ajaxSetup({
         //     contentType: "application/json; charset=utf-8"
         // });
 
-        $.post(
-            '/identifyUser',
-            data,
-            function (retour) {
-
-            if (retour.error) {
-                alert(retour.messageRetour);
-                $('#login').select();
-            }
-            else {
-                window.location = retour;
-            //     var rep = "<div class='row' style='color: grey; margin-left: 20px'> "+
-            //         "<span>"+retour.messageRetour+"</span>"+
-            //         "</div>";
-            //     $("#formParent").append(rep);
+        $.ajax({
+            type: "POST",
+            url: '/identifyUser',
+            data: JSON.stringify(data),
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (retour) {
+                if (retour.error) {
+                    alert(retour.messageRetour);
+                    $('#login').select();
+                }
+                else {
+                    window.location = retour;
+                }
             }
         });
     });
@@ -79,7 +79,5 @@ $(function () {
     });
 
 
-
-    Materialize.showStaggeredList($("#stage"));
 });
     

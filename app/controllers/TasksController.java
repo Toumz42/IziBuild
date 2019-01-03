@@ -25,9 +25,8 @@ public class TasksController extends Controller {
         String idProjStr = json.get("idProj").asText();
         String dateString = json.get("date").asText();
         String contenu = json.get("contenu").asText();
-        dateString = dateString.replace(",","");
         Date date = null;
-        SimpleDateFormat parser = new SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH);
+        SimpleDateFormat parser = new SimpleDateFormat("dd MMM, yyyy", Locale.FRENCH);
         try {
             date = parser.parse(dateString);
         } catch (ParseException e) {
@@ -82,6 +81,36 @@ public class TasksController extends Controller {
         Task p = Task.find.byId(id);
         if (p != null) {
             p.setEtatBoolean(val);
+            p.save();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode result = mapper.valueToTree(p);
+            return ok().sendJson(result);
+
+        }
+        return ok().sendJson(Json.toJson(false));
+    }
+    public Result changeTasksbyId() {
+
+        JsonNode json = request().body().asJson();
+        Long id = json.get("idTask").asLong();
+        String val = json.get("contenu").asText();
+        String type = json.get("type").asText();
+        Task p = Task.find.byId(id);
+        if (p != null) {
+            switch (type) {
+                case "taskDateInput":
+                    SimpleDateFormat parser = new SimpleDateFormat("dd MMM, yyyy HH:mm", Locale.FRENCH);
+                    try {
+                        Date date = parser.parse(val);
+                        p.setdateTask(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "taskContentInput":
+                    p.setContenu(val);
+                    break;
+            }
             p.save();
             ObjectMapper mapper = new ObjectMapper();
             JsonNode result = mapper.valueToTree(p);

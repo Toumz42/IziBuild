@@ -11,8 +11,13 @@ create table calendar_event (
   color                         varchar(255),
   user_id                       bigint,
   projet_id                     bigint,
-  constraint uq_calendar_event_user_id unique (user_id),
   constraint pk_calendar_event primary key (id)
+);
+
+create table calendar_event_user (
+  calendar_event_id             bigint not null,
+  user_id                       bigint not null,
+  constraint pk_calendar_event_user primary key (calendar_event_id,user_id)
 );
 
 create table mail_token (
@@ -38,6 +43,8 @@ create table projet (
   type_id                       bigint,
   theme                         varchar(255),
   date_creation                 datetime(6),
+  adresse                       varchar(255),
+  superficie                    bigint,
   user_id                       bigint,
   constraint uq_projet_type_id unique (type_id),
   constraint pk_projet primary key (id)
@@ -77,21 +84,30 @@ create table user (
   login                         varchar(255),
   password                      varchar(255),
   folder                        varchar(255),
+  adresse                       varchar(255),
+  ville                         varchar(255),
+  code_postal                   varchar(255),
+  portable                      varchar(255),
+  telephone                     varchar(255),
+  date_naissance                varchar(255),
+  siret                         varchar(255),
+  societe                       varchar(255),
   droit                         integer,
   categorie_id                  bigint,
   constraint pk_user primary key (id)
 );
 
-create table user_projet (
-  user_id                       bigint not null,
-  projet_id                     bigint not null,
-  constraint pk_user_projet primary key (user_id,projet_id)
-);
-
+create index ix_calendar_event_user_id on calendar_event (user_id);
 alter table calendar_event add constraint fk_calendar_event_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 
 create index ix_calendar_event_projet_id on calendar_event (projet_id);
 alter table calendar_event add constraint fk_calendar_event_projet_id foreign key (projet_id) references projet (id) on delete restrict on update restrict;
+
+create index ix_calendar_event_user_calendar_event on calendar_event_user (calendar_event_id);
+alter table calendar_event_user add constraint fk_calendar_event_user_calendar_event foreign key (calendar_event_id) references calendar_event (id) on delete restrict on update restrict;
+
+create index ix_calendar_event_user_user on calendar_event_user (user_id);
+alter table calendar_event_user add constraint fk_calendar_event_user_user foreign key (user_id) references user (id) on delete restrict on update restrict;
 
 alter table mail_token add constraint fk_mail_token_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 
@@ -120,19 +136,20 @@ alter table task add constraint fk_task_projet_id foreign key (projet_id) refere
 create index ix_user_categorie_id on user (categorie_id);
 alter table user add constraint fk_user_categorie_id foreign key (categorie_id) references referentiel (id) on delete restrict on update restrict;
 
-create index ix_user_projet_user on user_projet (user_id);
-alter table user_projet add constraint fk_user_projet_user foreign key (user_id) references user (id) on delete restrict on update restrict;
-
-create index ix_user_projet_projet on user_projet (projet_id);
-alter table user_projet add constraint fk_user_projet_projet foreign key (projet_id) references projet (id) on delete restrict on update restrict;
-
 
 # --- !Downs
 
 alter table calendar_event drop foreign key fk_calendar_event_user_id;
+drop index ix_calendar_event_user_id on calendar_event;
 
 alter table calendar_event drop foreign key fk_calendar_event_projet_id;
 drop index ix_calendar_event_projet_id on calendar_event;
+
+alter table calendar_event_user drop foreign key fk_calendar_event_user_calendar_event;
+drop index ix_calendar_event_user_calendar_event on calendar_event_user;
+
+alter table calendar_event_user drop foreign key fk_calendar_event_user_user;
+drop index ix_calendar_event_user_user on calendar_event_user;
 
 alter table mail_token drop foreign key fk_mail_token_user_id;
 
@@ -161,13 +178,9 @@ drop index ix_task_projet_id on task;
 alter table user drop foreign key fk_user_categorie_id;
 drop index ix_user_categorie_id on user;
 
-alter table user_projet drop foreign key fk_user_projet_user;
-drop index ix_user_projet_user on user_projet;
-
-alter table user_projet drop foreign key fk_user_projet_projet;
-drop index ix_user_projet_projet on user_projet;
-
 drop table if exists calendar_event;
+
+drop table if exists calendar_event_user;
 
 drop table if exists mail_token;
 
@@ -182,6 +195,4 @@ drop table if exists referentiel;
 drop table if exists task;
 
 drop table if exists user;
-
-drop table if exists user_projet;
 

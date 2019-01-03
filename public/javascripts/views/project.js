@@ -2,17 +2,18 @@
  * Created by ttomc on 06/01/2017.
  */
 var groupids = [];
+var projects = [];
 $(function()
 {
     $(".page-title").empty().append("Projet");
     var cardStart = "<ul class='stage'><div class='row'>"+
-        "<div class='col m12 s12 l12 push-s1 push-m1 push-l1'>"+ "<li>"+
+        "<div class='col m12 s12 l12'>"+ "<li>"+
         "<div class='card card-1'><div class='card-content'>"+
         "<div class='row'>";
     var cardEnd = "</div></div></div></li></div></div></ul>";
     data=null;
 
-
+    waitOn();
     $.ajax ({
         url: "/getProjects",
         type: "GET",
@@ -21,10 +22,24 @@ $(function()
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
+            projects = jsonToGlobalArray(projects, json);
             makeProjectDiv(json);
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Error fetching projects");
+            waitOff();
         }
     });
     var turned = false;
+    $("#kitchen,#bedroom,#bathroom").click(function () {
+        var theme = $(this).data("name");
+        $("#theme").val(theme);
+        $("#theme").addClass("red-text");
+        activeFields(["#theme"]);
+        $("#projectMenu").slideToggle();
+        $("#projetAdderDiv").toggle("slide");
+    });
     $("#addSuivi").click(function () {
         if (turned) {
             $(this).css({
@@ -43,25 +58,37 @@ $(function()
             });
             turned = true;
         }
-        $("#projetAdderDiv").toggle('slide');
+        $("#projectMenu").toggle('slide');
+        if ($("#projetAdderDiv").is(":visible")) {
+            $("#projetAdderDiv").toggle('slide');
+        }
+        $('html, body').animate({scrollTop: 0}, 500);
     });
 
     $("#subProject").click(function(){
+        waitOn();
         if ($("#theme").val() != "" && $("#date").val() != "") {
             var data = {
                 "theme": $("#theme").val(),
                 "date": $("#date").val(),
+                "adresse": $("#adresse").val(),
+                "superficie": $("#superficie").val(),
                 "groupids": groupids
             };
-
+            url = "/addProject";
+            if ($("#idProject").val() !== "") {
+                url = "/updateProjectGroup";
+                data.id = $("#idProject").val();
+            }
             $.ajax({
-                url: "/addProject",
+                url: url,
                 type: "POST",
                 data: JSON.stringify(data),
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 success: function (ret, textStatus, jqXHR) {
-                    $("#addCard").slideToggle();
+                    waitOff();
+                    $("#projetAdderDiv").slideToggle();
                     var json = $.parseJSON(ret);
                     makeProjectDiv(json);
                 }
@@ -74,6 +101,7 @@ $(function()
 });
 
 function makeProjectDiv(json) {
+    if (!$.isArray(json)) json = [json];
     if (json.length > 0) {
         var table;
         var tr;
@@ -93,11 +121,13 @@ function makeProjectDiv(json) {
             tr.append("<th style='width: 25%'><h5>Projet</h5></th>");
             tr.append("<th> Theme </th>");
             tr.append("<th>Date</th>");
+            tr.append("<th>Adresse</th>");
             table.append(tr);
             tr = $('<tr/>');
             tr.append("<td>&nbsp;<span style='display: none'>"+projId+"</span></td>");
             tr.append("<td>" + json[i].theme + "</td>");
-            tr.append("<td>" + json[i].date + "</td>");
+            tr.append("<td>" + json[i].dateString + "</td>");
+            tr.append("<td>" + json[i].adresse + "</td>");
             table.append(tr);
             tr = $('<tr/>');
             tr.append("<th style='width: 25%'>Artisans</th>");
@@ -116,8 +146,8 @@ function makeProjectDiv(json) {
             for (var k = 0; k < json[i].taskList.length; k++) {
                 tr = $('<tr/>');
                 tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
-                tr.append("<td>" + javaToFrenchDate(json[i].taskList[k].dateTask) + "</td>");
-                tr.append("<td>" + json[i].taskList[k].contenu + "</td>");
+                tr.append("<td><input class='taskInput datepicker' data-taskId='"+json[i].taskList[k].id+"' id='taskDateInput' value='" + timeToDatePicker(json[i].taskList[k].dateTask) + "'/> </td>");
+                tr.append("<td><textarea class='materialize-textarea taskInput' data-taskId='"+json[i].taskList[k].id+"' id='taskContentInput'>" + json[i].taskList[k].contenu + "</textarea></td>");
                 var checked = "";
                 if (json[i].taskList[k].etat == 1) {
                     checked = "checked";
@@ -156,14 +186,14 @@ function makeProjectDiv(json) {
                 accordContent.empty();
                 accordContent.append(table3);
             }
-            accordContent.append("<div class='buttonIcon addTask' type='groupe' id='"+json[i].id+"'>" + addIcon + "</div>");
+            accordContent.append("<div class='buttonIcon addTask' type='project' id='"+json[i].id+"'>" + addIcon + "</div>");
             accordContent.append(table4);
             //var res1 = cardStart + table.prop('outerHTML');
             //var res2 = table2.prop('outerHTML') + cardEnd;
             //var res = res1 + res2;
             div = $('<div class="right-align suppDiv"/>');
-            div.append("<div class='buttonIcon edit' type='groupe' id='"+json[i].id+"'>" + editIcon + "</div>");
-            div.append("<div class='buttonIcon delete' type='groupe' id='"+json[i].id+"'>" + deleteIcon + "</div>");
+            div.append("<div class='buttonIcon edit' type='project' id='"+json[i].id+"'>" + editIcon + "</div>");
+            div.append("<div class='buttonIcon delete' type='project' id='"+json[i].id+"'>" + deleteIcon + "</div>");
             var card = cardCollapseStart + table.prop('outerHTML') + table2.prop('outerHTML')
                 + div.prop('outerHTML')
                 + cardCollapseMiddle + $(accordContent).prop('outerHTML')
@@ -184,8 +214,27 @@ function makeProjectDiv(json) {
     $(".closeIcon").click(function () {
         $(this).parents(".collapsible-body").find(".addTaskTable").addClass("hide");
     });
+    $(".taskInput").change(function () {
+        var id = $(this).data("taskid");
+        var type = this.id;
+        var data = {
+            "idTask": id,
+            "contenu": $(this).val(),
+            "type": type
+        };
+        $.ajax({
+            url: "/changeTasksbyId",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (ret, textStatus, jqXHR) {
+                myToast("Tâche mise à jour !")
+            }
+        });
+    });
     $(".deleteIcon").click(function () {
-        var taskid = $(this).parent().attr("data-taskId");
+        var taskid = $(this).attr("data-taskId");
         var data = {
             "id": taskid,
             "type": "task"
@@ -200,6 +249,29 @@ function makeProjectDiv(json) {
                 if (ret) {
                     $(this).parents("tr").remove()
                 }
+            }
+        });
+    });
+    $(".delete").click(function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var self = this;
+        var id = this.id;
+        var data = {
+            "id": id,
+            "type": "projet"
+        };
+        $.ajax({
+            url: "/delete",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (ret, textStatus, jqXHR) {
+                $(self).parents(".stage").slideToggle();
+                setTimeout(function () {
+                    $(self).parents(".stage").remove();
+                }, 750);
             }
         });
     });
@@ -234,8 +306,8 @@ function makeProjectDiv(json) {
                     var json = $.parseJSON(ret);
                     tr = $('<tr/>');
                     tr.append("<td>&nbsp;<span style='display: none'>"+json.id+"</span></td>");
-                    tr.append("<td>" + javaToFrenchDate(json.dateTask) + "</td>");
-                    tr.append("<td>" + json.contenu + "</td>");
+                    tr.append("<td><input class='taskInput datepicker' data-taskId='"+json.id+"' id='taskDateInput' value='" + timeToDatePicker(json.dateTask) + "'/> </td>");
+                    tr.append("<td><textarea class='materialize-textarea taskInput' data-taskId='"+json.id+ "' id='taskContentInput' >" >+ json.contenu + "</textarea></td>");
                     var checked = "";
                     if (json.etat == 1) {
                         checked = "checked";
@@ -245,24 +317,55 @@ function makeProjectDiv(json) {
                         "   <input type='checkbox' id='"+json.id+"' class='validTask' type='checkbox' "+checked+">"+
                         "   <span class='lever'>" +
                         "</span></label></div> ";
-                    tr.append("<td>" + toggle +
-                        "<div class='deleteIcon' data-taskId='"+json[i].taskList[k].id+"'>"+deleteIcon+"</div>"
+                    tr.append("<td>" + toggle +"</td><td>"+
+                        "<div class='deleteIcon' data-taskId='"+json.id+"'>"+deleteIcon+"</div>"
                         + "</td>");
                     taskTable.append(tr);
                     if (noTaskTable) {
                         collapseBody.append(taskTable);
                     }
                     initValidProj();
+                    $(".taskInput").change(function () {
+                        var id = $(this).data("taskid");
+                        var type = this.id;
+                        var data = {
+                            "idTask": id,
+                            "contenu": $(this).val(),
+                            "type": type
+                        };
+                        $.ajax({
+                            url: "/changeTasksbyId",
+                            type: "POST",
+                            data: JSON.stringify(data),
+                            dataType: "text",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (ret, textStatus, jqXHR) {
+                                myToast("Tâche mise à jour !")
+                            }
+                        });
+                    });
+                    initMaterial();
                 }
             });
         }
+    });
+    $(".edit").click(function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var self = $(this);
+        var id = this.id;
+        var type = $(this).attr("type");
+        modalize($('#formGroupe'),$('#projetAdderDiv'),true);
+        var project = find(projects,id);
+        fillEditFormProject(project,id);
+
     });
     initMaterial();
     initValidProj();
 }
 
 function initTabUser() {
-
+    waitOn();
     dataGroup={};
     $("#usersContent").empty();
     dataGroup = JSON.stringify(dataGroup);
@@ -275,6 +378,11 @@ function initTabUser() {
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
             initAutoComplete(json);
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur recuperation pros");
+            waitOff();
         }
     });
 }

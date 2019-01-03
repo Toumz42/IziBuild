@@ -6,18 +6,20 @@ import models.MailToken;
 import models.User;
 import models.utils.ErrorUtils;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.hibernate.loader.plan.exec.internal.AbstractLoadPlanBasedLoader;
 import play.libs.Json;
 import play.libs.mailer.MailerClient;
 import play.mvc.*;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Map;
 
 /**
  * Created by ttomc on 02/01/2017.
  */
+@With(CookieAction.class)
 public class Application extends Controller {
     @Inject
     MailerClient mailerClient;
@@ -100,7 +102,7 @@ public class Application extends Controller {
     }
 
     public Result doc() {
-        if (checkConnected()) {
+        if (checkConnected() && checkAdmin()) {
             return ok(views.html.doc.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
@@ -108,7 +110,7 @@ public class Application extends Controller {
     }
 
     public Result incident() {
-        if (checkConnected()) {
+        if (checkConnected() && checkAdmin()) {
             return ok(views.html.incident.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
@@ -124,7 +126,9 @@ public class Application extends Controller {
     }
 
     public Result repertoire() {
-        if (checkConnected()) {
+        if (checkAdmin()) {
+            return ok(views.html.repertoireAdmin.render(checkConnected(), checkAdmin()));
+        } else if (checkConnected()) {
             return ok(views.html.repertoire.render(checkConnected(), checkAdmin()));
         } else {
             return redirect("/login");
@@ -147,13 +151,6 @@ public class Application extends Controller {
         return ok(views.html.createPro.render(checkConnected(), checkAdmin()));
     }
 
-    public Result admNote() {
-        if (checkAdmin() && checkConnected()) {
-            return ok(views.html.admnote.render(checkConnected(), checkAdmin()));
-        } else {
-            return redirect("/login");
-        }
-    }
 
     public Result referentiel() {
         if (checkConnected()) {
@@ -167,10 +164,11 @@ public class Application extends Controller {
         String login, pswd;
         Map<String, String[]> param = request().body().asFormUrlEncoded();
         JsonNode json = request().body().asJson();
-//        login = json.get("login").asText();
-//        pswd =  json.get("pswd").asText();
-        login = param.get("login")[0];
-        pswd = param.get("pswd")[0];
+        login = json.get("login").asText();
+        pswd =  json.get("pswd").asText();
+        Boolean stay =  json.get("stay").asBoolean(true);
+        //login = param.get("login")[0];
+        //pswd = param.get("pswd")[0];
         String sha1pswd = DigestUtils.sha1Hex(pswd);
 
         ErrorUtils retour = null;
@@ -182,6 +180,14 @@ public class Application extends Controller {
                     .findOne();
             if (p != null) {
                 session("userId", p.getId().toString());
+                if (stay) {
+                    return ok("/home");
+                }
+                Calendar c = GregorianCalendar.getInstance();
+                c.setTime(new Date());
+                long h24 = (24L * 3600L * 1000L);
+                String time = (c.getTimeInMillis() + h24 ) + "";
+                session("expire", time);
                 return ok("/home");
             } else {
                 retour = ErrorUtils.createError(true, "Pas de Compte", "erreur");
@@ -192,7 +198,6 @@ public class Application extends Controller {
         }
         ObjectMapper mapper = new ObjectMapper();
         JsonNode retourJson = mapper.convertValue(retour, JsonNode.class);
-
         return ok().sendJson(retourJson);
     }
 
@@ -206,10 +211,10 @@ public class Application extends Controller {
                 r = UserController.deleteUser(id);
                 break;
             case "projet":
-                r = ProjectController.deleteGroupe(id);
+                r = ProjectController.deleteProject(id);
                 break;
             case "task":
-                r = ProjectController.deleteAnomalies(id);
+                r = ProjectController.deleteTasks(id);
                 break;
         }
         return r;
@@ -229,9 +234,7 @@ public class Application extends Controller {
     public Boolean checkAdmin() {
         User u = Application.getCurrentUserObj();
         if (u != null) {
-            if (u.getDroit() == 0) {
-                return true;
-            }
+            return u.getDroit() != null && u.getDroit() == 0;
         }
         return false;
 //        return true;
@@ -296,7 +299,10 @@ public class Application extends Controller {
     }
 
     public Result messagerie() {
-        return ok(views.html.messagerie.render(checkConnected(), checkAdmin()));
+        if (checkConnected()) {
+            return ok(views.html.messagerie.render(checkConnected(), checkAdmin()));
+        }
+        return redirect("/login");
     }
 
     public Result conversation() {

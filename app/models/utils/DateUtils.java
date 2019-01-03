@@ -14,7 +14,7 @@ public class DateUtils {
 
     public String toFrenchDateString(Date date) {
         DateTime dt = new DateTime(date);
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMM, yyyy");
         DateTimeFormatter frenchFmt = fmt.withLocale(Locale.FRENCH);
         return frenchFmt.print(dt);
     }

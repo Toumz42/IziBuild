@@ -5,7 +5,7 @@ var groupids = [];
 var arrayData = [];
 var classes = [];
 var groupes = [];
-var users = [];
+var projects = [];
 var autocomplete;
 $(function()
 {
@@ -48,6 +48,7 @@ $(function()
     $("#sub").click(function(){
         if (check())
         {
+            waitOn();
             var url = "/addUser";
             var update = $("#idUser").val() != "";
             if (update) {
@@ -72,7 +73,7 @@ $(function()
                     $("#usersAdderDiv").toggle("slide");
                     var json = $.parseJSON(ret);
                     var res = userToTab(json);
-                    users = jsonToGlobalArray(users, json);
+                    projects = jsonToGlobalArray(projects, json);
                     if ($("#usersContent").find("#noData").length) {
                         $("#usersContent").empty();
                     }
@@ -91,16 +92,19 @@ $(function()
                         } else {
                             $("#usersContent").append(res);
                         }
+                        waitOff();
                         myToast("L'utilisateur a bien été mis à jour");
                     } else{
                         initAutoComplete(json);
                         turn($("#addUser"));
                         $("#usersContent").append(res);
                         // $("#usersAdderDiv").toggle("slide");
+                        waitOff();
                         myToast("L'utilisateur a bien été ajouté");
                     }
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
+                    waitOff();
                     myToast("Erreur dans l'ajout de l'utilisateur");
                 }
             });
@@ -112,6 +116,7 @@ $(function()
     $("#subGroupe").click(function(){
         if ( ($("#groupeName").val()!=""))
         {
+            waitOn();
             var url = "/addProjectGroup";
             var update =  $("#idGroupe").val() != "";
             if (update) {
@@ -163,9 +168,11 @@ $(function()
                         // $("#projetAdderDiv").toggle("slide");
                         myToast("Le groupe de projet a bien été ajouté");
                     }
+                    waitOff();
                 },
                 error : function (xhr, ajaxOptions, thrownError) {
                     myToast("Erreur dans l'ajout du groupe de projet");
+                    waitOff();
                 }
             });
         }
@@ -182,46 +189,40 @@ $(function()
 
     initTabUser('allUser', 1);
 
-    $('.datepicker').pickadate({
-        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Nov', 'Dec' ],
-        weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
-        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
-
-        labelMonthNext: 'Mois suivant',
-        labelMonthPrev: 'Mois precédent',
-        labelMonthSelect: 'Selection mois',
-        labelYearSelect: 'Selection année',
+    $('.datepicker').datepicker({
+        i18n : {
+            months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthsShort: [ 'janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.' ],
+            weekdays: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+            weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            weekdaysAbbrev: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+            clear: 'Effacer',
+            cancel: 'Annuler'
+        },
         container: '#datepicker-container',
-
-        today: 'Auj',
-        clear: 'Effacer',
-        close: 'Fermer',
-        firstDay: true,
-        formatSubmit: 'yyyy-mm-dd',
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
+        firstDay: 1,
+        format: 'dd mmm, yyyy',
+        yearRange: [new Date().getFullYear(), new Date().getFullYear() + 20] // Creates a dropdown of 15 years to control year
     });
+
+
 
     $('#droit').change(function (e) {
         var val = $(this).val();
         if (val == 0) {
             $('#classeUser').val(0);
             $('#classeUser option').prop("disabled",true);
-            $('#classeUser').material_select();
+            $('#classeUser').formSelect();
         }
         else{
             $('#classeUser option:not(".remain")').removeAttr("disabled");
-            $('#classeUser').material_select();
+            $('#classeUser').formSelect();
         }
     });
-    Materialize.showStaggeredList($("#stage1"));
 
     //fixedMailInput();
 
-    var options = [ {selector: '#stage2', offset: 0, callback: function(el) { Materialize.showStaggeredList($(el)); } } ];
-    Materialize.scrollFire(options);
+
     $('#mainTabs').tabs({
         onShow: function () {
             initTabUser(this.id, 1);
@@ -249,6 +250,7 @@ $(function()
                 "id" : id
             };
             if (confirm("Voulez-vous supprimer ?")){
+                waitOn();
                 $.ajax ({
                     url: "/delete",
                     type: "POST",
@@ -263,6 +265,11 @@ $(function()
                             self.closest("ul").remove();
                             myToast("La suppression a bien été effectuée");
                         }
+                        waitOff();
+                    },
+                    error : function (xhr, ajaxOptions, thrownError) {
+                        myToast("Erreur dans la recuperation");
+                        waitOff();
                     }
                 });}
         });
@@ -271,23 +278,9 @@ $(function()
             var self = $(this);
             var id = this.id;
             var type = $(this).attr("type");
-            switch (type) {
-                case "user" :
-                    modalize($('#formSign'),$('#usersAdderDiv'),true);
-                    var user = find(users,id);
-                    fillEditFormUser(user,id);
-                    break;
-                case "classe" :
-                    modalize($('#formClasse'),$('#classeAdderDiv'),true);
-                    var classe = find(classes,id);
-                    fillEditFormClasse(classe,id);
-                    break;
-                case "groupe" :
-                    modalize($('#formGroupe'),$('#projetAdderDiv'),true);
-                    var groupe = find(groupes,id);
-                    fillEditFormGroupe(groupe,id);
-                    break;
-            }
+            modalize($('#formGroupe'),$('#projetAdderDiv'),true);
+            var project = find(projects,id);
+            fillEditFormProject(project,id);
         });
     });
 });
@@ -421,6 +414,7 @@ function initAutoComplete(json) {
 
 
 function initSelectCategorie() {
+    waitOn();
     var dataGroup = JSON.stringify({code : "TYPE_METIER"});
     $.ajax ({
         url: "/getByCode",
@@ -441,7 +435,12 @@ function initSelectCategorie() {
                     $("#categoriePro").append(opt);
                 }
             });
-            $('select').material_select();
+            $('select').formSelect();
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
         }
     });
 }
@@ -479,7 +478,7 @@ function initTabUser(tab , page) {
             var json = $.parseJSON(ret);
             initAutoComplete(json);
             if ( json.length != 0 ) {
-                users = jsonToGlobalArray(users, json);
+                projects = jsonToGlobalArray(projects, json);
                 makeProjectDiv(json);
             } else {
                 $("#usersContent").empty();

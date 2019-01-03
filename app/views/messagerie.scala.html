@@ -4,12 +4,20 @@
     <script type='text/javascript' src='/assets/javascripts/views/utils/utils.js'></script>
     <script type='text/javascript' src='/assets/javascripts/views/messagerie.js'></script>
     <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
-    <a id="addMsg" class="btn-floating btn-large waves-effect waves-light indigo"><i class="material-icons">add</i></a>
+    <div class="fixed-action-btn right-align">
+        <a class="btn-floating btn-large waves-effect waves-light indigo fixedFab">
+            <i class="material-icons">add</i>
+        </a>
+        <ul>
+            <li><a id="addMsg" class="btn-floating red"><i class="material-icons">send</i></a></li>
+            <li><a class="btn-floating orange" @if(admin) { href="/repertoireAdmin" } else { href="/repertoire" }><i class="material-icons">contact_phone</i></a></li>
+        </ul>
+    </div>
     <div class="container">
         <div class="row">
         <ul class="stage">
             <div class="row" id="msgDiv" style="display: none">
-                <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                <div class="col m12 s12 l12">
                     <div class="card card-1">
                         <form id="formGroupe" class="red-text ">
                             <div class="modal-content">
@@ -20,13 +28,13 @@
                                             <div class="ac-input">
                                                 <div class="valign-wrapper">
                                                     <i class="valign material-icons prefix">account_circle</i>
-                                                    <input type="text" id="singleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez les membres du projet" data-activates="singleDropdown" data-beloworigin="true" autocomplete="off">
+                                                    <input type="text" id="singleInput" placeholder="Selectionnez le destinataire" data-target="singleDropdown" data-beloworigin="true" autocomplete="off">
                                                 </div>
                                                 <input type="hidden" id="destId"/>
                                             </div>
                                             <ul id="singleDropdown" class="dropdown-content ac-dropdown"></ul>
                                         </div>
-                                        <label class="active" for="singleInput">Single autocomplete: </label>
+                                        <label class="active" for="singleInput">Destinataire: </label>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -45,7 +53,7 @@
                 </div>
             </div>
             <div class="row" id="messagerie" style="display: none">
-                <div class="col m12 s12 l12 push-s1 push-m1 push-l1">
+                <div class="col m12 s12 l12 ">
                     <div class="card card-1">
                         <ul class="collection">
                         </ul>
@@ -53,7 +61,7 @@
                 </div>
             </div>
             <div class="row" id="noProj">
-                <div class="col s12 push-s1 push-m1 push-l1">
+                <div class="col s12 m12 l12">
                     <div class="card horizontal card-1">
                         <div class="card-image">
                             <img class="noProj" src="/assets/images/construction-worker.png">

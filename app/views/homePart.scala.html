@@ -2,128 +2,47 @@
 @main("Bienvenue sur EasyBuild") {
     <div class="container">
         <ul id="stage1">
-            <div class="row">
-                <div class="col s12 m12 l12 push-s1">
-                    @*<div class="row" style="padding: 0 1.5rem">*@
-                    @*<span style="font-size: 25px;color: #00abff">Menu</span><br>*@
-                    @*</div>*@
-                    <div class="row">
-                        <a class="col s11 m12 l6 card card-1 card-menu horizontal" href="/projet">
-                            <div class="card-image valign-wrapper">
-                                <img class="center-align responsive-img imgHome" src='/assets/images/menu/checklist.png' align="middle" title="Projet">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title projText red-text">Projet</span>
-                                    <p class="linkproj grey-text" >
-                                        Créez et Gérez vos différents projets.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a class="col s11 m12 l6 card push-l1  card-1 card-menu horizontal" href="/agenda" >
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome " src='/assets/images/menu/calendar.png'title="Agenda">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Agenda</span>
-                                    <p class="grey-text" >
-                                        Consultez les évenements de votre agenda.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
+            <div class="row" id="homeMenu">
+                <a class="col s12 m12 l4" href="/projet">
+                    <div class="card card-1 medium card-menu">
+                        <div class="card-image ">
+                            <img class="center-align responsive-img imgHome" src='/assets/images/menu/checklist.png' align="middle" title="Projet">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title projText red-text">Projet</span>
+                            <p class="linkproj grey-text" >
+                                Créez et Gérez vos différents projets.
+                            </p>
+                        </div>
                     </div>
-                    <div class="row">
-                        <a class="col s11 m12 l6 card  card-1 card-menu horizontal" href="/faq">
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome " src='/assets/images/menu/help.png' title="Aide">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text noteText" style="display: block;">Aide</span>
-                                    <p class="linkNote grey-text" >
-                                        Un peu d'aide ? Des questions ?
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a class="col s11 m12 l6 card push-l1  card-1 card-menu horizontal" href=/messagerie>
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome" src='/assets/images/menu/conversation.png' title="Messagerie">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Messagerie</span>
-                                    <p class="grey-text" >
-                                        Envoyez des messages aux autres utilisateurs.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
+                </a>
+                <a class="col s12 m12 l4" href="/agenda" >
+                    <div class="card card-1 medium card-menu">
+                        <div class="card-image ">
+                            <img class="responsive-img imgHome " src='/assets/images/menu/calendar.png'title="Agenda">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title red-text" style="display: block;">Agenda</span>
+                            <p class="grey-text" >
+                                Consultez les évenements de votre agenda.
+                            </p>
+                        </div>
                     </div>
-                    <div class="row">
-                        <a class="col s11 m12 l6 card card-1 card-menu horizontal" href="/doc">
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome" src='/assets/images/menu/cloud-computing.png'title="Documents">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Documents</span>
-                                    <p class="grey-text">
-                                        Stockez les documents de votre projet.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="col s11 m12 l6 push-l1  card card-1 card-menu horizontal" href="/incident">
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome" src='/assets/images/menu/exclamation.png'title="Incident">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Incident</span>
-                                    <p class="grey-text">
-                                        Déclarez un incident sur un projet.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
+                </a>
+                <a class="col s12 m12 l4" href=/messagerie>
+                    <div class="card card-1 medium card-menu">
+                        <div class="card-image ">
+                            <img class="responsive-img imgHome" src='/assets/images/menu/conversation.png' title="Messagerie">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title red-text" style="display: block;">Messagerie</span>
+                            <p class="grey-text" >
+                                Envoyez des messages aux autres utilisateurs.
+                            </p>
+                        </div>
                     </div>
-                    <div class="row">
-                        <a class="col s11 m12 l6 card card-1 card-menu horizontal" href=/repertoire>
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome" src='/assets/images/menu/contact.png' title="Carnet d’adresse">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Carnet d’adresse</span>
-                                    <p class="grey-text">
-                                        Consultez le répertoire des Artisans
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="col s11 m12 l6 card push-l1  card-1 card-menu horizontal" href="/editAccount">
-                            <div class="card-image valign-wrapper">
-                                <img class="responsive-img imgHome" src='/assets/images/menu/id-card.png'title="Gestion du compte">
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <span class="card-title red-text" style="display: block;">Gestion du compte</span>
-                                    <p class="grey-text" >
-                                        Gérez votre compte, changez vos informations.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                </a>
             </div>
         </ul>
     </div>
-
 }(connected, admin)

@@ -13,6 +13,40 @@ $(function()
     $(".page-title").empty().append("Répertoire");
     initPagination("/getProsPages", "proRep");
     getPros(currentPage);
+    $.ajax({
+        type: "POST",
+        url : "/getUsedByCode",
+        data : JSON.stringify({"code" : 0}),
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(data) {
+            data = JSON.parse(data);
+            $(".filter").append('<div class="chip blueB force-pointer" id="all">Tout</div>');
+            $.each(data,function(index,value)
+            {
+                $(".filter").append('<div class="chip force-pointer" id="'+value.id+'">'+value.libelle+'</div>');
+
+            });
+            $(".filter .chip").click(function (e) {
+                var id = this.id;
+                if (id === "all") {
+                    $("li.collection-item").show();
+                } else {
+                    $("li.collection-item").show();
+                    $("li.collection-item:not([data-type='" + id + "'])").hide();
+                }
+                $(".chip").removeClass("blueB");
+                $(this).toggleClass("blueB");
+            });
+            $("#searchRep").keyup(function () {
+                filterUlFromInput($("ul.collection"), $("#searchRep"));
+            });
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
+        }
+    });
     $('#userTab').click();
 });
 
@@ -53,6 +87,7 @@ function getPros(page) {
     dataGroup={page : page};
 
     dataGroup = JSON.stringify(dataGroup);
+    waitOn();
     $.ajax ({
         url: "/getAllProsByPage",
         type: "POST",
@@ -61,7 +96,7 @@ function getPros(page) {
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
-            initAutoComplete(json);
+            //initAutoComplete(json);
             if ( json.length != 0 ) {
                 users = jsonToGlobalArray(users, json);
                 $(".collection").empty();
@@ -69,6 +104,11 @@ function getPros(page) {
             } else {
                 $(".collection").empty();
             }
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur dans la recuperation");
+            waitOff();
         }
     });
 }
@@ -82,10 +122,13 @@ function usersToCollections(json) {
         json = [json];
     }
     $.each(json,function (index, element) {
-        tr = $('<li class="collection-item avatar" />');
+        tr = $('<li class="collection-item avatar" data-type="'+element.categorie.id+'" /> ');
         tr.append("<input type='hidden' class='idUser' value='" + element.id + "'>");
         tr.append("<img src='/assets/images/avatar/worker.png' alt='' class='circle'>");
-        tr.append("<span style='font-weight: bold' class='title'>" + element.name +" "+ element.surname + "</span>");
+        tr.append("<div style='font-weight: bold' class='title'>" + element.societe + "</div>");
+        tr.append("<div style='font-weight: bold' class='title'>" + element.name +" "+ element.surname + "</div>");
+        tr.append("<p style='font-weight: 400' id='info"+element.id+"'>"+element.adresse+" " + element.codePostal+" " + element.ville+"<br></p>");
+        tr.append("<p style='font-weight: 400' id='info"+element.id+"'>"+element.portable+"<br></p>");
         tr.append("<p style='font-weight: 400' id='info"+element.id+"'>"+element.categorie.libelle+"<br></p>");
         tr.append("<div class='open-conversation secondary-content' style='cursor:pointer' id='"+element.id+"'><i class='material-icons'>send</i></div>");
         $(".collection").append(tr);

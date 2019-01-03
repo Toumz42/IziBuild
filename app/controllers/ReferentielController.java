@@ -3,10 +3,12 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Referentiel;
+import models.User;
 import models.utils.TypesReferentiel;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import java.sql.Ref;
 import java.util.List;
 
 public class ReferentielController extends Controller {
@@ -82,6 +84,23 @@ public class ReferentielController extends Controller {
         Integer typeId = tp.getTypeByCode(type);
         List<Referentiel> list = Referentiel.find.query().where()
                 .eq("type", typeId).findList();
+        JsonNode result = mapper.valueToTree(list);
+        return ok().sendJson(result);
+    }
+
+    public Result getUsedByCode() {
+        JsonNode json = request().body().asJson();
+        String type = json.get("code").asText("");
+        Integer typeId = tp.getTypeByCode(type);
+        List<Referentiel> list = Referentiel.find.query().where()
+                .eq("type", typeId).findList();
+        for (int i = list.size() - 1 ; i >= 0; i--) {
+            Referentiel r = list.get(i);
+            if (User.find.query().where()
+                    .eq("categorie", r).findList().size() == 0) {
+                list.remove(r);
+            }
+        }
         JsonNode result = mapper.valueToTree(list);
         return ok().sendJson(result);
     }

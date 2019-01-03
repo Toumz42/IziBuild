@@ -1,25 +1,26 @@
 $(function () {
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/assets/sw.js',{ scope : "/" }).then(function(registration) {
-                // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function(err) {
-                // registration failed :(
-                console.log('ServiceWorker registration failed: ', err);
-            });
-        });
-    }
+    // if ('serviceWorker' in navigator) {
+    //     window.addEventListener('load', function() {
+    //         navigator.serviceWorker.register('/assets/sw.js',{ scope : "/" }).then(function(registration) {
+    //             // Registration was successful
+    //             console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    //         }, function(err) {
+    //             // registration failed :(
+    //             console.log('ServiceWorker registration failed: ', err);
+    //         });
+    //     });
+    // }
 
     $('#logoLI').show();
-    $('#nav-mobile').css({ 'margin-top': '0px'}).removeClass('fixed');
-    $('.button-collapse').removeClass('hide-on-large-only').addClass('show-on-large');
+    $('#nav-mobile').css({ 'margin-top': '0px'}).removeClass('sidenav-fixed');
+    $('.sidenav-trigger').removeClass('hide-on-large-only').addClass('show-on-large');
     $('.parallax').parallax();
     // Detect touch screen and enable scrollbar if necessary
     if (is_touch_device()) {
         $('.arrowCarousel').hide();
     }
     $('.carousel.carousel-slider').carousel({fullWidth: true}).removeAttr("style");
+    $('.small-carousel .carousel').carousel({dist: 0, padding: 200});
   //  $('.carousel').css("height", $(window).height() );
   //  $('.parallax-carousel').css("height", $(window).height());
 
@@ -70,10 +71,17 @@ $(function () {
 });
 
 function is_touch_device() {
-    try {
-        document.createEvent("TouchEvent");
+    var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
+    var mq = function (query) {
+        return window.matchMedia(query).matches;
+    };
+
+    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
         return true;
-    } catch (e) {
-        return false;
     }
+
+    // include the 'heartz' as a way to have a non matching MQ to help terminate the join
+    // https://git.io/vznFH
+    var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
+    return mq(query);
 }
