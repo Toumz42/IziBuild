@@ -80,6 +80,7 @@ $(function()
                 });
                 $("#cbx_referentiel").prop("disabled", false);
                 $("#inputReferentiel").hide("slide");
+                waitOff();
             },
             error : function (xhr, ajaxOptions, thrownError) {
                 myToast("Erreur dans la recuperation");
