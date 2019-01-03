@@ -77,6 +77,9 @@ Colors: Use the following - https://www.google.com/design/spec/style/color.html#
 }
 
 /* Bolds the name of the event and inherits the font size */
+.fc-event-container {
+    background: white;
+}
 .fc-event {
     font-size: inherit !important;
     font-weight: bold !important;
@@ -190,7 +193,6 @@ a[data-goto]:hover {
 
 .fc-today-button {
     border: 0;
-    border-radius: 2px
 }
 
 .fc-toolbar.fc-header-toolbar {
@@ -267,6 +269,9 @@ a[data-goto]:hover {
     border-bottom: 0
 }
 
+.fc-head .fc-head-container .fc-day-header a{
+    white-space: nowrap;
+}
 .fc-head .fc-head-container .fc-day-header {
     color: rgba(0,0,0,0.54);
     font-weight: 400;
@@ -463,6 +468,21 @@ a[data-goto]:hover {
     border: 0
 }
 
+@media only screen and (max-width: 1400px) {
+    .fc-button-group {
+        display: flex;
+        flex-flow: wrap;
+        justify-content: space-around;
+    }
+    .fc-left {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .fc-right {
+        width: 100%;
+    }
+}
 @media only screen and (max-width: 600px) {
     .fc-agenda-view .fc-day-header {
         font-size:24px

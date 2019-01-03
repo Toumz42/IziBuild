@@ -1,0 +1,28 @@
+@(connected : Boolean, admin:Boolean)
+
+@main("Administration") {
+    <script type='text/javascript' src='/assets/javascripts/views/repertoire.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/jquery.materialize-autocomplete.js'></script>
+    <script type='text/javascript' src='/assets/javascripts/view/utils/jquery.complexify.js'></script>
+    <div class="container">
+    <div class="container push-down-50">
+        <div class="row">
+            <div class="col m12 s12 l12 ">
+                <div class="card card-1">
+                    <ul class="pagination"><li class="disabled" id="firstArrow"><a href="#!"><i class="material-icons">chevron_left</i></a></li></ul>
+                    <div class="row"><div class="col m6 s6 l6 filter"></div>
+                    <div class="col m6 s6 l6 input-field searchRep">
+                        <i class="material-icons prefix">search</i>
+                        <input id="searchRep" type="text" required>
+                        <i class="close material-icons cancel-search">close</i>
+                    </div></div>
+                    <div class="row">
+                        <ul class="col m12 s12 l12 collection">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+}(connected, admin)
