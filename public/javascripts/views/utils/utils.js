@@ -200,9 +200,10 @@ function initPagination(url , type) {
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
             var json = $.parseJSON(ret);
-            if ( json.length != 0 ) {
+            if (json.length > 0 && json.length !== undefined) {
                 makePagination(json, type);
             } else {
+                //Ajouter gestion du aucun item
                 $("#usersContent").empty();
             }
         }
