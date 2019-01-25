@@ -515,7 +515,7 @@ function makeProjectDiv(json) {
             tr = $('<tr/>');
             tr.append("<td>&nbsp;<span style='display: none'>"+projId+"</span></td>");
             tr.append("<td>" + json[i].theme + "</td>");
-            tr.append("<td>" + json[i].dateSoutenanceString + "</td>");
+            tr.append("<td>" + json[i].dateString + "</td>");
             table.append(tr);
             tr = $('<tr/>');
             tr.append("<th style='width: 25%'>Artisans</th>");
