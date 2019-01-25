@@ -243,7 +243,7 @@ $(function()
     $(document).ajaxStop(function(event,request,settings){
         $(".delete").click(function () {
             var self = $(this);
-            var id = this.id;
+            var id = parseInt(this.id);
             var type = self.attr("type");
             var data = {
                 "type" : type,
@@ -580,8 +580,8 @@ function makeProjectDiv(json) {
             //var res2 = table2.prop('outerHTML') + cardEnd;
             //var res = res1 + res2;
             div = $('<div class="right-align suppDiv"/>');
-            div.append("<div class='buttonIcon edit' type='groupe' id='"+json[i].id+"'>" + editIcon + "</div>");
-            div.append("<div class='buttonIcon delete' type='groupe' id='"+json[i].id+"'>" + deleteIcon + "</div>");
+            div.append("<div class='buttonIcon edit' type='projet' id='"+json[i].id+"'>" + editIcon + "</div>");
+            div.append("<div class='buttonIcon delete' type='projet' id='"+json[i].id+"'>" + deleteIcon + "</div>");
             var card = cardCollapseStart + table.prop('outerHTML') + table2.prop('outerHTML')
                 + div.prop('outerHTML')
                 + cardCollapseMiddle + $(accordContent).prop('outerHTML')

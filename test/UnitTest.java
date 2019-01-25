@@ -20,7 +20,7 @@ public class UnitTest {
 
     @Test
     public void checkTemplate() {
-        Content html = views.html.index.render();
+        Content html = views.html.index.render(true, false);
         assertEquals("text/html", html.contentType());
         assertTrue(contentAsString(html).contains("Add Person"));
     }
