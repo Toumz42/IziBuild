@@ -31,7 +31,7 @@ public class HtmlUtils {
 
         String hEnd =  "</th>";
 
-        Class grpClass = null;
+        Class<?> grpClass = null;
 
         if (o != null) {
             grpClass = o.getClass();
@@ -89,7 +89,7 @@ public class HtmlUtils {
 
         String hEnd =  "</th>";
 
-        Class grpClass = null;
+        Class<?> grpClass = null;
 
         if (lO != null) {
             for (Object o : lO) {
