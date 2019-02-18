@@ -208,6 +208,9 @@ function fillEditFormClasse(val,id) {
     $("#classeName").val(classe.name);
 }
 function emptyComplete(array) {
+    if(array === undefined){
+        return;
+    }
     for ( var i = array.length - 1 ; i >=0 ; i--) {
         var element = array[i];
         var chip = {

@@ -96,10 +96,10 @@ function makeProjectDiv(json) {
             var emptyTaskTxt= $("<div class='txtTaskEmpty'>Vous n'avez aucune tâche sur le projet en cours. Créez votre première tache en cliquant ci dessous !</div>");
             divTaskEmpty.append(emptyTaskImg).append(emptyTaskTxt);
             accordContent.append(divTaskEmpty);
-            table = $("<table class='responsive-table highlight'></table>");
-            table2 = $("<table class='responsive-table highlight'></table>");
-            table3 = $("<table class='responsive-table highlight taskTable'></table>");
-            table4 = $("<table class='responsive-table highlight hide addTaskTable'></table>");
+            table = $("<table class='responsive-table'></table>");
+            table2 = $("<table class='responsive-table'></table>");
+            table3 = $("<table class='responsive-table taskTable'></table>");
+            table4 = $("<table class='responsive-table hide addTaskTable'></table>");
             tr = $('<tr/>');
             tr.append("<th>" + "</th>");
             tr.append("<th> Theme </th>");
@@ -113,20 +113,22 @@ function makeProjectDiv(json) {
             tr.append("<td>" + json[i].adresse + "</td>");
             table.append(tr);
             tr = $('<tr/>');
-            tr.append("<th style='width: 25%'><h5>Projet</h5></th>");
+            tr.append("<th style='width: 25%;color:black;'>Projet</th>");
             //tr.append("<th style='width: 25%'>Utilisateur</th>");
             tr.append("<th> Nom </th>");
             tr.append("<th>Prénom</th>");
+            tr.append("<th></th>");
             table2.append(tr);
             tr = $('<tr/>');
             tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
             //tr.append("<td>" + "</td>");
             tr.append("<td>" + json[i].user.name + "</td>");
             tr.append("<td>" + json[i].user.surname + "</td>");
+            tr.append("<td></td>");
             table2.append(tr);
             tr = $('<tr/>');
             if (json[i].proList > 0) {
-                tr.append("<th style='width: 25%'> Arstisans </th>");
+                tr.append("<th style='width: 25%;color:black;'> Arstisans </th>");
                 tr.append("<th> Nom </th>");
                 tr.append("<th>Prénom</th>");
                 tr.append("<th>Metier</th>");
@@ -140,12 +142,23 @@ function makeProjectDiv(json) {
                     table2.append(tr);
                 }
             }
-            table4.append('<tr><td>Tâches</td></tr>');
+            table4.append('<tr><td style="\n' +
+                '    padding: 0 0px 0 25px;\n' +
+                '">Tâches</td></tr>');
             for (var k = 0; k < json[i].taskList.length; k++) {
                 tr = $('<tr/>');
                 tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
-                tr.append("<td><input class='taskInput datepicker' data-taskId='"+json[i].taskList[k].id+"' id='taskDateInput' value='" + timeToDatePicker(json[i].taskList[k].dateTask) + "'/> </td>");
-                tr.append("<td><textarea class='materialize-textarea taskInput' data-taskId='"+json[i].taskList[k].id+"' id='taskContentInput' >" + json[i].taskList[k].contenu+ "</textarea></td>");
+                tr.append("<td>" +
+                    "<div class='input-field col s3 m3 l3'>" +
+                    "   <input id='dateTask"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='datepicker' value='" + timeToDatePicker(json[i].taskList[k].dateTask) + "'>" +
+                    "   <label for='dateTask"+json[i].taskList[k].id+"'>Date</label>" +
+                    "</div>" +
+                    "<div class='input-field col s9 m9 l9' style=\"\n" +
+                    "    width: 59%;\n" +
+                    "\">" +
+                    "   <textarea id='contenu"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='materialize-textarea'>"+json[i].taskList[k].contenu+"</textarea>" +
+                    "   <label for='contenu"+json[i].taskList[k].id+"'>Contenu</label>" +
+                    "</div>");
                 var checked = "";
                 if (json[i].taskList[k].etat == 1) {
                     checked = "checked";
@@ -167,18 +180,17 @@ function makeProjectDiv(json) {
                 "   <input id='dateTask"+projId+"' type='text' class='datepicker'>" +
                 "   <label for='dateTask"+projId+"'>Date</label>" +
                 "</div>" +
-                "<div class='input-field col s9 m9 l9'>" +
+                "<div class='input-field col s9 m9 l9' style=\"\n" +
+                "    width: 59%;\n" +
+                "\">" +
                 "   <textarea id='contenu"+projId+"' type='text' class='materialize-textarea'></textarea>" +
                 "   <label for='contenu"+projId+"'>Contenu</label>" +
-                "</div>" +
+                "</div>" + "<div class='icons-container'><div class='checkIcon'>"+ checkIcon + "</div>" +
+                "<div class='closeIcon'>"+closeIcon +"</div></div>" +
                 "</td>");
-            tr.append("<td>" +
-                "<div class='checkIcon'>"+ checkIcon + "</div>"+
-                "</td>");
-            tr.append("<td>" +
-                "<div class='closeIcon'>"+closeIcon +"</div>"+
-                "</td>");
-            table3.prepend('<tr><td><h5>Tâches</h5></td></tr>');
+            tr.append();
+            tr.append();
+            //table3.prepend('<tr><td><h5>Tâches</h5></td></tr>');
             table4.append(tr);
             if (json[i].taskList.length > 0) {
                 accordContent.empty();
@@ -298,9 +310,18 @@ function makeProjectDiv(json) {
                     $(emptyDiv).remove();
                     var json = $.parseJSON(ret);
                     tr = $('<tr/>');
-                    tr.append("<td>&nbsp;<span style='display: none'>" + json.id + "</span></td>");
-                    tr.append("<td><input class='taskInput datepicker' data-taskId='" + json.id + "' id='taskDateInput' value='" + timeToDatePicker(json.dateTask) + "'/> </td>");
-                    tr.append("<td><textarea class='materialize-textarea taskInput' data-taskId='" + json.id + "' id='taskContentInput' >" + json.contenu + "</textarea></td>");
+                    tr.append("<td>" +
+                    "<div class='input-field col s3 m3 l3'>" +
+                    "   <input id='dateTask"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='datepicker' value=" + timeToDatePicker(json[i].taskList[k].dateTask) + "'>" +
+                    "   <label for='dateTask"+json[i].taskList[k].id+"'>Date</label>" +
+                    "</div>" +
+                    "<div class='input-field col s9 m9 l9' style=\"\n" +
+                    "    width: 59%;\n" +
+                    "\">" +
+                    "   <textarea id='contenu"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='materialize-textarea'>json[i].taskList[k].contenu</textarea>" +
+                    "   <label for='contenu"+json[i].taskList[k].id+"'>Contenu</label>" +
+                    "</div>");
+
                     var checked = "";
                     if (json.etat == 1) {
                         checked = "checked";

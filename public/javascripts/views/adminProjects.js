@@ -259,7 +259,6 @@ $(function()
                     contentType: "application/json; charset=utf-8",
                     success: function(ret, textStatus, jqXHR){
                         var json = $.parseJSON(ret);
-                        initTabGroup('allGroup');
                         initTabUser('allUser', 1);
                         if ( json ) {
                             self.closest("ul").remove();
@@ -478,12 +477,14 @@ function initTabUser(tab , page) {
             var json = $.parseJSON(ret);
             initAutoComplete(json);
             if ( json.length != 0 ) {
+                $('.empty-projects').hide();
                 projects = jsonToGlobalArray(projects, json);
                 makeProjectDiv(json);
             } else {
                 $("#usersContent").empty();
                 res = cardStart + imgEmptyDiv + cardEnd;
                 $("#usersContent").append(res);
+                $('.empty-projects').show();
             }
         }
     });
@@ -503,26 +504,30 @@ function makeProjectDiv(json) {
             var emptyTaskTxt= $("<div class='txtTaskEmpty'>Vous n'avez aucune tâche sur le projet en cours. Créez votre première tache en cliquant ci dessous !</div>");
             divTaskEmpty.append(emptyTaskImg).append(emptyTaskTxt);
             accordContent.append(divTaskEmpty);
-            var table = $("<table class='responsive-table highlight'></table>");
-            var table2 = $("<table class='responsive-table highlight'></table>");
-            var table3 = $("<table class='responsive-table highlight taskTable'></table>");
-            var table4 = $("<table class='responsive-table highlight hide addTaskTable'></table>");
+            var table = $("<table class='responsive-table '></table>");
+            var table2 = $("<table class='responsive-table '></table>");
+            var table3 = $("<table class='responsive-table  taskTable'></table>");
+            var table4 = $("<table class='responsive-table  hide addTaskTable'></table>");
             tr = $('<tr/>');
-            tr.append("<th style='width: 25%'><h5>Projet</h5></th>");
+            tr.append("<th style='width: 25%;color:black;'>Projet</th>");
             tr.append("<th> Theme </th>");
             tr.append("<th>Date</th>");
+            tr.append("<th></th>");
             table.append(tr);
             tr = $('<tr/>');
             tr.append("<td>&nbsp;<span style='display: none'>"+projId+"</span></td>");
             tr.append("<td>" + json[i].theme + "</td>");
             tr.append("<td>" + json[i].dateString + "</td>");
+            tr.append("<td></td>");
             table.append(tr);
             tr = $('<tr/>');
-            tr.append("<th style='width: 25%'>Artisans</th>");
+            tr.append("<th style='width: 25%;color:black;'>Artisans</th>");
             tr.append("<th> Nom </th>");
             tr.append("<th>Prénom</th>");
             tr.append("<th>Metier</th>");
-            table2.append(tr);
+            if(json[i].proList.length > 0){
+                table2.append(tr);
+            }
             for (var j = 0; j < json[i].proList.length; j++) {
                 tr = $('<tr/>');
                 tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
@@ -557,7 +562,9 @@ function makeProjectDiv(json) {
                 "   <input id='dateTask"+projId+"' type='text' class='datepicker'>" +
                 "   <label for='dateTask"+projId+"'>Date</label>" +
                 "</div>" +
-                "<div class='input-field col s9 m9 l9'>" +
+                "<div class='input-field col s9 m9 l9' style=\"\n" +
+                "    width: 59%;\n" +
+                "\">" +
                 "   <textarea id='contenu"+projId+"' type='text' class='materialize-textarea'></textarea>" +
                 "   <label for='contenu"+projId+"'>Contenu</label>" +
                 "</div>" +
@@ -629,7 +636,7 @@ function makeProjectDiv(json) {
         var emptyDiv = collapseBody.find(".divTaskEmpty");
         var noTaskTable = $(taskTable).length < 1;
         if (noTaskTable) {
-            taskTable = $("<table class='responsive-table highlight taskTable'></table>");
+            taskTable = $("<table class='responsive-table  taskTable'></table>");
         } else {
             taskTable = $(taskTable);
         }
