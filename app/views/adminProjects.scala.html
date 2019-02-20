@@ -11,11 +11,15 @@
     <div class="container push-down-50">
         <div class="row">
             <div id="users">
+                <div class="empty-projects" style="display: none">
+                    <i class="no-project-icon material-icons">work_off</i>
+                    <p class="no-project-text">Il n'existe aucun projet</p>
+                </div>
                 @*<a id="addUser" class="addButton btn-floating twoTabLines hasTab btn-large waves-effect waves-light indigo darken-3"><i class="material-icons of_btn">add</i></a>*@
                 <div id="projetAdderDiv" style="display: none">
                     <ul class="stage">
                         <div class="row">
-                            <div class="col m12 s12 l12 ">
+                            <div class="col m12 s12 l12">
                                 <li>
                                     <div class="card card-1">
                                         <div class="card-content ">
@@ -43,13 +47,13 @@
                                                                     <div class="ac-input">
                                                                         <div class="valign-wrapper">
                                                                             <i class="valign material-icons prefix">account_circle</i>
-                                                                            <input type="text" id="multipleInput" style="margin-left:0;left: 3rem;position: relative;" placeholder="Selectionnez les membres du projet" data-target="multipleDropdown" data-beloworigin="true" autocomplete="off">
+                                                                            <input type="text" id="multipleInput" placeholder="Selectionnez les membres du projet" data-target="multipleDropdown" data-beloworigin="true" autocomplete="off">
                                                                         </div>
                                                                     </div>
                                                                     <ul id="multipleDropdown" class="dropdown-content ac-dropdown"></ul>
                                                                     <input type="hidden" name="multipleHidden" />
                                                                 </div>
-                                                                <label class="active" style="padding-bottom: 10px" for="multipleInput">Membres du projet : </label>
+                                                                <label class="active" style="padding-bottom: 10px" for="multipleInput">Artisans à ajouter au projet : </label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -64,15 +68,6 @@
                             </div>
                         </div>
                     </ul>
-                </div>
-                <div id="pros" class="row">
-                    <div class="col m12 s12 l12 ">
-                        <div class="card card-1">
-                            <ul class="pagination pro"><li class="disabled" id="firstArrow"><a href="#!"><i class="material-icons">chevron_left</i></a></li></ul>
-                            <ul class="collection">
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

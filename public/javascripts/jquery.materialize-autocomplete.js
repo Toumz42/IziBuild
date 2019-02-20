@@ -518,7 +518,7 @@
         $el.data('autocomplete', autocomplete);
         $el.dropdown(
             {
-                coverTrigger: false,
+                coverTrigger: true,
                 autoFocus: false
             });
         var elem = $el[0];

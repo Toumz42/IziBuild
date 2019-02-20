@@ -32,6 +32,7 @@ $(function()
         }
     });
     var turned = false;
+    $("#formGroupe").css('padding', '24px');
     $("#kitchen,#bedroom,#bathroom").click(function () {
         var theme = $(this).data("name");
         $("#theme").val(theme);
@@ -58,9 +59,10 @@ $(function()
             });
             turned = true;
         }
-        $("#projectMenu").toggle('slide');
+        $("#projectMenu").slideToggle();
         if ($("#projetAdderDiv").is(":visible")) {
             $("#projetAdderDiv").toggle('slide');
+            turned = true;
         }
         $('html, body').animate({scrollTop: 0}, 500);
     });
@@ -88,14 +90,21 @@ $(function()
                 contentType: "application/json; charset=utf-8",
                 success: function (ret, textStatus, jqXHR) {
                     waitOff();
-                    $("#projetAdderDiv").slideToggle();
+                    $("#projetAdderDiv").toggle('slide');
+                    $("#formGroupe").css('padding', '24px');
+                    $(this).css({
+                        '-webkit-transform': 'rotate(0deg)',
+                        '-moz-transform': 'rotate(0deg)',
+                        '-ms-transform': 'rotate(0deg)',
+                        'transform': 'rotate(0deg)'
+                    });
+                    turned = false;
                     var json = $.parseJSON(ret);
                     makeProjectDiv(json);
                 }
             });
         }
     });
-
     initMaterial();
     initTabUser();
 });
@@ -113,10 +122,10 @@ function makeProjectDiv(json) {
             var emptyTaskTxt= $("<div class='txtTaskEmpty'>Vous n'avez aucune tâche sur le projet en cours. Créez votre première tache en cliquant ci dessous !</div>");
             divTaskEmpty.append(emptyTaskImg).append(emptyTaskTxt);
             accordContent.append(divTaskEmpty);
-            table = $("<table class='responsive-table highlight'></table>");
-            table2 = $("<table class='responsive-table highlight'></table>");
-            table3 = $("<table class='responsive-table highlight taskTable'></table>");
-            table4 = $("<table class='responsive-table highlight hide addTaskTable'></table>");
+            table = $("<table class='responsive-table'></table>");
+            table2 = $("<table class='responsive-table'></table>");
+            table3 = $("<table class='responsive-table taskTable'></table>");
+            table4 = $("<table class='responsive-table hide addTaskTable'></table>");
             tr = $('<tr/>');
             tr.append("<th style='width: 25%'><h5>Projet</h5></th>");
             tr.append("<th> Theme </th>");
@@ -130,24 +139,42 @@ function makeProjectDiv(json) {
             tr.append("<td>" + json[i].adresse + "</td>");
             table.append(tr);
             tr = $('<tr/>');
-            tr.append("<th style='width: 25%'>Artisans</th>");
-            tr.append("<th> Nom </th>");
-            tr.append("<th>Prénom</th>");
-            tr.append("<th>Metier</th>");
-            table2.append(tr);
-            for (var j = 0; j < json[i].proList.length; j++) {
-                tr = $('<tr/>');
-                tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
-                tr.append("<td>" + json[i].proList[j].name + "</td>");
-                tr.append("<td>" + json[i].proList[j].surname + "</td>");
-                tr.append("<td>" + json[i].proList[j].categorie.libelle + "</td>");
+            if(json[i].proList.length !== 0) {
+                tr.append("<th style='width: 25%'>Artisans</th>");
+                tr.append("<th> Nom </th>");
+                tr.append("<th>Prénom</th>");
+                tr.append("<th>Metier</th>");
+                table2.append(tr);
+                for (var j = 0; j < json[i].proList.length; j++) {
+                    tr = $('<tr/>');
+                    tr.append("<td>&nbsp;<span style='display: none'>" + json[i].user.id + "</span></td>");
+                    tr.append("<td>" + json[i].proList[j].name + "</td>");
+                    tr.append("<td>" + json[i].proList[j].surname + "</td>");
+                    tr.append("<td>" + json[i].proList[j].categorie.libelle + "</td>");
+                    table2.append(tr);
+                }
+            }else{
+                tr.append("<th style='width: 25%'>Artisans</th>");
+                tr.append("<th>Aucun artisan n'a été renseigné pour ce projet</th>");
                 table2.append(tr);
             }
+            table4.append('<tr><td style="\n' +
+                '    padding: 0 0px 0 25px;\n' +
+                '">Tâches</td></tr>');
             for (var k = 0; k < json[i].taskList.length; k++) {
                 tr = $('<tr/>');
                 tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
-                tr.append("<td><input class='taskInput datepicker' data-taskId='"+json[i].taskList[k].id+"' id='taskDateInput' value='" + timeToDatePicker(json[i].taskList[k].dateTask) + "'/> </td>");
-                tr.append("<td><textarea class='materialize-textarea taskInput' data-taskId='"+json[i].taskList[k].id+"' id='taskContentInput'>" + json[i].taskList[k].contenu + "</textarea></td>");
+                tr.append("<td>" +
+                    "<div class='input-field col s3 m3 l3'>" +
+                    "   <input id='dateTask"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='datepicker' value='" + timeToDatePicker(json[i].taskList[k].dateTask) + "'>" +
+                    "   <label for='dateTask"+json[i].taskList[k].id+"'>Date</label>" +
+                    "</div>" +
+                    "<div class='input-field col s9 m9 l9' style=\"\n" +
+                    "    width: 59%;\n" +
+                    "\">" +
+                    "   <textarea id='contenu"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='materialize-textarea'>"+json[i].taskList[k].contenu+"</textarea>" +
+                    "   <label for='contenu"+json[i].taskList[k].id+"'>Contenu</label>" +
+                    "</div>");
                 var checked = "";
                 if (json[i].taskList[k].etat == 1) {
                     checked = "checked";
@@ -160,7 +187,7 @@ function makeProjectDiv(json) {
                 tr.append("<td>" + toggle + "</td>");
                 tr.append("<td>" +
                     "<div class='deleteIcon' data-taskId='"+json[i].taskList[k].id+"'>"+deleteIcon+"</div>"+
-                "</td>");
+                    "</td>");
                 table3.append(tr);
             }
             tr = $('<tr/>');
@@ -169,18 +196,14 @@ function makeProjectDiv(json) {
                 "   <input id='dateTask"+projId+"' type='text' class='datepicker'>" +
                 "   <label for='dateTask"+projId+"'>Date</label>" +
                 "</div>" +
-                "<div class='input-field col s9 m9 l9'>" +
+                "<div class='input-field col s9 m9 l9' style=\"\n" +
+                "    width: 59%;\n" +
+                "\">" +
                 "   <textarea id='contenu"+projId+"' type='text' class='materialize-textarea'></textarea>" +
                 "   <label for='contenu"+projId+"'>Contenu</label>" +
-                "</div>" +
+                "</div>" + "<div class='icons-container'><div class='checkIcon'>"+ checkIcon + "</div>" +
+                "<div class='closeIcon'>"+closeIcon +"</div></div>" +
                 "</td>");
-            tr.append("<td>" +
-               "<div class='checkIcon'>"+ checkIcon + "</div>"+
-                "</td>");
-            tr.append("<td>" +
-                "<div class='closeIcon'>"+closeIcon +"</div>"+
-                "</td>");
-            table3.prepend('<tr><td><h5>Tâches</h5></td></tr>');
             table4.append(tr);
             if (json[i].taskList.length > 0) {
                 accordContent.empty();
@@ -205,6 +228,7 @@ function makeProjectDiv(json) {
         // div.append("<div class='buttonIcon delete' type='groupe' id='"+json[i].id+"'>" + deleteIcon + "</div>");
         $("#noProj").hide();
         initMaterial();
+        $('.collapsible-body').find('label').addClass('active');
     }else {
         $("#noProj").show();
     }
@@ -305,20 +329,30 @@ function makeProjectDiv(json) {
                     $(emptyDiv).remove();
                     var json = $.parseJSON(ret);
                     tr = $('<tr/>');
-                    tr.append("<td>&nbsp;<span style='display: none'>"+json.id+"</span></td>");
-                    tr.append("<td><input class='taskInput datepicker' data-taskId='"+json.id+"' id='taskDateInput' value='" + timeToDatePicker(json.dateTask) + "'/> </td>");
-                    tr.append("<td><textarea class='materialize-textarea taskInput' data-taskId='"+json.id+ "' id='taskContentInput' >" >+ json.contenu + "</textarea></td>");
+                    tr.append("<td>&nbsp;<span style='display: none'>" + json.id + "</span></td>");
+                    tr.append("<td>" +
+                        "<div class='input-field col s3 m3 l3'>" +
+                        "   <input id='dateTask"+json.id+"' data-taskId='"+json.id+"' type='text' class='datepicker' value=" + timeToDatePicker(json.dateTask) + "'>" +
+                        "   <label for='dateTask"+json.id+"'>Date</label>" +
+                        "</div>" +
+                        "<div class='input-field col s9 m9 l9' style=\"\n" +
+                        "    width: 59%;\n" +
+                        "\">" +
+                        "   <textarea id='contenu"+json.id+"' data-taskId='"+json.id+"' type='text' class='materialize-textarea'>json.contenu</textarea>" +
+                        "   <label for='contenu"+json.id+"'>Contenu</label>" +
+                        "</div>");
+
                     var checked = "";
                     if (json.etat == 1) {
                         checked = "checked";
                     }
-                    var toggle ="<div class='switch right-align'><label>"+
+                    var toggle = "<div class='switch right-align'><label>" +
                         "   Validation  " +
-                        "   <input type='checkbox' id='"+json.id+"' class='validTask' type='checkbox' "+checked+">"+
+                        "   <input type='checkbox' id='" + json.id + "'  class='validTask' type='checkbox' " + checked + ">" +
                         "   <span class='lever'>" +
                         "</span></label></div> ";
-                    tr.append("<td>" + toggle +"</td><td>"+
-                        "<div class='deleteIcon' data-taskId='"+json.id+"'>"+deleteIcon+"</div>"
+                    tr.append("<td>" + toggle + "</td><td>" +
+                        "<div class='deleteIcon' data-taskId='" + json.id + "'>" + deleteIcon + "</div>"
                         + "</td>");
                     taskTable.append(tr);
                     if (noTaskTable) {
@@ -345,9 +379,12 @@ function makeProjectDiv(json) {
                         });
                     });
                     initMaterial();
+                    $('.collapsible-body').find('label').addClass('active');
                 }
+
             });
         }
+
     });
     $(".edit").click(function (e) {
         e.stopPropagation();
@@ -358,7 +395,7 @@ function makeProjectDiv(json) {
         modalize($('#formGroupe'),$('#projetAdderDiv'),true);
         var project = find(projects,id);
         fillEditFormProject(project,id);
-
+        $('#formGroupe').css('padding', '0');
     });
     initMaterial();
     initValidProj();
