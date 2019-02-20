@@ -29,15 +29,17 @@ textarea.materialize-textarea {
   border-bottom: $input-border;
   border-radius: 0;
   outline: none;
-  height: $input-height;
+  height: $input-height !important;
   width: 100%;
   font-size: $input-font-size;
   margin: $input-margin;
-  padding: $input-padding;
+  padding: 1.3rem 0 0rem 0.2rem;
   box-shadow: none;
-  box-sizing: content-box;
+  box-sizing: border-box;
   transition: box-shadow .3s, border .3s;
   padding-left: 4px;
+  position: relative;
+  top: 6px;
 
   // Disabled input style
   &:disabled,
@@ -319,7 +321,7 @@ textarea {
   &.materialize-textarea {
     line-height: normal;
     overflow-y: hidden; /* prevents scroll bar flash */
-    padding: .8rem 0 .8rem 0; /* prevents text jump on Enter keypress */
+    padding: 1.3rem 0 .8rem 0.2rem; /* prevents text jump on Enter keypress */
     resize: none;
     min-height: $input-height;
     box-sizing: border-box;

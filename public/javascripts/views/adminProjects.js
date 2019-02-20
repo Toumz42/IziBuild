@@ -44,6 +44,16 @@ $(function()
                 break;
         }
     });
+    var users;
+    $.ajax({
+        url: "/getAllPros",
+        type: "GET",
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR) {
+            users = ret;
+        }
+    });
 
     $("#sub").click(function(){
         if (check())
@@ -273,14 +283,19 @@ $(function()
                 });}
         });
 
-        $(".edit").click(function () {
+        $(".edit").click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
             var self = $(this);
             var id = this.id;
             var type = $(this).attr("type");
             modalize($('#formGroupe'),$('#projetAdderDiv'),true);
             var project = find(projects,id);
             fillEditFormProject(project,id);
+
         });
+        initMaterial();
+        initValidProj();
     });
 });
 
@@ -369,26 +384,34 @@ function checkPass()
     return false;
 }
 
-function initAutoComplete(json) {
+function initAutoComplete(json, isPros) {
     var reset = true;
     if (!Array.isArray(json)) {
+        console.log(json)
         json = [json];
         reset = false;
     }
+    if(isPros){
+        json = $.parseJSON(json);
+    }
     if (reset) {
-        arrayData = [];
+        var arrayData = [];
     }
     for (var i = 0; i < json.length; i++) {
+        console.log(i, json[i])
         var objDataComplete = {
-            "id" : json[i].id,
+            "id": json[i].id,
             "text": json[i].name + " " + json[i].surname
         };
-        if (arrayData.indexOf(objDataComplete) == -1) {
-            arrayData.push(objDataComplete);
+        if(arrayData !== undefined){
+            if (arrayData.indexOf(objDataComplete) === -1) {
+                arrayData.push(objDataComplete);
+            }
         }
     }
+    console.log(objDataComplete)
     autocomplete = $('#multipleInput').materialize_autocomplete({
-        // data: objDataComplete,
+       // data: objDataComplete,
         multiple: {
             enable: true,
             onAppend: function (item) {
@@ -504,7 +527,7 @@ function makeProjectDiv(json) {
             var emptyTaskTxt= $("<div class='txtTaskEmpty'>Vous n'avez aucune tâche sur le projet en cours. Créez votre première tache en cliquant ci dessous !</div>");
             divTaskEmpty.append(emptyTaskImg).append(emptyTaskTxt);
             accordContent.append(divTaskEmpty);
-            var table = $("<table class='responsive-table '></table>");
+            table = $("<table class='responsive-table '></table>");
             var table2 = $("<table class='responsive-table '></table>");
             var table3 = $("<table class='responsive-table  taskTable'></table>");
             var table4 = $("<table class='responsive-table  hide addTaskTable'></table>");
@@ -536,11 +559,23 @@ function makeProjectDiv(json) {
                 tr.append("<td>" + json[i].proList[j].categorie.libelle + "</td>");
                 table2.append(tr);
             }
+            table4.append('<tr><td style="\n' +
+                '    padding: 0 0px 0 25px;\n' +
+                '">Tâches</td></tr>');
             for (var k = 0; k < json[i].taskList.length; k++) {
                 tr = $('<tr/>');
                 tr.append("<td>&nbsp;<span style='display: none'>"+json[i].user.id+"</span></td>");
-                tr.append("<td>" + javaToFrenchDate(json[i].taskList[k].dateTask) + "</td>");
-                tr.append("<td>" + json[i].taskList[k].contenu + "</td>");
+                tr.append("<td>" +
+                    "<div class='input-field col s3 m3 l3'>" +
+                    "   <input id='dateTask"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='datepicker' value='" + timeToDatePicker(json[i].taskList[k].dateTask) + "'>" +
+                    "   <label for='dateTask"+json[i].taskList[k].id+"'>Date</label>" +
+                    "</div>" +
+                    "<div class='input-field col s9 m9 l9' style=\"\n" +
+                    "    width: 59%;\n" +
+                    "\">" +
+                    "   <textarea id='contenu"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='materialize-textarea'>"+json[i].taskList[k].contenu+"</textarea>" +
+                    "   <label for='contenu"+json[i].taskList[k].id+"'>Contenu</label>" +
+                    "</div>");
                 var checked = "";
                 if (json[i].taskList[k].etat == 1) {
                     checked = "checked";
@@ -567,15 +602,12 @@ function makeProjectDiv(json) {
                 "\">" +
                 "   <textarea id='contenu"+projId+"' type='text' class='materialize-textarea'></textarea>" +
                 "   <label for='contenu"+projId+"'>Contenu</label>" +
-                "</div>" +
+                "</div>" + "<div class='icons-container'><div class='checkIcon'>"+ checkIcon + "</div>" +
+                "<div class='closeIcon'>"+closeIcon +"</div></div>" +
                 "</td>");
-            tr.append("<td>" +
-                "<div class='checkIcon'>"+ checkIcon + "</div>"+
-                "</td>");
-            tr.append("<td>" +
-                "<div class='closeIcon'>"+closeIcon +"</div>"+
-                "</td>");
-            table3.prepend('<tr><td><h5>Tâches</h5></td></tr>');
+            tr.append();
+            tr.append();
+            //table3.prepend('<tr><td><h5>Tâches</h5></td></tr>');
             table4.append(tr);
             if (json[i].taskList.length > 0) {
                 accordContent.empty();
@@ -599,7 +631,8 @@ function makeProjectDiv(json) {
         // div.append("<div class='buttonIcon edit' type='groupe' id='"+json[i].id+"'>" + editIcon + "</div>");
         // div.append("<div class='buttonIcon delete' type='groupe' id='"+json[i].id+"'>" + deleteIcon + "</div>");
         $("#noProj").hide();
-        //initMaterial();
+        initMaterial();
+        $('.collapsible-body').find('label').addClass('active');
     }else {
         $("#noProj").show();
     }
@@ -610,7 +643,8 @@ function makeProjectDiv(json) {
         $(this).parents(".collapsible-body").find(".addTaskTable").addClass("hide");
     });
     $(".deleteIcon").click(function () {
-        var taskid = $(this).parent().attr("data-taskId");
+        var task = $(this);
+        var taskid = parseInt($(this).attr("data-taskid"));
         var data = {
             "id": taskid,
             "type": "task"
@@ -622,9 +656,7 @@ function makeProjectDiv(json) {
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (ret, textStatus, jqXHR) {
-                if (ret) {
-                    $(this).parents("tr").remove()
-                }
+                task.parents('tr').remove();
             }
         });
     });

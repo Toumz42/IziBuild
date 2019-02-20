@@ -48,6 +48,7 @@ $(function()
             });
             turned = true;
         }
+        console.log($("#projetAdderDiv"))
         $("#projetAdderDiv").toggle('slide');
         $('html, body').animate({scrollTop: 0}, 500);
     });
@@ -81,7 +82,7 @@ $(function()
     });
 
     initMaterial();
-    initTabUser();
+   // initTabUser();
 });
 
 function makeProjectDiv(json) {
@@ -212,6 +213,7 @@ function makeProjectDiv(json) {
         }
         $("#noProj").hide();
         initMaterial();
+        $('.collapsible-body').find('label').addClass('active');
     }else {
         $("#noProj").show();
     }
@@ -262,7 +264,8 @@ function makeProjectDiv(json) {
         });
     });
     $(".deleteIcon").click(function () {
-        var taskid = $(this).parent().attr("data-taskId");
+        var task = $(this);
+        var taskid = parseInt($(this).attr("data-taskid"));
         var data = {
             "id": taskid,
             "type": "task"
@@ -274,9 +277,7 @@ function makeProjectDiv(json) {
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (ret, textStatus, jqXHR) {
-                if (ret) {
-                    $(this).parents("tr").remove()
-                }
+                task.parents('tr').remove();
             }
         });
     });
@@ -288,7 +289,7 @@ function makeProjectDiv(json) {
         var emptyDiv = collapseBody.find(".divTaskEmpty");
         var noTaskTable = $(taskTable).length < 1;
         if (noTaskTable) {
-            taskTable = $("<table class='responsive-table highlight taskTable'></table>");
+            taskTable = $("<table class='responsive-table taskTable'></table>");
         } else {
             taskTable = $(taskTable);
         }
@@ -310,16 +311,17 @@ function makeProjectDiv(json) {
                     $(emptyDiv).remove();
                     var json = $.parseJSON(ret);
                     tr = $('<tr/>');
+                    tr.append("<td>&nbsp;<span style='display: none'>" + json.id + "</span></td>");
                     tr.append("<td>" +
                     "<div class='input-field col s3 m3 l3'>" +
-                    "   <input id='dateTask"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='datepicker' value=" + timeToDatePicker(json[i].taskList[k].dateTask) + "'>" +
-                    "   <label for='dateTask"+json[i].taskList[k].id+"'>Date</label>" +
+                    "   <input id='dateTask"+json.id+"' data-taskId='"+json.id+"' type='text' class='datepicker' value=" + timeToDatePicker(json.dateTask) + "'>" +
+                    "   <label for='dateTask"+json.id+"'>Date</label>" +
                     "</div>" +
                     "<div class='input-field col s9 m9 l9' style=\"\n" +
                     "    width: 59%;\n" +
                     "\">" +
-                    "   <textarea id='contenu"+json[i].taskList[k].id+"' data-taskId='"+json[i].taskList[k].id+"' type='text' class='materialize-textarea'>json[i].taskList[k].contenu</textarea>" +
-                    "   <label for='contenu"+json[i].taskList[k].id+"'>Contenu</label>" +
+                    "   <textarea id='contenu"+json.id+"' data-taskId='"+json.id+"' type='text' class='materialize-textarea'>json.contenu</textarea>" +
+                    "   <label for='contenu"+json.id+"'>Contenu</label>" +
                     "</div>");
 
                     var checked = "";
@@ -359,9 +361,12 @@ function makeProjectDiv(json) {
                         });
                     });
                     initMaterial();
+                    $('.collapsible-body').find('label').addClass('active');
                 }
+
             });
         }
+
     });
     initMaterial();
     initValidProj();
@@ -373,37 +378,39 @@ function initTabUser() {
     $("#usersContent").empty();
     dataGroup = JSON.stringify(dataGroup);
     $.ajax ({
-        url: "/getAllArtisan",
-        type: "POST",
-        data: dataGroup,
+        url: "/getAllPros",
+        type: "GET",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function(ret, textStatus, jqXHR){
-            var json = $.parseJSON(ret);
-            initAutoComplete(json);
+                initAutoComplete(ret);
         }
     });
 }
 function initAutoComplete(json) {
     var reset = true;
+    json = $.parseJSON(json);
     if (!Array.isArray(json)) {
         json = [json];
         reset = false;
     }
     if (reset) {
-        arrayData = [];
+        var arrayData = [];
     }
     for (var i = 0; i < json.length; i++) {
         var objDataComplete = {
             "id": json[i].id,
             "text": json[i].name + " " + json[i].surname
         };
-        if (arrayData.indexOf(objDataComplete) == -1) {
-            arrayData.push(objDataComplete);
+        if(arrayData !== undefined){
+            if (arrayData.indexOf(objDataComplete) === -1) {
+                arrayData.push(objDataComplete);
+            }
         }
     }
+
     autocomplete = $('#multipleInput').materialize_autocomplete({
-        // data: objDataComplete,
+        data: objDataComplete,
         multiple: {
             enable: true,
             onAppend: function (item) {

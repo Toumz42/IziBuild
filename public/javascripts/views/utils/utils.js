@@ -74,8 +74,8 @@ function modalize(el,parent,set, callback) {
         el.addClass("modal").addClass("modal-fixed-footer");
         $("#"+el[0].id+"").modal(
             {
-                startingTop: '25%',
-                endingTop: '5%',
+                startingTop: '5%',
+                endingTop: '25%',
                 onCloseEnd: function() {
                     modal = this;
                     parent.hide();
@@ -83,7 +83,7 @@ function modalize(el,parent,set, callback) {
                     switch (id) {
                         case "formGroupe":
                             emptyFields(grpFields);
-                            emptyComplete(groupids);
+                            //emptyComplete(groupids);
                             break;
                         case "formSign":
                             emptyFields(userFields);
@@ -313,10 +313,10 @@ function fillEditFormProject(val,id) {
     $("#superficie").val(project.superficie);
     $("#date").val(timeToDatePicker(project.dateCreation));
     groupids = [];
-    $.each(project.proList,function () {
+    project.proList.forEach(function (proj) {
         var chip = {
-            'id' : this.id,
-            'text' : this.name +" "+ this.surname
+            'id' : proj.id,
+            'text' : proj.name +" "+ proj.surname
         };
         autocomplete.append(chip)
     });
