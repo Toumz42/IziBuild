@@ -400,6 +400,7 @@ function makeProjectDiv(json) {
     $(".edit").click(function (e) {
         e.stopPropagation();
         e.preventDefault();
+        initTabUser();
         var self = $(this);
         var id = this.id;
         var type = $(this).attr("type");

@@ -386,7 +386,6 @@ function checkPass()
 function initAutoComplete(json, isPros) {
     var reset = true;
     if (!Array.isArray(json)) {
-        console.log(json)
         json = [json];
         reset = false;
     }
@@ -397,7 +396,6 @@ function initAutoComplete(json, isPros) {
         var arrayData = [];
     }
     for (var i = 0; i < json.length; i++) {
-        console.log(i, json[i])
         var objDataComplete = {
             "id": json[i].id,
             "text": json[i].name + " " + json[i].surname
@@ -408,7 +406,6 @@ function initAutoComplete(json, isPros) {
             }
         }
     }
-    console.log(objDataComplete)
     autocomplete = $('#multipleInput').materialize_autocomplete({
        // data: objDataComplete,
         multiple: {
@@ -508,6 +505,23 @@ function initTabUser(tab , page) {
                 $("#usersContent").append(res);
                 $('.empty-projects').show();
             }
+        }
+    });
+    dataGroup={};
+    $.ajax ({
+        url: "/getAllPros",
+        type: "GET",
+        data: dataGroup,
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        success: function(ret, textStatus, jqXHR){
+            var json = $.parseJSON(ret);
+            initAutoComplete(json);
+            waitOff();
+        },
+        error : function (xhr, ajaxOptions, thrownError) {
+            myToast("Erreur recuperation pros");
+            waitOff();
         }
     });
 }
@@ -656,6 +670,10 @@ function makeProjectDiv(json) {
             contentType: "application/json; charset=utf-8",
             success: function (ret, textStatus, jqXHR) {
                 task.parents('tr').remove();
+                myToast("La suppression de la tâche a bien été effectuée");
+            },
+            error: function() {
+                myToast("Erreur lors de la suppression");
             }
         });
     });
