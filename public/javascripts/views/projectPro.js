@@ -48,8 +48,21 @@ $(function()
             });
             turned = true;
         }
-        console.log($("#projetAdderDiv"))
-        $("#projetAdderDiv").toggle('slide');
+        if ($("#projectMenu").is(":visible")) {
+            $("#projectMenu").slideToggle();
+        }else{
+            $("#projectMenu").slideToggle();
+        }
+        if ($("#projetAdderDiv").is(":visible")) {
+            $("#projetAdderDiv").toggle('slide');
+            $(this).css({
+                '-webkit-transform': 'rotate(45deg)',
+                '-moz-transform': 'rotate(45deg)',
+                '-ms-transform': 'rotate(45deg)',
+                'transform': 'rotate(45deg)'
+            });
+            turned = true;
+        }
         $('html, body').animate({scrollTop: 0}, 500);
     });
 

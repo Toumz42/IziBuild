@@ -83,7 +83,7 @@ function modalize(el,parent,set, callback) {
                     switch (id) {
                         case "formGroupe":
                             emptyFields(grpFields);
-                            //emptyComplete(groupids);
+                            emptyComplete(groupids);
                             break;
                         case "formSign":
                             emptyFields(userFields);
@@ -305,6 +305,7 @@ function initValidProj() {
     });
 }
 function fillEditFormProject(val,id) {
+    emptyComplete();
     var project = val[0];
     $("#idProject").val(id);
     $("#projectName").val(project.name);

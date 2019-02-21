@@ -292,7 +292,6 @@ $(function()
             modalize($('#formGroupe'),$('#projetAdderDiv'),true);
             var project = find(projects,id);
             fillEditFormProject(project,id);
-
         });
         initMaterial();
         initValidProj();
