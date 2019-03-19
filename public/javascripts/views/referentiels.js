@@ -173,7 +173,7 @@ function saveByChamps(champ, valeur)
             "id" : id,
             "code" : code,
             "libelle" : libelle,
-            "commentaireLong" : commentaireLong,
+            "commentaireLong" : commentaireLong
         }),
         dataType : "text",
         contentType : "application/json; charset=utf-8",

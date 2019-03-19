@@ -13,6 +13,71 @@ body {
   // flex-direction: column;
 }
 
+@media only screen and (max-width: 992px){
+  table.taskTable tbody tr {
+      width: -webkit-fill-available;
+      display: inline-table;
+      vertical-align: middle;
+      border-bottom: none;
+      padding: 0px;
+    }
+
+  table.taskTable{
+    .deleteIcon{
+      padding: 0px 20px;
+    }
+  }
+
+  table.taskTable tbody {
+    display: block;
+    width: auto;
+    position: relative;
+    overflow-x: auto;
+    padding-top: 11%;
+    white-space: nowrap;
+  }
+
+  table.responsive-table tbody tr {
+     display: -webkit-box !important;
+     vertical-align: middle;
+   }
+
+  table.responsive-table th {
+    margin: 0;
+    width: 25%;
+    vertical-align: middle;
+    text-align: center !important;
+  }
+
+  table.responsive-table td {
+    margin: 0;
+    vertical-align: middle;
+    text-align: center !important;
+    width: 25%;
+  }
+
+  table.taskTable td {
+    margin: 0;
+    vertical-align: middle;
+    position: unset;
+    text-align: center;
+    width: auto;
+  }
+
+  table.taskTable td {
+     display: table-cell !important;
+     min-height: 1.25em;
+     text-align: left;
+     vertical-align: middle !important;
+   }
+}
+
+.taskTable tbody tr:first-child {
+  line-height: 42px;
+  background-color: initial;
+  color: rgba(0,0,0,0.7);
+}
+
 main {
   // flex: 1 0 auto;
 }
@@ -33,6 +98,13 @@ ul {
     & > li {
       list-style-type: none;
     }
+  }
+}
+@media only screen and (max-width: 992px) {
+  .addTask {
+    position: absolute;
+    top: 0px;
+    right: 0;
   }
 }
 

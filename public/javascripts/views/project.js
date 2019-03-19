@@ -171,6 +171,7 @@ function makeProjectDiv(json) {
             }
             table4.append('<tr><td style="\n' +
                 '    padding: 0 0px 0 25px;\n' +
+                'display: block'+
                 '">Tâches</td></tr>');
             for (var k = 0; k < json[i].taskList.length; k++) {
                 tr = $('<tr/>');

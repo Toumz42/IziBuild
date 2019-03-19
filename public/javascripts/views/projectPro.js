@@ -306,7 +306,7 @@ function makeProjectDiv(json) {
         } else {
             taskTable = $(taskTable);
         }
-        if ($("#contenu"+id).val() != "" && $("#dateTask"+id).val() != "") {
+        if ($("#contenu"+id).val() !== "" && $("#dateTask"+id).val() !== "") {
             var data = {
                 "idProj": id,
                 "contenu": $("#contenu"+id).val(),

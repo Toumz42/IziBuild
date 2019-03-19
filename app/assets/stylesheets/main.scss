@@ -2,6 +2,12 @@ html,body,main {
     min-height: 100vh;
     height: fit-content;
 }
+@media only screen and (max-width: 992px) {
+    .taskTable td {
+            padding: 5px 0px !important;
+        }
+    }
+
 main {
     padding-top: 90px;
 }
@@ -696,6 +702,24 @@ nav.red.accent-4 {
     }
 }
 
+#tableReferentiel {
+  thead{
+    background-color: rgba(242,242,242,1);
+  }
+
+  tr:first-child{
+    line-height: 42px;
+    background-color: unset;
+    color: rgba(0,0,0,.7);
+  }
+
+  .stage tr:first-child{
+    line-height: 42px;
+    background-color: unset;
+    color: rgba(0,0,0,.7);
+  }
+}
+
 #formSign{
     .col.m12.s12.l12 {
         padding: 0 0.75rem;
@@ -793,7 +817,7 @@ nav.red.accent-4 {
 }
 
 .img-out-card {
-    width: 105px;
+    width: 70px;
     position: absolute;
     top: 40px;
     left: 40px;
